@@ -22,7 +22,7 @@
 #define PORT_B PORTD
 #define PORT_W  PORTB
 
-#define RGBW 666 //Welcom to HELL
+#define RGBW 666 //Welcome to HELL
 
 #define BUTTON_SPROB_LED_PORT PORTB
 #define BUTTON_SPROB_LED_DDR DDRB
@@ -62,7 +62,7 @@ unsigned char sec = 0, min = 0, hour = 0, day = 0, date = 0, month = 0, year = 0
 //Временные переменные 
 unsigned char sec_, min_, hour_, day_, date_, month_, year_, hour_, min_;
 unsigned char temp_mins_dawm = 0, temp_hours_dawm = 0, temp_mins_sunset = 0, temp_hours_sunset = 0;;
-unsigned int excess_mins_dawm = 0, excess_mins_sunset = 0;
+unsigned long excess_sec_dawm = 0, excess_sec_sunset = 0;
 
 //Переменные рассвета и заката
 uint16_t led_menu_dawn_hours = 0, led_menu_dawn_mins = 0, led_menu_dawn_interval_mins= 0, led_menu_sunset_hours = 0, led_menu_sunset_mins = 0, led_menu_sunset_interval_mins = 0;
@@ -77,11 +77,11 @@ uint16_t now_mode_led_menu = 0, increment_mode_led_menu = 0, now_mode_light = 0,
 //EEPORM
 uint16_t ee_led_menu_dawn_hours EEMEM = 0, ee_led_menu_dawn_mins EEMEM = 0, ee_led_menu_dawn_interval_mins EEMEM = 0, ee_led_menu_sunset_hours EEMEM = 0, ee_led_menu_sunset_mins EEMEM = 0, ee_led_menu_sunset_interval_mins EEMEM = 0;
 
-
+unsigned long all_time_in_sec = 0, all_time_in_sec_sunset = 0, all_time_in_sec_dawn = 0;
 //ШИМ каналы RGBW
 unsigned char red, green = 0, blue = 0, white = 0;       //Переменные скважности ШИМ
 unsigned char red_b  = 0, green_b = 0, blue_b = 0, white_b = 0;     //Буферизация значений скважности ШИМ
-unsigned char count = 0, i2c_time_disable = 0;                           //Счетчик вызовов обработчика прерываний
+unsigned char count = 0;                           //Счетчик вызовов обработчика прерываний
 
 volatile char twoHZ = 255;
 
@@ -109,11 +109,19 @@ ISR (TIMER0_OVF_vect)
 		blue_b  = blue;
 		white_b  = white;
 		
-       //Высокий уровень
-	   PORT_R |= (1<<R);
-	   PORT_G |= (1<<G);
-	   PORT_B |= (1<<B);
-	   PORT_W |= (1<<W);
+       //Высокий уровень, если не 0х00 что-бы не было засветки
+	   if(red){
+	     PORT_R |= (1<<R);
+	   }
+	   if(green){
+	     PORT_G |= (1<<G);
+	   }
+	   if(blue){
+	     PORT_B |= (1<<B);
+	   }
+	   if(white){
+	     PORT_W |= (1<<W);
+	   }
 		
 	}
 	
@@ -232,7 +240,7 @@ void ModifyRTC(void)
 			}
 		break;
 		
-		
+		/*
 		case MODE_EDIT_DAY: // дата
 		 	I2C_SendByte(4);//Переходим на 0x04 - байт числа даты
 			if (month==2) //февраль
@@ -378,7 +386,7 @@ void ModifyRTC(void)
 				}
 			}
 	    break;
-
+*/
 	}
 	I2C_StopCondition();
 }
@@ -473,7 +481,6 @@ void ShowDate(unsigned char date, unsigned char month, unsigned char year){
 
 int main(void)
 {
-	
 	//Инициализация перефирии
 	I2C_Init();
 	PWM_init();
@@ -519,57 +526,51 @@ int main(void)
 	led_menu_sunset_hours = eeprom_read_word(&ee_led_menu_sunset_hours);
 	led_menu_sunset_mins = eeprom_read_word(&ee_led_menu_sunset_mins);
     led_menu_sunset_interval_mins = eeprom_read_word(&ee_led_menu_sunset_interval_mins);
-		
+	
 	while(1)
 	{   	  //Принудительное включение 
 				if(now_mode_led_menu == MODE_NONE && now_mode == MODE_NONE){
 				if((PINB & (1 << PB7))){	
-				//Супер дупер крутой рассвет и закат
-				if((hour >= led_menu_dawn_hours && min > led_menu_dawn_mins) || (hour > led_menu_dawn_hours && min < led_menu_dawn_mins)){
-					if(hour >= led_menu_dawn_hours && min > led_menu_dawn_mins){
-				
-						temp_hours_dawm = hour-led_menu_dawn_hours;
-						temp_mins_dawm = min-led_menu_dawn_mins;
-						excess_mins_dawm = temp_hours_dawm*60 + temp_mins_dawm;
-					}
-					if(hour > led_menu_dawn_hours && min < led_menu_dawn_mins){
-						temp_hours_dawm = hour-led_menu_dawn_hours;
-						temp_mins_dawm = led_menu_dawn_mins-min;
-						excess_mins_dawm = temp_hours_dawm*60 - temp_mins_dawm;
-					}
-			
-					if(excess_mins_dawm < led_menu_dawn_interval_mins){
-						PWM_set(RGBW, map(excess_mins_dawm, 1, led_menu_dawn_interval_mins, 0, 255));
-						now_mode_light = LIGHT_DAWM;
-						}else{
-						if((hour >= led_menu_sunset_hours && min > led_menu_sunset_mins) || (hour > led_menu_sunset_hours && min < led_menu_sunset_mins)){
-							if(hour >= led_menu_sunset_hours && min > led_menu_sunset_mins){
-						
-								temp_hours_sunset = hour-led_menu_sunset_hours;
-								temp_mins_sunset = min-led_menu_sunset_mins;
-								excess_mins_sunset = temp_hours_sunset*60 + temp_mins_sunset;
-							}
-							if(hour > led_menu_sunset_hours && min < led_menu_sunset_mins){
-								temp_hours_sunset = hour-led_menu_sunset_hours;
-								temp_mins_sunset = led_menu_sunset_mins-min;
-								excess_mins_sunset = temp_hours_sunset*60 - temp_mins_sunset;
-							}
-							if(excess_mins_sunset < led_menu_sunset_interval_mins){
-								PWM_set(RGBW, map(excess_mins_sunset, 1, led_menu_sunset_interval_mins, 255, 0));
-								now_mode_light = LIGHT_SUNSET;
-								}else{ PWM_set(RGBW, 0x00); now_mode_light = LIGHT_OFF;}
-								}else{ PWM_set(RGBW, 0xFF); now_mode_light = LIGHT_FULL;}
-							}
-							}else{  
-								PWM_set(RGBW, 0x00); now_mode_light = LIGHT_OFF;
-							}			
+								//Супер дупер крутой рассвет и закат
+								
+								all_time_in_sec = (((long)hour * 60) + (long)min)*60 + (long)sec;
+								all_time_in_sec_dawn = ((long)led_menu_dawn_hours * 60 * 60) + ((long)led_menu_dawn_mins * 60);
+								
+								if(all_time_in_sec_dawn < all_time_in_sec){
+									excess_sec_dawm = all_time_in_sec - all_time_in_sec_dawn;
+									//Если закат начался
+			                        if(((int)excess_sec_dawm / 60) < led_menu_dawn_interval_mins){
+										PWM_set(RGBW, map(excess_sec_dawm, 1, led_menu_dawn_interval_mins * 60, 10, 255));
+										now_mode_light = LIGHT_DAWM;
+									}else{
+										all_time_in_sec_sunset = ((long)led_menu_sunset_hours * 60 * 60) + ((long)led_menu_sunset_mins * 60);
+																				
+										if(all_time_in_sec_sunset  < all_time_in_sec){
+											excess_sec_sunset = all_time_in_sec - all_time_in_sec_sunset;
+											
+											if(((int)excess_sec_sunset / 60) < led_menu_sunset_interval_mins){
+												PWM_set(RGBW, map(excess_sec_sunset, 1, led_menu_sunset_interval_mins * 60, 255, 10));
+												now_mode_light = LIGHT_SUNSET;
+										    }else{ 
+												PWM_set(RGBW, 0x00); 
+												now_mode_light = LIGHT_OFF;
+											}
+										}else{ 
+											PWM_set(RGBW, 0xFF); 
+											now_mode_light = LIGHT_FULL;
+										}
+									 }
+								}else{  
+									PWM_set(RGBW, 0x00); 
+									now_mode_light = LIGHT_OFF;
+								}			
 					
-							if(prev_now_mode_light != now_mode_light ){
-								ClearALLCharIndicator();
-							}
+								if(prev_now_mode_light != now_mode_light ){
+									ClearALLCharIndicator();
+								}
 					
-							prev_now_mode_light = now_mode_light;
-							TIMSK |= (1 << TOIE0);
+								prev_now_mode_light = now_mode_light;
+								TIMSK |= (1 << TOIE0);
 					}else{
 						//Подаем + на драйвера если тумблер включен
 						TIMSK &=~ (1 << TOIE0);
@@ -666,10 +667,20 @@ int main(void)
 					//Минуты
 					now_mode = MODE_EDIT_MINUTES; 
 				   }else if(now_mode == MODE_EDIT_MINUTES){
-					//Число
+					I2C_StartCondition();
+					I2C_SendByte(0b11010000);
+					I2C_SendByte(0);
+					I2C_SendByte(RTC_ConvertFromBinDec(1));
+					I2C_StopCondition();
+					ClearALLCharIndicator();
+					now_mode = MODE_NONE;
+					increment_mode = MODE_NONE_INC;
+					/*
+		            //Число
 					now_mode = MODE_EDIT_DAY;
 					ClearALLCharIndicator();
-				   }else if(now_mode == MODE_EDIT_DAY){
+					*/
+				   }/*else if(now_mode == MODE_EDIT_DAY){
 					//Месяц
 					now_mode = MODE_EDIT_MOUTH;
 				   }else if(now_mode == MODE_EDIT_MOUTH){
@@ -689,7 +700,7 @@ int main(void)
 					ClearALLCharIndicator();
 					now_mode = MODE_NONE;
 					increment_mode = MODE_NONE_INC;
-				   }
+				   }*/
 				  }
 				break;
 			
@@ -699,6 +710,7 @@ int main(void)
 						  if(now_mode_led_menu == MODE_NONE){
 							//Часы начала рассвета
 							ClearALLCharIndicator();
+							ClearALLDotsIndicator();
 							now_mode_led_menu = MODE_EDIT_START_TIME_DAWN_HOURS;
 						  }else if(now_mode_led_menu == MODE_EDIT_START_TIME_DAWN_HOURS){
 							eeprom_write_word(&ee_led_menu_dawn_hours , led_menu_dawn_hours);
@@ -885,8 +897,8 @@ int main(void)
 					  setCharIndicator(11, 4);
 				   }
 				break;
-			
-			
+			    
+			/*
 				case MODE_EDIT_DAY: // дата
 				   ShowDate(date, month, year);
 				break;
@@ -909,6 +921,7 @@ int main(void)
 					setCharIndicator(10, 4);
 					setCharIndicator(10, 5);
 				break;
+				*/
 			
 			}
 		

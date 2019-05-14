@@ -3,31 +3,31 @@ MyClock1307LED.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00001514  00000000  00000000  000000b4  2**1
+  0 .text         00001226  00000000  00000000  000000b4  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         0000001c  00800060  00001514  000015c8  2**0
+  1 .data         0000001c  00800060  00001226  000012da  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          0000005d  0080007c  0080007c  000015e4  2**0
+  2 .bss          00000069  0080007c  0080007c  000012f6  2**0
                   ALLOC
-  3 .eeprom       0000000c  00810000  00810000  000015e4  2**0
+  3 .eeprom       0000000c  00810000  00810000  000012f6  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  4 .comment      00000030  00000000  00000000  000015f0  2**0
+  4 .comment      00000030  00000000  00000000  00001302  2**0
                   CONTENTS, READONLY
-  5 .debug_aranges 00000188  00000000  00000000  00001620  2**0
+  5 .debug_aranges 00000188  00000000  00000000  00001332  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00001cb0  00000000  00000000  000017a8  2**0
+  6 .debug_info   00001a74  00000000  00000000  000014ba  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000007c8  00000000  00000000  00003458  2**0
+  7 .debug_abbrev 000007c8  00000000  00000000  00002f2e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000a1f  00000000  00000000  00003c20  2**0
+  8 .debug_line   00000975  00000000  00000000  000036f6  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000003e0  00000000  00000000  00004640  2**2
+  9 .debug_frame  000003d8  00000000  00000000  0000406c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000062e  00000000  00000000  00004a20  2**0
+ 10 .debug_str    00000698  00000000  00000000  00004444  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000dc6  00000000  00000000  0000504e  2**0
+ 11 .debug_loc    00000dd5  00000000  00000000  00004adc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000168  00000000  00000000  00005e14  2**0
+ 12 .debug_ranges 00000168  00000000  00000000  000058b1  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -65,8 +65,8 @@ Disassembly of section .text:
       32:	10 e0       	ldi	r17, 0x00	; 0
       34:	a0 e6       	ldi	r26, 0x60	; 96
       36:	b0 e0       	ldi	r27, 0x00	; 0
-      38:	e4 e1       	ldi	r30, 0x14	; 20
-      3a:	f5 e1       	ldi	r31, 0x15	; 21
+      38:	e6 e2       	ldi	r30, 0x26	; 38
+      3a:	f2 e1       	ldi	r31, 0x12	; 18
       3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
       3e:	05 90       	lpm	r0, Z+
       40:	0d 92       	st	X+, r0
@@ -84,11 +84,11 @@ Disassembly of section .text:
       50:	1d 92       	st	X+, r1
 
 00000052 <.do_clear_bss_start>:
-      52:	a9 3d       	cpi	r26, 0xD9	; 217
+      52:	a5 3e       	cpi	r26, 0xE5	; 229
       54:	b2 07       	cpc	r27, r18
       56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
-      58:	d1 d4       	rcall	.+2466   	; 0x9fc <main>
-      5a:	5a ca       	rjmp	.-2892   	; 0xfffff510 <__eeprom_end+0xff7ef504>
+      58:	a4 d3       	rcall	.+1864   	; 0x7a2 <main>
+      5a:	e3 c8       	rjmp	.-3642   	; 0xfffff222 <__eeprom_end+0xff7ef216>
 
 0000005c <__bad_interrupt>:
       5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
@@ -575,7 +575,7 @@ void BUT_Poll(void)
      252:	19 cf       	rjmp	.-462    	; 0x86 <BUT_Check.constprop.0>
 
 00000254 <timer1_led_init>:
-	0b01011100//DAMN
+	0b00010111, //SUNSET
 };
 
 void timer1_led_init(void)
@@ -789,7 +789,7 @@ ISR (TIMER1_COMPA_vect)
       white = val;
     }else if(channel == RGBW){
       red = val;
-     364:	80 93 d6 00 	sts	0x00D6, r24
+     364:	80 93 e2 00 	sts	0x00E2, r24
 	  green = val;
      368:	80 93 a9 00 	sts	0x00A9, r24
 	  blue = val;
@@ -857,2890 +857,2336 @@ ISR (TIMER0_OVF_vect)
      3cc:	80 93 a2 00 	sts	0x00A2, r24
 	if (count == 0){//Переполнение
      3d0:	81 11       	cpse	r24, r1
-     3d2:	14 c0       	rjmp	.+40     	; 0x3fc <__vector_9+0x44>
+     3d2:	1e c0       	rjmp	.+60     	; 0x410 <__vector_9+0x58>
 		
 		//Сохранием значения в буфер
 		red_b   = red; 
-     3d4:	80 91 d6 00 	lds	r24, 0x00D6
+     3d4:	80 91 e2 00 	lds	r24, 0x00E2
      3d8:	80 93 a6 00 	sts	0x00A6, r24
 		green_b = green;
-     3dc:	80 91 a9 00 	lds	r24, 0x00A9
-     3e0:	80 93 a5 00 	sts	0x00A5, r24
+     3dc:	90 91 a9 00 	lds	r25, 0x00A9
+     3e0:	90 93 a5 00 	sts	0x00A5, r25
 		blue_b  = blue;
-     3e4:	80 91 a8 00 	lds	r24, 0x00A8
-     3e8:	80 93 a4 00 	sts	0x00A4, r24
+     3e4:	90 91 a8 00 	lds	r25, 0x00A8
+     3e8:	90 93 a4 00 	sts	0x00A4, r25
 		white_b  = white;
-     3ec:	80 91 a7 00 	lds	r24, 0x00A7
-     3f0:	80 93 a3 00 	sts	0x00A3, r24
+     3ec:	90 91 a7 00 	lds	r25, 0x00A7
+     3f0:	90 93 a3 00 	sts	0x00A3, r25
 		
-       //Высокий уровень
-	   PORT_R |= (1<<R);
-     3f4:	95 9a       	sbi	0x12, 5	; 18
-	   PORT_G |= (1<<G);
-     3f6:	96 9a       	sbi	0x12, 6	; 18
-	   PORT_B |= (1<<B);
-     3f8:	97 9a       	sbi	0x12, 7	; 18
-	   PORT_W |= (1<<W);
-     3fa:	c0 9a       	sbi	0x18, 0	; 24
+       //Высокий уровень, если не 0х00 что-бы не было засветки
+	   if(red){
+     3f4:	81 11       	cpse	r24, r1
+	     PORT_R |= (1<<R);
+     3f6:	95 9a       	sbi	0x12, 5	; 18
+	   }
+	   if(green){
+     3f8:	80 91 a9 00 	lds	r24, 0x00A9
+     3fc:	81 11       	cpse	r24, r1
+	     PORT_G |= (1<<G);
+     3fe:	96 9a       	sbi	0x12, 6	; 18
+	   }
+	   if(blue){
+     400:	80 91 a8 00 	lds	r24, 0x00A8
+     404:	81 11       	cpse	r24, r1
+	     PORT_B |= (1<<B);
+     406:	97 9a       	sbi	0x12, 7	; 18
+	   }
+	   if(white){
+     408:	80 91 a7 00 	lds	r24, 0x00A7
+     40c:	81 11       	cpse	r24, r1
+	     PORT_W |= (1<<W);
+     40e:	c0 9a       	sbi	0x18, 0	; 24
+	   }
 		
 	}
 	
 	//Если достигли ширины импульса, низкий уровень
 	if (red_b   == count) { PORT_R &=~ (1<<R);}
-     3fc:	90 91 a6 00 	lds	r25, 0x00A6
-     400:	80 91 a2 00 	lds	r24, 0x00A2
-     404:	98 13       	cpse	r25, r24
-     406:	01 c0       	rjmp	.+2      	; 0x40a <__vector_9+0x52>
-     408:	95 98       	cbi	0x12, 5	; 18
+     410:	90 91 a6 00 	lds	r25, 0x00A6
+     414:	80 91 a2 00 	lds	r24, 0x00A2
+     418:	98 13       	cpse	r25, r24
+     41a:	01 c0       	rjmp	.+2      	; 0x41e <__vector_9+0x66>
+     41c:	95 98       	cbi	0x12, 5	; 18
 	if (green_b == count) { PORT_G &=~ (1<<G);}
-     40a:	90 91 a5 00 	lds	r25, 0x00A5
-     40e:	80 91 a2 00 	lds	r24, 0x00A2
-     412:	98 13       	cpse	r25, r24
-     414:	01 c0       	rjmp	.+2      	; 0x418 <__vector_9+0x60>
-     416:	96 98       	cbi	0x12, 6	; 18
+     41e:	90 91 a5 00 	lds	r25, 0x00A5
+     422:	80 91 a2 00 	lds	r24, 0x00A2
+     426:	98 13       	cpse	r25, r24
+     428:	01 c0       	rjmp	.+2      	; 0x42c <__vector_9+0x74>
+     42a:	96 98       	cbi	0x12, 6	; 18
 	if (blue_b  == count) {  PORT_B &=~ (1<<B);}
-     418:	90 91 a4 00 	lds	r25, 0x00A4
-     41c:	80 91 a2 00 	lds	r24, 0x00A2
-     420:	98 13       	cpse	r25, r24
-     422:	01 c0       	rjmp	.+2      	; 0x426 <__vector_9+0x6e>
-     424:	97 98       	cbi	0x12, 7	; 18
+     42c:	90 91 a4 00 	lds	r25, 0x00A4
+     430:	80 91 a2 00 	lds	r24, 0x00A2
+     434:	98 13       	cpse	r25, r24
+     436:	01 c0       	rjmp	.+2      	; 0x43a <__vector_9+0x82>
+     438:	97 98       	cbi	0x12, 7	; 18
 	if (white_b  == count) { 	PORT_W &= ~(1<<W);}
-     426:	90 91 a3 00 	lds	r25, 0x00A3
-     42a:	80 91 a2 00 	lds	r24, 0x00A2
-     42e:	98 13       	cpse	r25, r24
-     430:	01 c0       	rjmp	.+2      	; 0x434 <__vector_9+0x7c>
-     432:	c0 98       	cbi	0x18, 0	; 24
+     43a:	90 91 a3 00 	lds	r25, 0x00A3
+     43e:	80 91 a2 00 	lds	r24, 0x00A2
+     442:	98 13       	cpse	r25, r24
+     444:	01 c0       	rjmp	.+2      	; 0x448 <__vector_9+0x90>
+     446:	c0 98       	cbi	0x18, 0	; 24
 }
-     434:	9f 91       	pop	r25
-     436:	8f 91       	pop	r24
-     438:	0f 90       	pop	r0
-     43a:	0f be       	out	0x3f, r0	; 63
-     43c:	0f 90       	pop	r0
-     43e:	1f 90       	pop	r1
-     440:	18 95       	reti
+     448:	9f 91       	pop	r25
+     44a:	8f 91       	pop	r24
+     44c:	0f 90       	pop	r0
+     44e:	0f be       	out	0x3f, r0	; 63
+     450:	0f 90       	pop	r0
+     452:	1f 90       	pop	r1
+     454:	18 95       	reti
 
-00000442 <led_strob>:
+00000456 <led_strob>:
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 //Строб светодиода кнопки
 void led_strob(){
 	BUTTON_SPROB_LED_PORT |= (1 << BUTTON_SPROB_LED_PIN);
-     442:	c6 9a       	sbi	0x18, 6	; 24
+     456:	c6 9a       	sbi	0x18, 6	; 24
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-     444:	2f ef       	ldi	r18, 0xFF	; 255
-     446:	80 e7       	ldi	r24, 0x70	; 112
-     448:	92 e0       	ldi	r25, 0x02	; 2
-     44a:	21 50       	subi	r18, 0x01	; 1
-     44c:	80 40       	sbci	r24, 0x00	; 0
-     44e:	90 40       	sbci	r25, 0x00	; 0
-     450:	e1 f7       	brne	.-8      	; 0x44a <led_strob+0x8>
-     452:	00 c0       	rjmp	.+0      	; 0x454 <led_strob+0x12>
-     454:	00 00       	nop
+     458:	2f ef       	ldi	r18, 0xFF	; 255
+     45a:	80 e7       	ldi	r24, 0x70	; 112
+     45c:	92 e0       	ldi	r25, 0x02	; 2
+     45e:	21 50       	subi	r18, 0x01	; 1
+     460:	80 40       	sbci	r24, 0x00	; 0
+     462:	90 40       	sbci	r25, 0x00	; 0
+     464:	e1 f7       	brne	.-8      	; 0x45e <led_strob+0x8>
+     466:	00 c0       	rjmp	.+0      	; 0x468 <__stack+0x9>
+     468:	00 00       	nop
 	_delay_ms(100);
 	BUTTON_SPROB_LED_PORT &= ~(1 << BUTTON_SPROB_LED_PIN);
-     456:	c6 98       	cbi	0x18, 6	; 24
-     458:	08 95       	ret
+     46a:	c6 98       	cbi	0x18, 6	; 24
+     46c:	08 95       	ret
 
-0000045a <SPI_init>:
+0000046e <SPI_init>:
 }
 
 //SPI инициализация 
 void SPI_init(void)
 {
 	SHIFT_REG_DDR |= ((1<<DATA)|(1<<SCL));
-     45a:	87 b3       	in	r24, 0x17	; 23
-     45c:	88 62       	ori	r24, 0x28	; 40
-     45e:	87 bb       	out	0x17, r24	; 23
+     46e:	87 b3       	in	r24, 0x17	; 23
+     470:	88 62       	ori	r24, 0x28	; 40
+     472:	87 bb       	out	0x17, r24	; 23
 	SHIFT_REG_PORT &= ~((1<<DATA)|(1<<SCL));
-     460:	88 b3       	in	r24, 0x18	; 24
-     462:	87 7d       	andi	r24, 0xD7	; 215
-     464:	88 bb       	out	0x18, r24	; 24
+     474:	88 b3       	in	r24, 0x18	; 24
+     476:	87 7d       	andi	r24, 0xD7	; 215
+     478:	88 bb       	out	0x18, r24	; 24
 	SHIFT_REG_DDR |= (1<<LATCH) ;
-     466:	ba 9a       	sbi	0x17, 2	; 23
+     47a:	ba 9a       	sbi	0x17, 2	; 23
 	SHIFT_REG_PORT &=~ (1 << LATCH);
-     468:	c2 98       	cbi	0x18, 2	; 24
+     47c:	c2 98       	cbi	0x18, 2	; 24
 	SPCR = ((1<<SPE)|(1<<MSTR));//Включение, режим MASTER
-     46a:	80 e5       	ldi	r24, 0x50	; 80
-     46c:	8d b9       	out	0x0d, r24	; 13
-     46e:	08 95       	ret
+     47e:	80 e5       	ldi	r24, 0x50	; 80
+     480:	8d b9       	out	0x0d, r24	; 13
+     482:	08 95       	ret
 
-00000470 <PWM_init>:
+00000484 <PWM_init>:
 }
 
 //PWM инициализация 
 void PWM_init(){
 	DDR_R |= (1<<R);
-     470:	8d 9a       	sbi	0x11, 5	; 17
+     484:	8d 9a       	sbi	0x11, 5	; 17
 	DDR_G |= (1<<G);
-     472:	8e 9a       	sbi	0x11, 6	; 17
+     486:	8e 9a       	sbi	0x11, 6	; 17
 	DDR_B |= (1<<B);
-     474:	8f 9a       	sbi	0x11, 7	; 17
+     488:	8f 9a       	sbi	0x11, 7	; 17
 	DDR_W |= (1<<W);
-     476:	b8 9a       	sbi	0x17, 0	; 23
+     48a:	b8 9a       	sbi	0x17, 0	; 23
 	
 	PORT_R &= ~(1<<R);
-     478:	95 98       	cbi	0x12, 5	; 18
+     48c:	95 98       	cbi	0x12, 5	; 18
 	PORT_G &= ~(1<<G);
-     47a:	96 98       	cbi	0x12, 6	; 18
+     48e:	96 98       	cbi	0x12, 6	; 18
 	PORT_B &= ~(1<<B);
-     47c:	97 98       	cbi	0x12, 7	; 18
+     490:	97 98       	cbi	0x12, 7	; 18
 	PORT_W &= ~(1<<W);
-     47e:	c0 98       	cbi	0x18, 0	; 24
+     492:	c0 98       	cbi	0x18, 0	; 24
 
 	DDRB &= ~(1<<PB7);
-     480:	bf 98       	cbi	0x17, 7	; 23
+     494:	bf 98       	cbi	0x17, 7	; 23
     TCCR0 |= (1 << CS10);
-     482:	83 b7       	in	r24, 0x33	; 51
-     484:	81 60       	ori	r24, 0x01	; 1
-     486:	83 bf       	out	0x33, r24	; 51
+     496:	83 b7       	in	r24, 0x33	; 51
+     498:	81 60       	ori	r24, 0x01	; 1
+     49a:	83 bf       	out	0x33, r24	; 51
     TCNT0 = 0x00;
-     488:	12 be       	out	0x32, r1	; 50
+     49c:	12 be       	out	0x32, r1	; 50
     TIMSK |= (1 << TOIE0);
-     48a:	89 b7       	in	r24, 0x39	; 57
-     48c:	81 60       	ori	r24, 0x01	; 1
-     48e:	89 bf       	out	0x39, r24	; 57
-     490:	08 95       	ret
+     49e:	89 b7       	in	r24, 0x39	; 57
+     4a0:	81 60       	ori	r24, 0x01	; 1
+     4a2:	89 bf       	out	0x39, r24	; 57
+     4a4:	08 95       	ret
 
-00000492 <ModifyRTC>:
-    }
+000004a6 <ModifyRTC>:
 }
 
 //Настройки времени
 void ModifyRTC(void)
 {
-     492:	cf 93       	push	r28
 	I2C_StartCondition();
-     494:	6c d7       	rcall	.+3800   	; 0x136e <I2C_StartCondition>
+     4a6:	d9 d5       	rcall	.+2994   	; 0x105a <I2C_StartCondition>
 	I2C_SendByte(0b11010000);
-     496:	80 ed       	ldi	r24, 0xD0	; 208
-     498:	73 d7       	rcall	.+3814   	; 0x1380 <I2C_SendByte>
+     4a8:	80 ed       	ldi	r24, 0xD0	; 208
+     4aa:	e0 d5       	rcall	.+3008   	; 0x106c <I2C_SendByte>
 	switch(now_mode){
-     49a:	80 91 b3 00 	lds	r24, 0x00B3
-     49e:	83 30       	cpi	r24, 0x03	; 3
-     4a0:	09 f4       	brne	.+2      	; 0x4a4 <ModifyRTC+0x12>
-     4a2:	67 c0       	rjmp	.+206    	; 0x572 <ModifyRTC+0xe0>
-     4a4:	28 f4       	brcc	.+10     	; 0x4b0 <ModifyRTC+0x1e>
-     4a6:	81 30       	cpi	r24, 0x01	; 1
-     4a8:	61 f0       	breq	.+24     	; 0x4c2 <ModifyRTC+0x30>
-     4aa:	82 30       	cpi	r24, 0x02	; 2
-     4ac:	b1 f1       	breq	.+108    	; 0x51a <ModifyRTC+0x88>
-     4ae:	52 c1       	rjmp	.+676    	; 0x754 <ModifyRTC+0x2c2>
-     4b0:	85 30       	cpi	r24, 0x05	; 5
-     4b2:	09 f4       	brne	.+2      	; 0x4b6 <ModifyRTC+0x24>
-     4b4:	fa c0       	rjmp	.+500    	; 0x6aa <ModifyRTC+0x218>
-     4b6:	08 f4       	brcc	.+2      	; 0x4ba <ModifyRTC+0x28>
-     4b8:	cc c0       	rjmp	.+408    	; 0x652 <ModifyRTC+0x1c0>
-     4ba:	86 30       	cpi	r24, 0x06	; 6
-     4bc:	09 f4       	brne	.+2      	; 0x4c0 <ModifyRTC+0x2e>
-     4be:	20 c1       	rjmp	.+576    	; 0x700 <ModifyRTC+0x26e>
-     4c0:	49 c1       	rjmp	.+658    	; 0x754 <ModifyRTC+0x2c2>
+     4ac:	80 91 bf 00 	lds	r24, 0x00BF
+     4b0:	81 30       	cpi	r24, 0x01	; 1
+     4b2:	19 f0       	breq	.+6      	; 0x4ba <ModifyRTC+0x14>
+     4b4:	82 30       	cpi	r24, 0x02	; 2
+     4b6:	61 f1       	breq	.+88     	; 0x510 <ModifyRTC+0x6a>
+     4b8:	55 c0       	rjmp	.+170    	; 0x564 <ModifyRTC+0xbe>
 		case MODE_EDIT_HOURS: //часы
 			I2C_SendByte(2);//Переходим на 0x02 - байт часов
-     4c2:	82 e0       	ldi	r24, 0x02	; 2
-     4c4:	5d d7       	rcall	.+3770   	; 0x1380 <I2C_SendByte>
+     4ba:	82 e0       	ldi	r24, 0x02	; 2
+     4bc:	d7 d5       	rcall	.+2990   	; 0x106c <I2C_SendByte>
 			if(increment_mode == MODE_INC){
-     4c6:	80 91 b2 00 	lds	r24, 0x00B2
-     4ca:	81 30       	cpi	r24, 0x01	; 1
-     4cc:	89 f4       	brne	.+34     	; 0x4f0 <ModifyRTC+0x5e>
+     4be:	80 91 be 00 	lds	r24, 0x00BE
+     4c2:	81 30       	cpi	r24, 0x01	; 1
+     4c4:	89 f4       	brne	.+34     	; 0x4e8 <ModifyRTC+0x42>
 			  if(hour<23){ 
-     4ce:	80 91 cc 00 	lds	r24, 0x00CC
-     4d2:	87 31       	cpi	r24, 0x17	; 23
-     4d4:	38 f4       	brcc	.+14     	; 0x4e4 <ModifyRTC+0x52>
+     4c6:	80 91 d8 00 	lds	r24, 0x00D8
+     4ca:	87 31       	cpi	r24, 0x17	; 23
+     4cc:	38 f4       	brcc	.+14     	; 0x4dc <ModifyRTC+0x36>
 				  I2C_SendByte(RTC_ConvertFromBinDec(hour+1));
-     4d6:	8f 5f       	subi	r24, 0xFF	; 255
-     4d8:	3e d7       	rcall	.+3708   	; 0x1356 <RTC_ConvertFromBinDec>
-     4da:	52 d7       	rcall	.+3748   	; 0x1380 <I2C_SendByte>
+     4ce:	8f 5f       	subi	r24, 0xFF	; 255
+     4d0:	b8 d5       	rcall	.+2928   	; 0x1042 <RTC_ConvertFromBinDec>
+     4d2:	cc d5       	rcall	.+2968   	; 0x106c <I2C_SendByte>
 				  hour++;
-     4dc:	80 91 cc 00 	lds	r24, 0x00CC
-     4e0:	8f 5f       	subi	r24, 0xFF	; 255
-     4e2:	13 c0       	rjmp	.+38     	; 0x50a <ModifyRTC+0x78>
+     4d4:	80 91 d8 00 	lds	r24, 0x00D8
+     4d8:	8f 5f       	subi	r24, 0xFF	; 255
+     4da:	12 c0       	rjmp	.+36     	; 0x500 <ModifyRTC+0x5a>
 			  }else{ 
 				  I2C_SendByte(RTC_ConvertFromBinDec(0));
-     4e4:	80 e0       	ldi	r24, 0x00	; 0
-     4e6:	37 d7       	rcall	.+3694   	; 0x1356 <RTC_ConvertFromBinDec>
-     4e8:	4b d7       	rcall	.+3734   	; 0x1380 <I2C_SendByte>
+     4dc:	80 e0       	ldi	r24, 0x00	; 0
+     4de:	b1 d5       	rcall	.+2914   	; 0x1042 <RTC_ConvertFromBinDec>
+     4e0:	c5 d5       	rcall	.+2954   	; 0x106c <I2C_SendByte>
 				  hour = 0;
-     4ea:	10 92 cc 00 	sts	0x00CC, r1
-     4ee:	32 c1       	rjmp	.+612    	; 0x754 <ModifyRTC+0x2c2>
+     4e2:	10 92 d8 00 	sts	0x00D8, r1
+     4e6:	3e c0       	rjmp	.+124    	; 0x564 <ModifyRTC+0xbe>
 			  }
 			}else if(increment_mode == MODE_DISINC){
-     4f0:	82 30       	cpi	r24, 0x02	; 2
-     4f2:	09 f0       	breq	.+2      	; 0x4f6 <ModifyRTC+0x64>
-     4f4:	2f c1       	rjmp	.+606    	; 0x754 <ModifyRTC+0x2c2>
+     4e8:	82 30       	cpi	r24, 0x02	; 2
+     4ea:	e1 f5       	brne	.+120    	; 0x564 <ModifyRTC+0xbe>
 			  if(hour>0){
-     4f6:	80 91 cc 00 	lds	r24, 0x00CC
-     4fa:	88 23       	and	r24, r24
-     4fc:	49 f0       	breq	.+18     	; 0x510 <ModifyRTC+0x7e>
+     4ec:	80 91 d8 00 	lds	r24, 0x00D8
+     4f0:	88 23       	and	r24, r24
+     4f2:	49 f0       	breq	.+18     	; 0x506 <ModifyRTC+0x60>
 			    I2C_SendByte(RTC_ConvertFromBinDec(hour-1));
-     4fe:	81 50       	subi	r24, 0x01	; 1
-     500:	2a d7       	rcall	.+3668   	; 0x1356 <RTC_ConvertFromBinDec>
-     502:	3e d7       	rcall	.+3708   	; 0x1380 <I2C_SendByte>
+     4f4:	81 50       	subi	r24, 0x01	; 1
+     4f6:	a5 d5       	rcall	.+2890   	; 0x1042 <RTC_ConvertFromBinDec>
+     4f8:	b9 d5       	rcall	.+2930   	; 0x106c <I2C_SendByte>
 				hour--;
-     504:	80 91 cc 00 	lds	r24, 0x00CC
-     508:	81 50       	subi	r24, 0x01	; 1
-     50a:	80 93 cc 00 	sts	0x00CC, r24
-     50e:	22 c1       	rjmp	.+580    	; 0x754 <ModifyRTC+0x2c2>
+     4fa:	80 91 d8 00 	lds	r24, 0x00D8
+     4fe:	81 50       	subi	r24, 0x01	; 1
+     500:	80 93 d8 00 	sts	0x00D8, r24
+     504:	2f c0       	rjmp	.+94     	; 0x564 <ModifyRTC+0xbe>
 			  }else{ 
 				I2C_SendByte(RTC_ConvertFromBinDec(23));
-     510:	87 e1       	ldi	r24, 0x17	; 23
-     512:	21 d7       	rcall	.+3650   	; 0x1356 <RTC_ConvertFromBinDec>
-     514:	35 d7       	rcall	.+3690   	; 0x1380 <I2C_SendByte>
+     506:	87 e1       	ldi	r24, 0x17	; 23
+     508:	9c d5       	rcall	.+2872   	; 0x1042 <RTC_ConvertFromBinDec>
+     50a:	b0 d5       	rcall	.+2912   	; 0x106c <I2C_SendByte>
 				hour = 23;
-     516:	87 e1       	ldi	r24, 0x17	; 23
-     518:	f8 cf       	rjmp	.-16     	; 0x50a <ModifyRTC+0x78>
+     50c:	87 e1       	ldi	r24, 0x17	; 23
+     50e:	f8 cf       	rjmp	.-16     	; 0x500 <ModifyRTC+0x5a>
 			}
 			
 		break;
 		
 		case MODE_EDIT_MINUTES: // минуты
 			I2C_SendByte(1);//Переходим на 0x01 - байт минут
-     51a:	81 e0       	ldi	r24, 0x01	; 1
-     51c:	31 d7       	rcall	.+3682   	; 0x1380 <I2C_SendByte>
+     510:	81 e0       	ldi	r24, 0x01	; 1
+     512:	ac d5       	rcall	.+2904   	; 0x106c <I2C_SendByte>
 			if(increment_mode == MODE_INC){
-     51e:	80 91 b2 00 	lds	r24, 0x00B2
-     522:	81 30       	cpi	r24, 0x01	; 1
-     524:	89 f4       	brne	.+34     	; 0x548 <ModifyRTC+0xb6>
+     514:	80 91 be 00 	lds	r24, 0x00BE
+     518:	81 30       	cpi	r24, 0x01	; 1
+     51a:	89 f4       	brne	.+34     	; 0x53e <ModifyRTC+0x98>
              if(min<59){ 
-     526:	80 91 cd 00 	lds	r24, 0x00CD
-     52a:	8b 33       	cpi	r24, 0x3B	; 59
-     52c:	38 f4       	brcc	.+14     	; 0x53c <ModifyRTC+0xaa>
+     51c:	80 91 d9 00 	lds	r24, 0x00D9
+     520:	8b 33       	cpi	r24, 0x3B	; 59
+     522:	38 f4       	brcc	.+14     	; 0x532 <ModifyRTC+0x8c>
 				 I2C_SendByte(RTC_ConvertFromBinDec(min+1));
-     52e:	8f 5f       	subi	r24, 0xFF	; 255
-     530:	12 d7       	rcall	.+3620   	; 0x1356 <RTC_ConvertFromBinDec>
-     532:	26 d7       	rcall	.+3660   	; 0x1380 <I2C_SendByte>
+     524:	8f 5f       	subi	r24, 0xFF	; 255
+     526:	8d d5       	rcall	.+2842   	; 0x1042 <RTC_ConvertFromBinDec>
+     528:	a1 d5       	rcall	.+2882   	; 0x106c <I2C_SendByte>
 				 min++;
-     534:	80 91 cd 00 	lds	r24, 0x00CD
-     538:	8f 5f       	subi	r24, 0xFF	; 255
-     53a:	13 c0       	rjmp	.+38     	; 0x562 <ModifyRTC+0xd0>
+     52a:	80 91 d9 00 	lds	r24, 0x00D9
+     52e:	8f 5f       	subi	r24, 0xFF	; 255
+     530:	17 c0       	rjmp	.+46     	; 0x560 <ModifyRTC+0xba>
              }else{ 
 				 I2C_SendByte(RTC_ConvertFromBinDec(0));
-     53c:	80 e0       	ldi	r24, 0x00	; 0
-     53e:	0b d7       	rcall	.+3606   	; 0x1356 <RTC_ConvertFromBinDec>
-     540:	1f d7       	rcall	.+3646   	; 0x1380 <I2C_SendByte>
+     532:	80 e0       	ldi	r24, 0x00	; 0
+     534:	86 d5       	rcall	.+2828   	; 0x1042 <RTC_ConvertFromBinDec>
+     536:	9a d5       	rcall	.+2868   	; 0x106c <I2C_SendByte>
 				 min = 0;
-     542:	10 92 cd 00 	sts	0x00CD, r1
-     546:	06 c1       	rjmp	.+524    	; 0x754 <ModifyRTC+0x2c2>
+     538:	10 92 d9 00 	sts	0x00D9, r1
+     53c:	13 c0       	rjmp	.+38     	; 0x564 <ModifyRTC+0xbe>
 			 }
 		    }else if(increment_mode == MODE_DISINC){
-     548:	82 30       	cpi	r24, 0x02	; 2
-     54a:	09 f0       	breq	.+2      	; 0x54e <ModifyRTC+0xbc>
-     54c:	03 c1       	rjmp	.+518    	; 0x754 <ModifyRTC+0x2c2>
+     53e:	82 30       	cpi	r24, 0x02	; 2
+     540:	89 f4       	brne	.+34     	; 0x564 <ModifyRTC+0xbe>
 				if(min>0){ 
-     54e:	80 91 cd 00 	lds	r24, 0x00CD
-     552:	88 23       	and	r24, r24
-     554:	49 f0       	breq	.+18     	; 0x568 <ModifyRTC+0xd6>
+     542:	80 91 d9 00 	lds	r24, 0x00D9
+     546:	88 23       	and	r24, r24
+     548:	39 f0       	breq	.+14     	; 0x558 <ModifyRTC+0xb2>
 					I2C_SendByte(RTC_ConvertFromBinDec(min-1));
-     556:	81 50       	subi	r24, 0x01	; 1
-     558:	fe d6       	rcall	.+3580   	; 0x1356 <RTC_ConvertFromBinDec>
-     55a:	12 d7       	rcall	.+3620   	; 0x1380 <I2C_SendByte>
+     54a:	81 50       	subi	r24, 0x01	; 1
+     54c:	7a d5       	rcall	.+2804   	; 0x1042 <RTC_ConvertFromBinDec>
+     54e:	8e d5       	rcall	.+2844   	; 0x106c <I2C_SendByte>
 					min--;
-     55c:	80 91 cd 00 	lds	r24, 0x00CD
-     560:	81 50       	subi	r24, 0x01	; 1
-     562:	80 93 cd 00 	sts	0x00CD, r24
-     566:	f6 c0       	rjmp	.+492    	; 0x754 <ModifyRTC+0x2c2>
+     550:	80 91 d9 00 	lds	r24, 0x00D9
+     554:	81 50       	subi	r24, 0x01	; 1
+     556:	04 c0       	rjmp	.+8      	; 0x560 <ModifyRTC+0xba>
 				}else{ 
 					I2C_SendByte(RTC_ConvertFromBinDec(59));
-     568:	8b e3       	ldi	r24, 0x3B	; 59
-     56a:	f5 d6       	rcall	.+3562   	; 0x1356 <RTC_ConvertFromBinDec>
-     56c:	09 d7       	rcall	.+3602   	; 0x1380 <I2C_SendByte>
+     558:	8b e3       	ldi	r24, 0x3B	; 59
+     55a:	73 d5       	rcall	.+2790   	; 0x1042 <RTC_ConvertFromBinDec>
+     55c:	87 d5       	rcall	.+2830   	; 0x106c <I2C_SendByte>
 					min = 59;
-     56e:	8b e3       	ldi	r24, 0x3B	; 59
-     570:	f8 cf       	rjmp	.-16     	; 0x562 <ModifyRTC+0xd0>
-			}
-		break;
-		
-		
-		case MODE_EDIT_DAY: // дата
-		 	I2C_SendByte(4);//Переходим на 0x04 - байт числа даты
-     572:	84 e0       	ldi	r24, 0x04	; 4
-     574:	05 d7       	rcall	.+3594   	; 0x1380 <I2C_SendByte>
-			if (month==2) //февраль
-     576:	90 91 c9 00 	lds	r25, 0x00C9
-     57a:	80 91 b2 00 	lds	r24, 0x00B2
-     57e:	92 30       	cpi	r25, 0x02	; 2
-     580:	71 f5       	brne	.+92     	; 0x5de <ModifyRTC+0x14c>
-			{
-				if(year%4==0) { //Если високосный год
-     582:	90 91 c8 00 	lds	r25, 0x00C8
-     586:	93 70       	andi	r25, 0x03	; 3
-     588:	39 f4       	brne	.+14     	; 0x598 <ModifyRTC+0x106>
-					 if(increment_mode == MODE_INC){
-     58a:	81 30       	cpi	r24, 0x01	; 1
-     58c:	81 f4       	brne	.+32     	; 0x5ae <ModifyRTC+0x11c>
-						 if(date<29){ 
-     58e:	80 91 ca 00 	lds	r24, 0x00CA
-     592:	8d 31       	cpi	r24, 0x1D	; 29
-     594:	38 f4       	brcc	.+14     	; 0x5a4 <ModifyRTC+0x112>
-     596:	41 c0       	rjmp	.+130    	; 0x61a <ModifyRTC+0x188>
-							 I2C_SendByte(RTC_ConvertFromBinDec(29));
-							 date = 29;
-						 }
-			         }
-				}else{
-					if(increment_mode == MODE_INC){
-     598:	81 30       	cpi	r24, 0x01	; 1
-     59a:	a9 f4       	brne	.+42     	; 0x5c6 <ModifyRTC+0x134>
-						if(date<28){
-     59c:	80 91 ca 00 	lds	r24, 0x00CA
-     5a0:	8c 31       	cpi	r24, 0x1C	; 28
-     5a2:	d8 f1       	brcs	.+118    	; 0x61a <ModifyRTC+0x188>
-					 if(increment_mode == MODE_INC){
-						 if(date<29){ 
-							 I2C_SendByte(RTC_ConvertFromBinDec(date+1));
-							 date++;
-						 }else{ 
-							 I2C_SendByte(RTC_ConvertFromBinDec(1));
-     5a4:	81 e0       	ldi	r24, 0x01	; 1
-     5a6:	d7 d6       	rcall	.+3502   	; 0x1356 <RTC_ConvertFromBinDec>
-     5a8:	eb d6       	rcall	.+3542   	; 0x1380 <I2C_SendByte>
-							 date = 1;
-     5aa:	81 e0       	ldi	r24, 0x01	; 1
-     5ac:	4f c0       	rjmp	.+158    	; 0x64c <ModifyRTC+0x1ba>
-						 }
-				     }else if(increment_mode == MODE_DISINC){
-     5ae:	82 30       	cpi	r24, 0x02	; 2
-     5b0:	09 f0       	breq	.+2      	; 0x5b4 <ModifyRTC+0x122>
-     5b2:	d0 c0       	rjmp	.+416    	; 0x754 <ModifyRTC+0x2c2>
-						 if(date>1){ 
-     5b4:	80 91 ca 00 	lds	r24, 0x00CA
-     5b8:	82 30       	cpi	r24, 0x02	; 2
-     5ba:	e8 f5       	brcc	.+122    	; 0x636 <ModifyRTC+0x1a4>
-							 I2C_SendByte(RTC_ConvertFromBinDec(date-1));
-							 date--;
-						 }else{ 
-							 I2C_SendByte(RTC_ConvertFromBinDec(29));
-     5bc:	8d e1       	ldi	r24, 0x1D	; 29
-     5be:	cb d6       	rcall	.+3478   	; 0x1356 <RTC_ConvertFromBinDec>
-     5c0:	df d6       	rcall	.+3518   	; 0x1380 <I2C_SendByte>
-							 date = 29;
-     5c2:	8d e1       	ldi	r24, 0x1D	; 29
-     5c4:	43 c0       	rjmp	.+134    	; 0x64c <ModifyRTC+0x1ba>
-							date++;
-						}else{ 
-							I2C_SendByte(RTC_ConvertFromBinDec(1));
-							date = 1;
-						}
-					}else if(increment_mode == MODE_DISINC){
-     5c6:	82 30       	cpi	r24, 0x02	; 2
-     5c8:	09 f0       	breq	.+2      	; 0x5cc <ModifyRTC+0x13a>
-     5ca:	c4 c0       	rjmp	.+392    	; 0x754 <ModifyRTC+0x2c2>
-						 if(date>1){ 
-     5cc:	80 91 ca 00 	lds	r24, 0x00CA
-     5d0:	82 30       	cpi	r24, 0x02	; 2
-     5d2:	88 f5       	brcc	.+98     	; 0x636 <ModifyRTC+0x1a4>
-							 I2C_SendByte(RTC_ConvertFromBinDec(date-1));
-							 date--;
-						 }else{ 
-							 I2C_SendByte(RTC_ConvertFromBinDec(28));
-     5d4:	8c e1       	ldi	r24, 0x1C	; 28
-     5d6:	bf d6       	rcall	.+3454   	; 0x1356 <RTC_ConvertFromBinDec>
-     5d8:	d3 d6       	rcall	.+3494   	; 0x1380 <I2C_SendByte>
-							 date = 28;
-     5da:	8c e1       	ldi	r24, 0x1C	; 28
-     5dc:	37 c0       	rjmp	.+110    	; 0x64c <ModifyRTC+0x1ba>
-						 }
-					}				
-				}
-			}else if ((month==4)|(month==6)|(month==9)|(month==11)){
-     5de:	9d 7f       	andi	r25, 0xFD	; 253
-     5e0:	94 30       	cpi	r25, 0x04	; 4
-     5e2:	11 f0       	breq	.+4      	; 0x5e8 <ModifyRTC+0x156>
-     5e4:	99 30       	cpi	r25, 0x09	; 9
-     5e6:	99 f4       	brne	.+38     	; 0x60e <ModifyRTC+0x17c>
-				if(increment_mode == MODE_INC){
-     5e8:	81 30       	cpi	r24, 0x01	; 1
-     5ea:	29 f4       	brne	.+10     	; 0x5f6 <ModifyRTC+0x164>
-					if(date<30){ 
-     5ec:	80 91 ca 00 	lds	r24, 0x00CA
-     5f0:	8e 31       	cpi	r24, 0x1E	; 30
-     5f2:	c0 f6       	brcc	.-80     	; 0x5a4 <ModifyRTC+0x112>
-     5f4:	12 c0       	rjmp	.+36     	; 0x61a <ModifyRTC+0x188>
-						date++;
-					}else{ 
-						I2C_SendByte(RTC_ConvertFromBinDec(1));
-						date = 1;
-					}
-				}else if(increment_mode == MODE_DISINC){
-     5f6:	82 30       	cpi	r24, 0x02	; 2
-     5f8:	09 f0       	breq	.+2      	; 0x5fc <ModifyRTC+0x16a>
-     5fa:	ac c0       	rjmp	.+344    	; 0x754 <ModifyRTC+0x2c2>
-					if(date>1){ 
-     5fc:	80 91 ca 00 	lds	r24, 0x00CA
-     600:	82 30       	cpi	r24, 0x02	; 2
-     602:	c8 f4       	brcc	.+50     	; 0x636 <ModifyRTC+0x1a4>
-						I2C_SendByte(RTC_ConvertFromBinDec(date-1));
-						date--;
-					}else{ 
-						I2C_SendByte(RTC_ConvertFromBinDec(30));
-     604:	8e e1       	ldi	r24, 0x1E	; 30
-     606:	a7 d6       	rcall	.+3406   	; 0x1356 <RTC_ConvertFromBinDec>
-     608:	bb d6       	rcall	.+3446   	; 0x1380 <I2C_SendByte>
-						date = 30;
-     60a:	8e e1       	ldi	r24, 0x1E	; 30
-     60c:	1f c0       	rjmp	.+62     	; 0x64c <ModifyRTC+0x1ba>
-					}
-				}			
-			}else{
-				if(increment_mode == MODE_INC){
-     60e:	81 30       	cpi	r24, 0x01	; 1
-     610:	59 f4       	brne	.+22     	; 0x628 <ModifyRTC+0x196>
-					if(date<31){ 
-     612:	80 91 ca 00 	lds	r24, 0x00CA
-     616:	8f 31       	cpi	r24, 0x1F	; 31
-     618:	28 f6       	brcc	.-118    	; 0x5a4 <ModifyRTC+0x112>
-						I2C_SendByte(RTC_ConvertFromBinDec(date+1));
-     61a:	8f 5f       	subi	r24, 0xFF	; 255
-     61c:	9c d6       	rcall	.+3384   	; 0x1356 <RTC_ConvertFromBinDec>
-     61e:	b0 d6       	rcall	.+3424   	; 0x1380 <I2C_SendByte>
-						date++;
-     620:	80 91 ca 00 	lds	r24, 0x00CA
-     624:	8f 5f       	subi	r24, 0xFF	; 255
-     626:	12 c0       	rjmp	.+36     	; 0x64c <ModifyRTC+0x1ba>
-					}else{ 
-						I2C_SendByte(RTC_ConvertFromBinDec(1));
-						date = 1;
-					}
-				}else if(increment_mode == MODE_DISINC){
-     628:	82 30       	cpi	r24, 0x02	; 2
-     62a:	09 f0       	breq	.+2      	; 0x62e <ModifyRTC+0x19c>
-     62c:	93 c0       	rjmp	.+294    	; 0x754 <ModifyRTC+0x2c2>
-					if(date>1){ 
-     62e:	80 91 ca 00 	lds	r24, 0x00CA
-     632:	82 30       	cpi	r24, 0x02	; 2
-     634:	38 f0       	brcs	.+14     	; 0x644 <ModifyRTC+0x1b2>
-						I2C_SendByte(RTC_ConvertFromBinDec(date-1));
-     636:	81 50       	subi	r24, 0x01	; 1
-     638:	8e d6       	rcall	.+3356   	; 0x1356 <RTC_ConvertFromBinDec>
-     63a:	a2 d6       	rcall	.+3396   	; 0x1380 <I2C_SendByte>
-						date--;
-     63c:	80 91 ca 00 	lds	r24, 0x00CA
-     640:	81 50       	subi	r24, 0x01	; 1
-     642:	04 c0       	rjmp	.+8      	; 0x64c <ModifyRTC+0x1ba>
-					}else{ 
-						I2C_SendByte(RTC_ConvertFromBinDec(31));
-     644:	8f e1       	ldi	r24, 0x1F	; 31
-     646:	87 d6       	rcall	.+3342   	; 0x1356 <RTC_ConvertFromBinDec>
-     648:	9b d6       	rcall	.+3382   	; 0x1380 <I2C_SendByte>
-						date = 31;
-     64a:	8f e1       	ldi	r24, 0x1F	; 31
-     64c:	80 93 ca 00 	sts	0x00CA, r24
-     650:	81 c0       	rjmp	.+258    	; 0x754 <ModifyRTC+0x2c2>
-				}
-			}
-		break;
-		
-		case MODE_EDIT_MOUTH: // месяц
-		 	I2C_SendByte(5);//Переходим на 0x05 - байт месяца
-     652:	85 e0       	ldi	r24, 0x05	; 5
-     654:	95 d6       	rcall	.+3370   	; 0x1380 <I2C_SendByte>
-			
-			if(increment_mode == MODE_INC){
-     656:	c0 91 b2 00 	lds	r28, 0x00B2
-     65a:	c1 30       	cpi	r28, 0x01	; 1
-     65c:	89 f4       	brne	.+34     	; 0x680 <ModifyRTC+0x1ee>
-			 if(month<12){ 
-     65e:	80 91 c9 00 	lds	r24, 0x00C9
-     662:	8c 30       	cpi	r24, 0x0C	; 12
-     664:	38 f4       	brcc	.+14     	; 0x674 <ModifyRTC+0x1e2>
-				 I2C_SendByte(RTC_ConvertFromBinDec(month+1));
-     666:	8f 5f       	subi	r24, 0xFF	; 255
-     668:	76 d6       	rcall	.+3308   	; 0x1356 <RTC_ConvertFromBinDec>
-     66a:	8a d6       	rcall	.+3348   	; 0x1380 <I2C_SendByte>
-				 month++;
-     66c:	80 91 c9 00 	lds	r24, 0x00C9
-     670:	8f 5f       	subi	r24, 0xFF	; 255
-     672:	18 c0       	rjmp	.+48     	; 0x6a4 <ModifyRTC+0x212>
-			 }else{ 
-				 I2C_SendByte(RTC_ConvertFromBinDec(1));
-     674:	81 e0       	ldi	r24, 0x01	; 1
-     676:	6f d6       	rcall	.+3294   	; 0x1356 <RTC_ConvertFromBinDec>
-     678:	83 d6       	rcall	.+3334   	; 0x1380 <I2C_SendByte>
-				 month = 1;
-     67a:	c0 93 c9 00 	sts	0x00C9, r28
-     67e:	6a c0       	rjmp	.+212    	; 0x754 <ModifyRTC+0x2c2>
-			 }
-			}else if(increment_mode == MODE_DISINC){
-     680:	c2 30       	cpi	r28, 0x02	; 2
-     682:	09 f0       	breq	.+2      	; 0x686 <ModifyRTC+0x1f4>
-     684:	67 c0       	rjmp	.+206    	; 0x754 <ModifyRTC+0x2c2>
-			 if(month > 1){ 
-     686:	80 91 c9 00 	lds	r24, 0x00C9
-     68a:	82 30       	cpi	r24, 0x02	; 2
-     68c:	38 f0       	brcs	.+14     	; 0x69c <ModifyRTC+0x20a>
-				 I2C_SendByte(RTC_ConvertFromBinDec(month-1));
-     68e:	81 50       	subi	r24, 0x01	; 1
-     690:	62 d6       	rcall	.+3268   	; 0x1356 <RTC_ConvertFromBinDec>
-     692:	76 d6       	rcall	.+3308   	; 0x1380 <I2C_SendByte>
-				 month--;
-     694:	80 91 c9 00 	lds	r24, 0x00C9
-     698:	81 50       	subi	r24, 0x01	; 1
-     69a:	04 c0       	rjmp	.+8      	; 0x6a4 <ModifyRTC+0x212>
-			 }else{ 
-				 I2C_SendByte(RTC_ConvertFromBinDec(12));
-     69c:	8c e0       	ldi	r24, 0x0C	; 12
-     69e:	5b d6       	rcall	.+3254   	; 0x1356 <RTC_ConvertFromBinDec>
-     6a0:	6f d6       	rcall	.+3294   	; 0x1380 <I2C_SendByte>
-				 month = 12;
-     6a2:	8c e0       	ldi	r24, 0x0C	; 12
-     6a4:	80 93 c9 00 	sts	0x00C9, r24
-     6a8:	55 c0       	rjmp	.+170    	; 0x754 <ModifyRTC+0x2c2>
-			}		
-		break;
-		
-		
-		case MODE_EDIT_YEAR: // год
-		 	I2C_SendByte(6);//Переходим на 0x06 - байт года
-     6aa:	86 e0       	ldi	r24, 0x06	; 6
-     6ac:	69 d6       	rcall	.+3282   	; 0x1380 <I2C_SendByte>
-			if(increment_mode == MODE_INC){
-     6ae:	c0 91 b2 00 	lds	r28, 0x00B2
-     6b2:	c1 30       	cpi	r28, 0x01	; 1
-     6b4:	89 f4       	brne	.+34     	; 0x6d8 <ModifyRTC+0x246>
-			 if(year<99){ 
-     6b6:	80 91 c8 00 	lds	r24, 0x00C8
-     6ba:	83 36       	cpi	r24, 0x63	; 99
-     6bc:	38 f4       	brcc	.+14     	; 0x6cc <ModifyRTC+0x23a>
-				 I2C_SendByte(RTC_ConvertFromBinDec(year+1));
-     6be:	8f 5f       	subi	r24, 0xFF	; 255
-     6c0:	4a d6       	rcall	.+3220   	; 0x1356 <RTC_ConvertFromBinDec>
-     6c2:	5e d6       	rcall	.+3260   	; 0x1380 <I2C_SendByte>
-				 year++;
-     6c4:	80 91 c8 00 	lds	r24, 0x00C8
-     6c8:	8f 5f       	subi	r24, 0xFF	; 255
-     6ca:	17 c0       	rjmp	.+46     	; 0x6fa <ModifyRTC+0x268>
-			 }else{ 
-				 I2C_SendByte(RTC_ConvertFromBinDec(1));
-     6cc:	81 e0       	ldi	r24, 0x01	; 1
-     6ce:	43 d6       	rcall	.+3206   	; 0x1356 <RTC_ConvertFromBinDec>
-     6d0:	57 d6       	rcall	.+3246   	; 0x1380 <I2C_SendByte>
-				 year = 1;
-     6d2:	c0 93 c8 00 	sts	0x00C8, r28
-     6d6:	3e c0       	rjmp	.+124    	; 0x754 <ModifyRTC+0x2c2>
-			 }
-			}else if(increment_mode == MODE_DISINC){
-     6d8:	c2 30       	cpi	r28, 0x02	; 2
-     6da:	e1 f5       	brne	.+120    	; 0x754 <ModifyRTC+0x2c2>
-			 if(year>1){
-     6dc:	80 91 c8 00 	lds	r24, 0x00C8
-     6e0:	82 30       	cpi	r24, 0x02	; 2
-     6e2:	38 f0       	brcs	.+14     	; 0x6f2 <ModifyRTC+0x260>
-				  I2C_SendByte(RTC_ConvertFromBinDec(year-1));
-     6e4:	81 50       	subi	r24, 0x01	; 1
-     6e6:	37 d6       	rcall	.+3182   	; 0x1356 <RTC_ConvertFromBinDec>
-     6e8:	4b d6       	rcall	.+3222   	; 0x1380 <I2C_SendByte>
-				  year--;
-     6ea:	80 91 c8 00 	lds	r24, 0x00C8
-     6ee:	81 50       	subi	r24, 0x01	; 1
-     6f0:	04 c0       	rjmp	.+8      	; 0x6fa <ModifyRTC+0x268>
-			 }else{ 
-				  I2C_SendByte(RTC_ConvertFromBinDec(99));
-     6f2:	83 e6       	ldi	r24, 0x63	; 99
-     6f4:	30 d6       	rcall	.+3168   	; 0x1356 <RTC_ConvertFromBinDec>
-     6f6:	44 d6       	rcall	.+3208   	; 0x1380 <I2C_SendByte>
-				  year = 99;
-     6f8:	83 e6       	ldi	r24, 0x63	; 99
-     6fa:	80 93 c8 00 	sts	0x00C8, r24
-     6fe:	2a c0       	rjmp	.+84     	; 0x754 <ModifyRTC+0x2c2>
-			}
-		break;
-		
-		
-		case MODE_EDIT_WEEK_DAY: // день недели
-		 	I2C_SendByte(3);//Переходим на 0x03 - байт дня недели
-     700:	83 e0       	ldi	r24, 0x03	; 3
-     702:	3e d6       	rcall	.+3196   	; 0x1380 <I2C_SendByte>
-			if(increment_mode == MODE_INC){
-     704:	c0 91 b2 00 	lds	r28, 0x00B2
-     708:	c1 30       	cpi	r28, 0x01	; 1
-     70a:	89 f4       	brne	.+34     	; 0x72e <ModifyRTC+0x29c>
-			    if(day<7){ 
-     70c:	80 91 cb 00 	lds	r24, 0x00CB
-     710:	87 30       	cpi	r24, 0x07	; 7
-     712:	38 f4       	brcc	.+14     	; 0x722 <ModifyRTC+0x290>
-					I2C_SendByte(RTC_ConvertFromBinDec(day+1));
-     714:	8f 5f       	subi	r24, 0xFF	; 255
-     716:	1f d6       	rcall	.+3134   	; 0x1356 <RTC_ConvertFromBinDec>
-     718:	33 d6       	rcall	.+3174   	; 0x1380 <I2C_SendByte>
-					day++;
-     71a:	80 91 cb 00 	lds	r24, 0x00CB
-     71e:	8f 5f       	subi	r24, 0xFF	; 255
-     720:	17 c0       	rjmp	.+46     	; 0x750 <ModifyRTC+0x2be>
-			    }else{ 
-					I2C_SendByte(RTC_ConvertFromBinDec(1));
-     722:	81 e0       	ldi	r24, 0x01	; 1
-     724:	18 d6       	rcall	.+3120   	; 0x1356 <RTC_ConvertFromBinDec>
-     726:	2c d6       	rcall	.+3160   	; 0x1380 <I2C_SendByte>
-					day = 1;
-     728:	c0 93 cb 00 	sts	0x00CB, r28
-     72c:	13 c0       	rjmp	.+38     	; 0x754 <ModifyRTC+0x2c2>
-				}
-			}else if(increment_mode == MODE_DISINC){
-     72e:	c2 30       	cpi	r28, 0x02	; 2
-     730:	89 f4       	brne	.+34     	; 0x754 <ModifyRTC+0x2c2>
-				if(day>1){ 
-     732:	80 91 cb 00 	lds	r24, 0x00CB
-     736:	82 30       	cpi	r24, 0x02	; 2
-     738:	38 f0       	brcs	.+14     	; 0x748 <ModifyRTC+0x2b6>
-					I2C_SendByte(RTC_ConvertFromBinDec(day-1));
-     73a:	81 50       	subi	r24, 0x01	; 1
-     73c:	0c d6       	rcall	.+3096   	; 0x1356 <RTC_ConvertFromBinDec>
-     73e:	20 d6       	rcall	.+3136   	; 0x1380 <I2C_SendByte>
-					day--;
-     740:	80 91 cb 00 	lds	r24, 0x00CB
-     744:	81 50       	subi	r24, 0x01	; 1
-     746:	04 c0       	rjmp	.+8      	; 0x750 <ModifyRTC+0x2be>
-				}else{ 
-					I2C_SendByte(RTC_ConvertFromBinDec(7));
-     748:	87 e0       	ldi	r24, 0x07	; 7
-     74a:	05 d6       	rcall	.+3082   	; 0x1356 <RTC_ConvertFromBinDec>
-     74c:	19 d6       	rcall	.+3122   	; 0x1380 <I2C_SendByte>
-					day = 7;
-     74e:	87 e0       	ldi	r24, 0x07	; 7
-     750:	80 93 cb 00 	sts	0x00CB, r24
-			}
-	    break;
-
-	}
-	I2C_StopCondition();
-}
-     754:	cf 91       	pop	r28
+     55e:	8b e3       	ldi	r24, 0x3B	; 59
+     560:	80 93 d9 00 	sts	0x00D9, r24
 				}
 			}
 	    break;
-
+*/
 	}
 	I2C_StopCondition();
-     756:	11 c6       	rjmp	.+3106   	; 0x137a <I2C_StopCondition>
+     564:	80 c5       	rjmp	.+2816   	; 0x1066 <I2C_StopCondition>
 
-00000758 <ModifyLEDMenu>:
+00000566 <ModifyLEDMenu>:
 }
 
 //Настройка рассвета/заката
 void ModifyLEDMenu(void)
 {
 	switch(now_mode_led_menu){
-     758:	80 91 b0 00 	lds	r24, 0x00B0
-     75c:	90 91 b1 00 	lds	r25, 0x00B1
-     760:	89 30       	cpi	r24, 0x09	; 9
-     762:	91 05       	cpc	r25, r1
-     764:	09 f4       	brne	.+2      	; 0x768 <ModifyLEDMenu+0x10>
-     766:	5e c0       	rjmp	.+188    	; 0x824 <ModifyLEDMenu+0xcc>
-     768:	30 f4       	brcc	.+12     	; 0x776 <ModifyLEDMenu+0x1e>
-     76a:	87 30       	cpi	r24, 0x07	; 7
-     76c:	91 05       	cpc	r25, r1
-     76e:	69 f0       	breq	.+26     	; 0x78a <ModifyLEDMenu+0x32>
-     770:	08 97       	sbiw	r24, 0x08	; 8
-     772:	89 f1       	breq	.+98     	; 0x7d6 <ModifyLEDMenu+0x7e>
-     774:	08 95       	ret
-     776:	8b 30       	cpi	r24, 0x0B	; 11
-     778:	91 05       	cpc	r25, r1
-     77a:	09 f4       	brne	.+2      	; 0x77e <ModifyLEDMenu+0x26>
-     77c:	9f c0       	rjmp	.+318    	; 0x8bc <ModifyLEDMenu+0x164>
-     77e:	08 f4       	brcc	.+2      	; 0x782 <ModifyLEDMenu+0x2a>
-     780:	77 c0       	rjmp	.+238    	; 0x870 <ModifyLEDMenu+0x118>
-     782:	0c 97       	sbiw	r24, 0x0c	; 12
-     784:	09 f4       	brne	.+2      	; 0x788 <ModifyLEDMenu+0x30>
-     786:	c0 c0       	rjmp	.+384    	; 0x908 <ModifyLEDMenu+0x1b0>
-     788:	08 95       	ret
+     566:	80 91 bc 00 	lds	r24, 0x00BC
+     56a:	90 91 bd 00 	lds	r25, 0x00BD
+     56e:	89 30       	cpi	r24, 0x09	; 9
+     570:	91 05       	cpc	r25, r1
+     572:	09 f4       	brne	.+2      	; 0x576 <ModifyLEDMenu+0x10>
+     574:	5e c0       	rjmp	.+188    	; 0x632 <ModifyLEDMenu+0xcc>
+     576:	30 f4       	brcc	.+12     	; 0x584 <ModifyLEDMenu+0x1e>
+     578:	87 30       	cpi	r24, 0x07	; 7
+     57a:	91 05       	cpc	r25, r1
+     57c:	69 f0       	breq	.+26     	; 0x598 <ModifyLEDMenu+0x32>
+     57e:	08 97       	sbiw	r24, 0x08	; 8
+     580:	89 f1       	breq	.+98     	; 0x5e4 <ModifyLEDMenu+0x7e>
+     582:	08 95       	ret
+     584:	8b 30       	cpi	r24, 0x0B	; 11
+     586:	91 05       	cpc	r25, r1
+     588:	09 f4       	brne	.+2      	; 0x58c <ModifyLEDMenu+0x26>
+     58a:	9f c0       	rjmp	.+318    	; 0x6ca <ModifyLEDMenu+0x164>
+     58c:	08 f4       	brcc	.+2      	; 0x590 <ModifyLEDMenu+0x2a>
+     58e:	77 c0       	rjmp	.+238    	; 0x67e <ModifyLEDMenu+0x118>
+     590:	0c 97       	sbiw	r24, 0x0c	; 12
+     592:	09 f4       	brne	.+2      	; 0x596 <ModifyLEDMenu+0x30>
+     594:	c0 c0       	rjmp	.+384    	; 0x716 <ModifyLEDMenu+0x1b0>
+     596:	08 95       	ret
 		    case MODE_EDIT_START_TIME_DAWN_HOURS: // день недели
 			    if(increment_mode_led_menu == MODE_INC){
-     78a:	80 91 ae 00 	lds	r24, 0x00AE
-     78e:	90 91 af 00 	lds	r25, 0x00AF
-     792:	81 30       	cpi	r24, 0x01	; 1
-     794:	91 05       	cpc	r25, r1
-     796:	81 f4       	brne	.+32     	; 0x7b8 <ModifyLEDMenu+0x60>
+     598:	80 91 ba 00 	lds	r24, 0x00BA
+     59c:	90 91 bb 00 	lds	r25, 0x00BB
+     5a0:	81 30       	cpi	r24, 0x01	; 1
+     5a2:	91 05       	cpc	r25, r1
+     5a4:	81 f4       	brne	.+32     	; 0x5c6 <ModifyLEDMenu+0x60>
 					if(led_menu_dawn_hours<10) led_menu_dawn_hours++;
-     798:	80 91 be 00 	lds	r24, 0x00BE
-     79c:	90 91 bf 00 	lds	r25, 0x00BF
-     7a0:	8a 30       	cpi	r24, 0x0A	; 10
-     7a2:	91 05       	cpc	r25, r1
-     7a4:	10 f4       	brcc	.+4      	; 0x7aa <ModifyLEDMenu+0x52>
-     7a6:	01 96       	adiw	r24, 0x01	; 1
-     7a8:	02 c0       	rjmp	.+4      	; 0x7ae <ModifyLEDMenu+0x56>
+     5a6:	80 91 ca 00 	lds	r24, 0x00CA
+     5aa:	90 91 cb 00 	lds	r25, 0x00CB
+     5ae:	8a 30       	cpi	r24, 0x0A	; 10
+     5b0:	91 05       	cpc	r25, r1
+     5b2:	10 f4       	brcc	.+4      	; 0x5b8 <ModifyLEDMenu+0x52>
+     5b4:	01 96       	adiw	r24, 0x01	; 1
+     5b6:	02 c0       	rjmp	.+4      	; 0x5bc <ModifyLEDMenu+0x56>
 					else led_menu_dawn_hours = 3;
-     7aa:	83 e0       	ldi	r24, 0x03	; 3
-     7ac:	90 e0       	ldi	r25, 0x00	; 0
-     7ae:	90 93 bf 00 	sts	0x00BF, r25
-     7b2:	80 93 be 00 	sts	0x00BE, r24
-     7b6:	08 95       	ret
+     5b8:	83 e0       	ldi	r24, 0x03	; 3
+     5ba:	90 e0       	ldi	r25, 0x00	; 0
+     5bc:	90 93 cb 00 	sts	0x00CB, r25
+     5c0:	80 93 ca 00 	sts	0x00CA, r24
+     5c4:	08 95       	ret
 				}else if(increment_mode_led_menu == MODE_DISINC){
-     7b8:	02 97       	sbiw	r24, 0x02	; 2
-     7ba:	09 f0       	breq	.+2      	; 0x7be <ModifyLEDMenu+0x66>
-     7bc:	c9 c0       	rjmp	.+402    	; 0x950 <ModifyLEDMenu+0x1f8>
+     5c6:	02 97       	sbiw	r24, 0x02	; 2
+     5c8:	09 f0       	breq	.+2      	; 0x5cc <ModifyLEDMenu+0x66>
+     5ca:	c9 c0       	rjmp	.+402    	; 0x75e <ModifyLEDMenu+0x1f8>
 					if(led_menu_dawn_hours>4) led_menu_dawn_hours--;
-     7be:	80 91 be 00 	lds	r24, 0x00BE
-     7c2:	90 91 bf 00 	lds	r25, 0x00BF
-     7c6:	85 30       	cpi	r24, 0x05	; 5
-     7c8:	91 05       	cpc	r25, r1
-     7ca:	10 f0       	brcs	.+4      	; 0x7d0 <ModifyLEDMenu+0x78>
-     7cc:	01 97       	sbiw	r24, 0x01	; 1
-     7ce:	ef cf       	rjmp	.-34     	; 0x7ae <ModifyLEDMenu+0x56>
+     5cc:	80 91 ca 00 	lds	r24, 0x00CA
+     5d0:	90 91 cb 00 	lds	r25, 0x00CB
+     5d4:	85 30       	cpi	r24, 0x05	; 5
+     5d6:	91 05       	cpc	r25, r1
+     5d8:	10 f0       	brcs	.+4      	; 0x5de <ModifyLEDMenu+0x78>
+     5da:	01 97       	sbiw	r24, 0x01	; 1
+     5dc:	ef cf       	rjmp	.-34     	; 0x5bc <ModifyLEDMenu+0x56>
 					else led_menu_dawn_hours = 10;
-     7d0:	8a e0       	ldi	r24, 0x0A	; 10
-     7d2:	90 e0       	ldi	r25, 0x00	; 0
-     7d4:	ec cf       	rjmp	.-40     	; 0x7ae <ModifyLEDMenu+0x56>
+     5de:	8a e0       	ldi	r24, 0x0A	; 10
+     5e0:	90 e0       	ldi	r25, 0x00	; 0
+     5e2:	ec cf       	rjmp	.-40     	; 0x5bc <ModifyLEDMenu+0x56>
 			    }
 			break;
 			
 		    case MODE_EDIT_START_TIME_DAWN_MINS: // день недели
 				 if(increment_mode_led_menu == MODE_INC){
-     7d6:	80 91 ae 00 	lds	r24, 0x00AE
-     7da:	90 91 af 00 	lds	r25, 0x00AF
-     7de:	81 30       	cpi	r24, 0x01	; 1
-     7e0:	91 05       	cpc	r25, r1
-     7e2:	71 f4       	brne	.+28     	; 0x800 <ModifyLEDMenu+0xa8>
+     5e4:	80 91 ba 00 	lds	r24, 0x00BA
+     5e8:	90 91 bb 00 	lds	r25, 0x00BB
+     5ec:	81 30       	cpi	r24, 0x01	; 1
+     5ee:	91 05       	cpc	r25, r1
+     5f0:	71 f4       	brne	.+28     	; 0x60e <ModifyLEDMenu+0xa8>
 					 if(led_menu_dawn_mins<59) led_menu_dawn_mins++;
-     7e4:	80 91 bc 00 	lds	r24, 0x00BC
-     7e8:	90 91 bd 00 	lds	r25, 0x00BD
-     7ec:	8b 33       	cpi	r24, 0x3B	; 59
-     7ee:	91 05       	cpc	r25, r1
-     7f0:	10 f4       	brcc	.+4      	; 0x7f6 <ModifyLEDMenu+0x9e>
-     7f2:	01 96       	adiw	r24, 0x01	; 1
-     7f4:	0f c0       	rjmp	.+30     	; 0x814 <ModifyLEDMenu+0xbc>
+     5f2:	80 91 c8 00 	lds	r24, 0x00C8
+     5f6:	90 91 c9 00 	lds	r25, 0x00C9
+     5fa:	8b 33       	cpi	r24, 0x3B	; 59
+     5fc:	91 05       	cpc	r25, r1
+     5fe:	10 f4       	brcc	.+4      	; 0x604 <ModifyLEDMenu+0x9e>
+     600:	01 96       	adiw	r24, 0x01	; 1
+     602:	0f c0       	rjmp	.+30     	; 0x622 <ModifyLEDMenu+0xbc>
 					 else led_menu_dawn_mins = 0;
-     7f6:	10 92 bd 00 	sts	0x00BD, r1
-     7fa:	10 92 bc 00 	sts	0x00BC, r1
-     7fe:	08 95       	ret
+     604:	10 92 c9 00 	sts	0x00C9, r1
+     608:	10 92 c8 00 	sts	0x00C8, r1
+     60c:	08 95       	ret
 				 }else if(increment_mode_led_menu == MODE_DISINC){
-     800:	02 97       	sbiw	r24, 0x02	; 2
-     802:	09 f0       	breq	.+2      	; 0x806 <ModifyLEDMenu+0xae>
-     804:	a5 c0       	rjmp	.+330    	; 0x950 <ModifyLEDMenu+0x1f8>
+     60e:	02 97       	sbiw	r24, 0x02	; 2
+     610:	09 f0       	breq	.+2      	; 0x614 <ModifyLEDMenu+0xae>
+     612:	a5 c0       	rjmp	.+330    	; 0x75e <ModifyLEDMenu+0x1f8>
 					 if(led_menu_dawn_mins>0) led_menu_dawn_mins--;
-     806:	80 91 bc 00 	lds	r24, 0x00BC
-     80a:	90 91 bd 00 	lds	r25, 0x00BD
-     80e:	00 97       	sbiw	r24, 0x00	; 0
-     810:	31 f0       	breq	.+12     	; 0x81e <ModifyLEDMenu+0xc6>
-     812:	01 97       	sbiw	r24, 0x01	; 1
-     814:	90 93 bd 00 	sts	0x00BD, r25
-     818:	80 93 bc 00 	sts	0x00BC, r24
-     81c:	08 95       	ret
+     614:	80 91 c8 00 	lds	r24, 0x00C8
+     618:	90 91 c9 00 	lds	r25, 0x00C9
+     61c:	00 97       	sbiw	r24, 0x00	; 0
+     61e:	31 f0       	breq	.+12     	; 0x62c <ModifyLEDMenu+0xc6>
+     620:	01 97       	sbiw	r24, 0x01	; 1
+     622:	90 93 c9 00 	sts	0x00C9, r25
+     626:	80 93 c8 00 	sts	0x00C8, r24
+     62a:	08 95       	ret
 					 else led_menu_dawn_mins = 59;
-     81e:	8b e3       	ldi	r24, 0x3B	; 59
-     820:	90 e0       	ldi	r25, 0x00	; 0
-     822:	f8 cf       	rjmp	.-16     	; 0x814 <ModifyLEDMenu+0xbc>
+     62c:	8b e3       	ldi	r24, 0x3B	; 59
+     62e:	90 e0       	ldi	r25, 0x00	; 0
+     630:	f8 cf       	rjmp	.-16     	; 0x622 <ModifyLEDMenu+0xbc>
 				 }
 		    break;
 			
 			case MODE_EDIT_INTERVAL_DAWN: // день недели
 				 if(increment_mode_led_menu == MODE_INC){
-     824:	80 91 ae 00 	lds	r24, 0x00AE
-     828:	90 91 af 00 	lds	r25, 0x00AF
-     82c:	81 30       	cpi	r24, 0x01	; 1
-     82e:	91 05       	cpc	r25, r1
-     830:	61 f4       	brne	.+24     	; 0x84a <ModifyLEDMenu+0xf2>
+     632:	80 91 ba 00 	lds	r24, 0x00BA
+     636:	90 91 bb 00 	lds	r25, 0x00BB
+     63a:	81 30       	cpi	r24, 0x01	; 1
+     63c:	91 05       	cpc	r25, r1
+     63e:	61 f4       	brne	.+24     	; 0x658 <ModifyLEDMenu+0xf2>
 					 if(led_menu_dawn_interval_mins<120) led_menu_dawn_interval_mins += 15;
-     832:	80 91 ba 00 	lds	r24, 0x00BA
-     836:	90 91 bb 00 	lds	r25, 0x00BB
-     83a:	88 37       	cpi	r24, 0x78	; 120
-     83c:	91 05       	cpc	r25, r1
-     83e:	10 f4       	brcc	.+4      	; 0x844 <ModifyLEDMenu+0xec>
-     840:	0f 96       	adiw	r24, 0x0f	; 15
-     842:	11 c0       	rjmp	.+34     	; 0x866 <ModifyLEDMenu+0x10e>
+     640:	80 91 c6 00 	lds	r24, 0x00C6
+     644:	90 91 c7 00 	lds	r25, 0x00C7
+     648:	88 37       	cpi	r24, 0x78	; 120
+     64a:	91 05       	cpc	r25, r1
+     64c:	10 f4       	brcc	.+4      	; 0x652 <ModifyLEDMenu+0xec>
+     64e:	0f 96       	adiw	r24, 0x0f	; 15
+     650:	11 c0       	rjmp	.+34     	; 0x674 <ModifyLEDMenu+0x10e>
 					 else led_menu_dawn_interval_mins = 15;
-     844:	8f e0       	ldi	r24, 0x0F	; 15
-     846:	90 e0       	ldi	r25, 0x00	; 0
-     848:	0e c0       	rjmp	.+28     	; 0x866 <ModifyLEDMenu+0x10e>
+     652:	8f e0       	ldi	r24, 0x0F	; 15
+     654:	90 e0       	ldi	r25, 0x00	; 0
+     656:	0e c0       	rjmp	.+28     	; 0x674 <ModifyLEDMenu+0x10e>
 					 }else if(increment_mode_led_menu == MODE_DISINC){
-     84a:	02 97       	sbiw	r24, 0x02	; 2
-     84c:	09 f0       	breq	.+2      	; 0x850 <ModifyLEDMenu+0xf8>
-     84e:	80 c0       	rjmp	.+256    	; 0x950 <ModifyLEDMenu+0x1f8>
+     658:	02 97       	sbiw	r24, 0x02	; 2
+     65a:	09 f0       	breq	.+2      	; 0x65e <ModifyLEDMenu+0xf8>
+     65c:	80 c0       	rjmp	.+256    	; 0x75e <ModifyLEDMenu+0x1f8>
 					 if(led_menu_dawn_interval_mins>15) led_menu_dawn_interval_mins -= 15;
-     850:	80 91 ba 00 	lds	r24, 0x00BA
-     854:	90 91 bb 00 	lds	r25, 0x00BB
-     858:	80 31       	cpi	r24, 0x10	; 16
-     85a:	91 05       	cpc	r25, r1
-     85c:	10 f0       	brcs	.+4      	; 0x862 <ModifyLEDMenu+0x10a>
-     85e:	0f 97       	sbiw	r24, 0x0f	; 15
-     860:	02 c0       	rjmp	.+4      	; 0x866 <ModifyLEDMenu+0x10e>
+     65e:	80 91 c6 00 	lds	r24, 0x00C6
+     662:	90 91 c7 00 	lds	r25, 0x00C7
+     666:	80 31       	cpi	r24, 0x10	; 16
+     668:	91 05       	cpc	r25, r1
+     66a:	10 f0       	brcs	.+4      	; 0x670 <ModifyLEDMenu+0x10a>
+     66c:	0f 97       	sbiw	r24, 0x0f	; 15
+     66e:	02 c0       	rjmp	.+4      	; 0x674 <ModifyLEDMenu+0x10e>
 					 else led_menu_dawn_interval_mins = 120;
-     862:	88 e7       	ldi	r24, 0x78	; 120
-     864:	90 e0       	ldi	r25, 0x00	; 0
-     866:	90 93 bb 00 	sts	0x00BB, r25
-     86a:	80 93 ba 00 	sts	0x00BA, r24
-     86e:	08 95       	ret
+     670:	88 e7       	ldi	r24, 0x78	; 120
+     672:	90 e0       	ldi	r25, 0x00	; 0
+     674:	90 93 c7 00 	sts	0x00C7, r25
+     678:	80 93 c6 00 	sts	0x00C6, r24
+     67c:	08 95       	ret
 				 }
 		    break;
 			
 		    case MODE_EDIT_START_TIME_SUNSET_HOURS: // день недели
 		    if(increment_mode_led_menu == MODE_INC){
-     870:	80 91 ae 00 	lds	r24, 0x00AE
-     874:	90 91 af 00 	lds	r25, 0x00AF
-     878:	81 30       	cpi	r24, 0x01	; 1
-     87a:	91 05       	cpc	r25, r1
-     87c:	61 f4       	brne	.+24     	; 0x896 <ModifyLEDMenu+0x13e>
+     67e:	80 91 ba 00 	lds	r24, 0x00BA
+     682:	90 91 bb 00 	lds	r25, 0x00BB
+     686:	81 30       	cpi	r24, 0x01	; 1
+     688:	91 05       	cpc	r25, r1
+     68a:	61 f4       	brne	.+24     	; 0x6a4 <ModifyLEDMenu+0x13e>
 			    if(led_menu_sunset_hours<21) led_menu_sunset_hours++;
-     87e:	80 91 b8 00 	lds	r24, 0x00B8
-     882:	90 91 b9 00 	lds	r25, 0x00B9
-     886:	85 31       	cpi	r24, 0x15	; 21
-     888:	91 05       	cpc	r25, r1
-     88a:	10 f4       	brcc	.+4      	; 0x890 <ModifyLEDMenu+0x138>
-     88c:	01 96       	adiw	r24, 0x01	; 1
-     88e:	11 c0       	rjmp	.+34     	; 0x8b2 <ModifyLEDMenu+0x15a>
+     68c:	80 91 c4 00 	lds	r24, 0x00C4
+     690:	90 91 c5 00 	lds	r25, 0x00C5
+     694:	85 31       	cpi	r24, 0x15	; 21
+     696:	91 05       	cpc	r25, r1
+     698:	10 f4       	brcc	.+4      	; 0x69e <ModifyLEDMenu+0x138>
+     69a:	01 96       	adiw	r24, 0x01	; 1
+     69c:	11 c0       	rjmp	.+34     	; 0x6c0 <ModifyLEDMenu+0x15a>
 			    else led_menu_sunset_hours = 13;
-     890:	8d e0       	ldi	r24, 0x0D	; 13
-     892:	90 e0       	ldi	r25, 0x00	; 0
-     894:	0e c0       	rjmp	.+28     	; 0x8b2 <ModifyLEDMenu+0x15a>
+     69e:	8d e0       	ldi	r24, 0x0D	; 13
+     6a0:	90 e0       	ldi	r25, 0x00	; 0
+     6a2:	0e c0       	rjmp	.+28     	; 0x6c0 <ModifyLEDMenu+0x15a>
 			    }else if(increment_mode_led_menu == MODE_DISINC){
-     896:	02 97       	sbiw	r24, 0x02	; 2
-     898:	09 f0       	breq	.+2      	; 0x89c <ModifyLEDMenu+0x144>
-     89a:	5a c0       	rjmp	.+180    	; 0x950 <ModifyLEDMenu+0x1f8>
+     6a4:	02 97       	sbiw	r24, 0x02	; 2
+     6a6:	09 f0       	breq	.+2      	; 0x6aa <ModifyLEDMenu+0x144>
+     6a8:	5a c0       	rjmp	.+180    	; 0x75e <ModifyLEDMenu+0x1f8>
 			    if(led_menu_sunset_hours>13) led_menu_sunset_hours--;
-     89c:	80 91 b8 00 	lds	r24, 0x00B8
-     8a0:	90 91 b9 00 	lds	r25, 0x00B9
-     8a4:	8e 30       	cpi	r24, 0x0E	; 14
-     8a6:	91 05       	cpc	r25, r1
-     8a8:	10 f0       	brcs	.+4      	; 0x8ae <ModifyLEDMenu+0x156>
-     8aa:	01 97       	sbiw	r24, 0x01	; 1
-     8ac:	02 c0       	rjmp	.+4      	; 0x8b2 <ModifyLEDMenu+0x15a>
+     6aa:	80 91 c4 00 	lds	r24, 0x00C4
+     6ae:	90 91 c5 00 	lds	r25, 0x00C5
+     6b2:	8e 30       	cpi	r24, 0x0E	; 14
+     6b4:	91 05       	cpc	r25, r1
+     6b6:	10 f0       	brcs	.+4      	; 0x6bc <ModifyLEDMenu+0x156>
+     6b8:	01 97       	sbiw	r24, 0x01	; 1
+     6ba:	02 c0       	rjmp	.+4      	; 0x6c0 <ModifyLEDMenu+0x15a>
 			    else led_menu_sunset_hours = 21;
-     8ae:	85 e1       	ldi	r24, 0x15	; 21
-     8b0:	90 e0       	ldi	r25, 0x00	; 0
-     8b2:	90 93 b9 00 	sts	0x00B9, r25
-     8b6:	80 93 b8 00 	sts	0x00B8, r24
-     8ba:	08 95       	ret
+     6bc:	85 e1       	ldi	r24, 0x15	; 21
+     6be:	90 e0       	ldi	r25, 0x00	; 0
+     6c0:	90 93 c5 00 	sts	0x00C5, r25
+     6c4:	80 93 c4 00 	sts	0x00C4, r24
+     6c8:	08 95       	ret
 		    }
 		    break;
 		    
 		    case MODE_EDIT_START_TIME_SUNSET_MINS: // день недели
 		    if(increment_mode_led_menu == MODE_INC){
-     8bc:	80 91 ae 00 	lds	r24, 0x00AE
-     8c0:	90 91 af 00 	lds	r25, 0x00AF
-     8c4:	81 30       	cpi	r24, 0x01	; 1
-     8c6:	91 05       	cpc	r25, r1
-     8c8:	71 f4       	brne	.+28     	; 0x8e6 <ModifyLEDMenu+0x18e>
+     6ca:	80 91 ba 00 	lds	r24, 0x00BA
+     6ce:	90 91 bb 00 	lds	r25, 0x00BB
+     6d2:	81 30       	cpi	r24, 0x01	; 1
+     6d4:	91 05       	cpc	r25, r1
+     6d6:	71 f4       	brne	.+28     	; 0x6f4 <ModifyLEDMenu+0x18e>
 			    if(led_menu_sunset_mins<59) led_menu_sunset_mins++;
-     8ca:	80 91 b6 00 	lds	r24, 0x00B6
-     8ce:	90 91 b7 00 	lds	r25, 0x00B7
-     8d2:	8b 33       	cpi	r24, 0x3B	; 59
-     8d4:	91 05       	cpc	r25, r1
-     8d6:	10 f4       	brcc	.+4      	; 0x8dc <ModifyLEDMenu+0x184>
-     8d8:	01 96       	adiw	r24, 0x01	; 1
-     8da:	11 c0       	rjmp	.+34     	; 0x8fe <ModifyLEDMenu+0x1a6>
+     6d8:	80 91 c2 00 	lds	r24, 0x00C2
+     6dc:	90 91 c3 00 	lds	r25, 0x00C3
+     6e0:	8b 33       	cpi	r24, 0x3B	; 59
+     6e2:	91 05       	cpc	r25, r1
+     6e4:	10 f4       	brcc	.+4      	; 0x6ea <ModifyLEDMenu+0x184>
+     6e6:	01 96       	adiw	r24, 0x01	; 1
+     6e8:	11 c0       	rjmp	.+34     	; 0x70c <ModifyLEDMenu+0x1a6>
 			    else led_menu_sunset_mins = 0;
-     8dc:	10 92 b7 00 	sts	0x00B7, r1
-     8e0:	10 92 b6 00 	sts	0x00B6, r1
-     8e4:	08 95       	ret
+     6ea:	10 92 c3 00 	sts	0x00C3, r1
+     6ee:	10 92 c2 00 	sts	0x00C2, r1
+     6f2:	08 95       	ret
 			    }else if(increment_mode_led_menu == MODE_DISINC){
-     8e6:	02 97       	sbiw	r24, 0x02	; 2
-     8e8:	99 f5       	brne	.+102    	; 0x950 <ModifyLEDMenu+0x1f8>
+     6f4:	02 97       	sbiw	r24, 0x02	; 2
+     6f6:	99 f5       	brne	.+102    	; 0x75e <ModifyLEDMenu+0x1f8>
 			    if(led_menu_sunset_mins>0) led_menu_sunset_mins--;
-     8ea:	80 91 b6 00 	lds	r24, 0x00B6
-     8ee:	90 91 b7 00 	lds	r25, 0x00B7
-     8f2:	00 97       	sbiw	r24, 0x00	; 0
-     8f4:	11 f0       	breq	.+4      	; 0x8fa <ModifyLEDMenu+0x1a2>
-     8f6:	01 97       	sbiw	r24, 0x01	; 1
-     8f8:	02 c0       	rjmp	.+4      	; 0x8fe <ModifyLEDMenu+0x1a6>
+     6f8:	80 91 c2 00 	lds	r24, 0x00C2
+     6fc:	90 91 c3 00 	lds	r25, 0x00C3
+     700:	00 97       	sbiw	r24, 0x00	; 0
+     702:	11 f0       	breq	.+4      	; 0x708 <ModifyLEDMenu+0x1a2>
+     704:	01 97       	sbiw	r24, 0x01	; 1
+     706:	02 c0       	rjmp	.+4      	; 0x70c <ModifyLEDMenu+0x1a6>
 			    else led_menu_sunset_mins = 59;
-     8fa:	8b e3       	ldi	r24, 0x3B	; 59
-     8fc:	90 e0       	ldi	r25, 0x00	; 0
-     8fe:	90 93 b7 00 	sts	0x00B7, r25
-     902:	80 93 b6 00 	sts	0x00B6, r24
-     906:	08 95       	ret
+     708:	8b e3       	ldi	r24, 0x3B	; 59
+     70a:	90 e0       	ldi	r25, 0x00	; 0
+     70c:	90 93 c3 00 	sts	0x00C3, r25
+     710:	80 93 c2 00 	sts	0x00C2, r24
+     714:	08 95       	ret
 		    }
 		    break;
 		    
 		    case MODE_EDIT_INTERVAL_SUNSET: // день недели
 		    if(increment_mode_led_menu == MODE_INC){
-     908:	80 91 ae 00 	lds	r24, 0x00AE
-     90c:	90 91 af 00 	lds	r25, 0x00AF
-     910:	81 30       	cpi	r24, 0x01	; 1
-     912:	91 05       	cpc	r25, r1
-     914:	61 f4       	brne	.+24     	; 0x92e <ModifyLEDMenu+0x1d6>
+     716:	80 91 ba 00 	lds	r24, 0x00BA
+     71a:	90 91 bb 00 	lds	r25, 0x00BB
+     71e:	81 30       	cpi	r24, 0x01	; 1
+     720:	91 05       	cpc	r25, r1
+     722:	61 f4       	brne	.+24     	; 0x73c <ModifyLEDMenu+0x1d6>
 			    if(led_menu_sunset_interval_mins<120) led_menu_sunset_interval_mins += 15;
-     916:	80 91 b4 00 	lds	r24, 0x00B4
-     91a:	90 91 b5 00 	lds	r25, 0x00B5
-     91e:	88 37       	cpi	r24, 0x78	; 120
-     920:	91 05       	cpc	r25, r1
-     922:	10 f4       	brcc	.+4      	; 0x928 <ModifyLEDMenu+0x1d0>
-     924:	0f 96       	adiw	r24, 0x0f	; 15
-     926:	10 c0       	rjmp	.+32     	; 0x948 <ModifyLEDMenu+0x1f0>
+     724:	80 91 c0 00 	lds	r24, 0x00C0
+     728:	90 91 c1 00 	lds	r25, 0x00C1
+     72c:	88 37       	cpi	r24, 0x78	; 120
+     72e:	91 05       	cpc	r25, r1
+     730:	10 f4       	brcc	.+4      	; 0x736 <ModifyLEDMenu+0x1d0>
+     732:	0f 96       	adiw	r24, 0x0f	; 15
+     734:	10 c0       	rjmp	.+32     	; 0x756 <ModifyLEDMenu+0x1f0>
 			    else led_menu_sunset_interval_mins = 15;
-     928:	8f e0       	ldi	r24, 0x0F	; 15
-     92a:	90 e0       	ldi	r25, 0x00	; 0
-     92c:	0d c0       	rjmp	.+26     	; 0x948 <ModifyLEDMenu+0x1f0>
+     736:	8f e0       	ldi	r24, 0x0F	; 15
+     738:	90 e0       	ldi	r25, 0x00	; 0
+     73a:	0d c0       	rjmp	.+26     	; 0x756 <ModifyLEDMenu+0x1f0>
 			    }else if(increment_mode_led_menu == MODE_DISINC){
-     92e:	02 97       	sbiw	r24, 0x02	; 2
-     930:	79 f4       	brne	.+30     	; 0x950 <ModifyLEDMenu+0x1f8>
+     73c:	02 97       	sbiw	r24, 0x02	; 2
+     73e:	79 f4       	brne	.+30     	; 0x75e <ModifyLEDMenu+0x1f8>
 			    if(led_menu_sunset_interval_mins>15) led_menu_sunset_interval_mins -= 15;
-     932:	80 91 b4 00 	lds	r24, 0x00B4
-     936:	90 91 b5 00 	lds	r25, 0x00B5
-     93a:	80 31       	cpi	r24, 0x10	; 16
-     93c:	91 05       	cpc	r25, r1
-     93e:	10 f0       	brcs	.+4      	; 0x944 <ModifyLEDMenu+0x1ec>
-     940:	0f 97       	sbiw	r24, 0x0f	; 15
-     942:	02 c0       	rjmp	.+4      	; 0x948 <ModifyLEDMenu+0x1f0>
+     740:	80 91 c0 00 	lds	r24, 0x00C0
+     744:	90 91 c1 00 	lds	r25, 0x00C1
+     748:	80 31       	cpi	r24, 0x10	; 16
+     74a:	91 05       	cpc	r25, r1
+     74c:	10 f0       	brcs	.+4      	; 0x752 <ModifyLEDMenu+0x1ec>
+     74e:	0f 97       	sbiw	r24, 0x0f	; 15
+     750:	02 c0       	rjmp	.+4      	; 0x756 <ModifyLEDMenu+0x1f0>
 			    else led_menu_sunset_interval_mins = 120;
-     944:	88 e7       	ldi	r24, 0x78	; 120
-     946:	90 e0       	ldi	r25, 0x00	; 0
-     948:	90 93 b5 00 	sts	0x00B5, r25
-     94c:	80 93 b4 00 	sts	0x00B4, r24
-     950:	08 95       	ret
+     752:	88 e7       	ldi	r24, 0x78	; 120
+     754:	90 e0       	ldi	r25, 0x00	; 0
+     756:	90 93 c1 00 	sts	0x00C1, r25
+     75a:	80 93 c0 00 	sts	0x00C0, r24
+     75e:	08 95       	ret
 
-00000952 <ShowTime>:
+00000760 <ShowTime>:
 		    break;
 	}
 
 }
 
 void ShowTime(unsigned char hour, unsigned char min){
-     952:	0f 93       	push	r16
-     954:	1f 93       	push	r17
-     956:	cf 93       	push	r28
-     958:	df 93       	push	r29
-     95a:	1f 92       	push	r1
-     95c:	cd b7       	in	r28, 0x3d	; 61
-     95e:	de b7       	in	r29, 0x3e	; 62
-     960:	06 2f       	mov	r16, r22
+     760:	0f 93       	push	r16
+     762:	1f 93       	push	r17
+     764:	cf 93       	push	r28
+     766:	df 93       	push	r29
+     768:	1f 92       	push	r1
+     76a:	cd b7       	in	r28, 0x3d	; 61
+     76c:	de b7       	in	r29, 0x3e	; 62
+     76e:	06 2f       	mov	r16, r22
 	setCharIndicator(hour/10, 1);
-     962:	1a e0       	ldi	r17, 0x0A	; 10
-     964:	61 2f       	mov	r22, r17
-     966:	35 d5       	rcall	.+2666   	; 0x13d2 <__udivmodqi4>
-     968:	61 e0       	ldi	r22, 0x01	; 1
-     96a:	99 83       	std	Y+1, r25	; 0x01
-     96c:	81 dc       	rcall	.-1790   	; 0x270 <setCharIndicator>
+     770:	1a e0       	ldi	r17, 0x0A	; 10
+     772:	61 2f       	mov	r22, r17
+     774:	a4 d4       	rcall	.+2376   	; 0x10be <__udivmodqi4>
+     776:	61 e0       	ldi	r22, 0x01	; 1
+     778:	99 83       	std	Y+1, r25	; 0x01
+     77a:	7a dd       	rcall	.-1292   	; 0x270 <setCharIndicator>
 	setCharIndicator(hour%10, 2);
-     96e:	62 e0       	ldi	r22, 0x02	; 2
-     970:	99 81       	ldd	r25, Y+1	; 0x01
-     972:	89 2f       	mov	r24, r25
-     974:	7d dc       	rcall	.-1798   	; 0x270 <setCharIndicator>
+     77c:	62 e0       	ldi	r22, 0x02	; 2
+     77e:	99 81       	ldd	r25, Y+1	; 0x01
+     780:	89 2f       	mov	r24, r25
+     782:	76 dd       	rcall	.-1300   	; 0x270 <setCharIndicator>
 	
 	setCharIndicator(min/10, 3);
-     976:	80 2f       	mov	r24, r16
-     978:	61 2f       	mov	r22, r17
-     97a:	2b d5       	rcall	.+2646   	; 0x13d2 <__udivmodqi4>
-     97c:	63 e0       	ldi	r22, 0x03	; 3
-     97e:	99 83       	std	Y+1, r25	; 0x01
-     980:	77 dc       	rcall	.-1810   	; 0x270 <setCharIndicator>
+     784:	80 2f       	mov	r24, r16
+     786:	61 2f       	mov	r22, r17
+     788:	9a d4       	rcall	.+2356   	; 0x10be <__udivmodqi4>
+     78a:	63 e0       	ldi	r22, 0x03	; 3
+     78c:	99 83       	std	Y+1, r25	; 0x01
+     78e:	70 dd       	rcall	.-1312   	; 0x270 <setCharIndicator>
 	setCharIndicator(min%10, 4);
-     982:	64 e0       	ldi	r22, 0x04	; 4
-     984:	99 81       	ldd	r25, Y+1	; 0x01
-     986:	89 2f       	mov	r24, r25
+     790:	64 e0       	ldi	r22, 0x04	; 4
+     792:	99 81       	ldd	r25, Y+1	; 0x01
+     794:	89 2f       	mov	r24, r25
 }
-     988:	0f 90       	pop	r0
-     98a:	df 91       	pop	r29
-     98c:	cf 91       	pop	r28
-     98e:	1f 91       	pop	r17
-     990:	0f 91       	pop	r16
+     796:	0f 90       	pop	r0
+     798:	df 91       	pop	r29
+     79a:	cf 91       	pop	r28
+     79c:	1f 91       	pop	r17
+     79e:	0f 91       	pop	r16
 void ShowTime(unsigned char hour, unsigned char min){
 	setCharIndicator(hour/10, 1);
 	setCharIndicator(hour%10, 2);
 	
 	setCharIndicator(min/10, 3);
 	setCharIndicator(min%10, 4);
-     992:	6e cc       	rjmp	.-1828   	; 0x270 <setCharIndicator>
+     7a0:	67 cd       	rjmp	.-1330   	; 0x270 <setCharIndicator>
 
-00000994 <ShowDate>:
-}
-
-void ShowDate(unsigned char date, unsigned char month, unsigned char year){
-     994:	0f 93       	push	r16
-     996:	1f 93       	push	r17
-     998:	cf 93       	push	r28
-     99a:	df 93       	push	r29
-     99c:	00 d0       	rcall	.+0      	; 0x99e <ShowDate+0xa>
-     99e:	cd b7       	in	r28, 0x3d	; 61
-     9a0:	de b7       	in	r29, 0x3e	; 62
-     9a2:	06 2f       	mov	r16, r22
-	setCharIndicator(date/10, 0);
-     9a4:	1a e0       	ldi	r17, 0x0A	; 10
-     9a6:	61 2f       	mov	r22, r17
-     9a8:	14 d5       	rcall	.+2600   	; 0x13d2 <__udivmodqi4>
-     9aa:	60 e0       	ldi	r22, 0x00	; 0
-     9ac:	4a 83       	std	Y+2, r20	; 0x02
-     9ae:	99 83       	std	Y+1, r25	; 0x01
-     9b0:	5f dc       	rcall	.-1858   	; 0x270 <setCharIndicator>
-	setCharIndicator(date%10, 1);
-     9b2:	61 e0       	ldi	r22, 0x01	; 1
-     9b4:	99 81       	ldd	r25, Y+1	; 0x01
-     9b6:	89 2f       	mov	r24, r25
-     9b8:	5b dc       	rcall	.-1866   	; 0x270 <setCharIndicator>
-	setDotIndicator(1, 1);
-     9ba:	61 e0       	ldi	r22, 0x01	; 1
-     9bc:	81 e0       	ldi	r24, 0x01	; 1
-     9be:	5e dc       	rcall	.-1860   	; 0x27c <setDotIndicator>
-	
-	setCharIndicator(month/10, 2);
-     9c0:	80 2f       	mov	r24, r16
-     9c2:	61 2f       	mov	r22, r17
-     9c4:	06 d5       	rcall	.+2572   	; 0x13d2 <__udivmodqi4>
-     9c6:	62 e0       	ldi	r22, 0x02	; 2
-     9c8:	99 83       	std	Y+1, r25	; 0x01
-     9ca:	52 dc       	rcall	.-1884   	; 0x270 <setCharIndicator>
-	setCharIndicator(month%10, 3);
-     9cc:	63 e0       	ldi	r22, 0x03	; 3
-     9ce:	99 81       	ldd	r25, Y+1	; 0x01
-     9d0:	89 2f       	mov	r24, r25
-     9d2:	4e dc       	rcall	.-1892   	; 0x270 <setCharIndicator>
-	setDotIndicator(3, 1);
-     9d4:	61 e0       	ldi	r22, 0x01	; 1
-     9d6:	83 e0       	ldi	r24, 0x03	; 3
-     9d8:	51 dc       	rcall	.-1886   	; 0x27c <setDotIndicator>
-	
-	setCharIndicator(year/10, 4);
-     9da:	4a 81       	ldd	r20, Y+2	; 0x02
-     9dc:	84 2f       	mov	r24, r20
-     9de:	61 2f       	mov	r22, r17
-     9e0:	f8 d4       	rcall	.+2544   	; 0x13d2 <__udivmodqi4>
-     9e2:	64 e0       	ldi	r22, 0x04	; 4
-     9e4:	99 83       	std	Y+1, r25	; 0x01
-     9e6:	44 dc       	rcall	.-1912   	; 0x270 <setCharIndicator>
-	setCharIndicator(year%10, 5);
-     9e8:	65 e0       	ldi	r22, 0x05	; 5
-     9ea:	99 81       	ldd	r25, Y+1	; 0x01
-     9ec:	89 2f       	mov	r24, r25
-}
-     9ee:	0f 90       	pop	r0
-     9f0:	0f 90       	pop	r0
-     9f2:	df 91       	pop	r29
-     9f4:	cf 91       	pop	r28
-     9f6:	1f 91       	pop	r17
-     9f8:	0f 91       	pop	r16
-	setCharIndicator(month/10, 2);
-	setCharIndicator(month%10, 3);
-	setDotIndicator(3, 1);
-	
+000007a2 <main>:
 	setCharIndicator(year/10, 4);
 	setCharIndicator(year%10, 5);
-     9fa:	3a cc       	rjmp	.-1932   	; 0x270 <setCharIndicator>
-
-000009fc <main>:
 }
 
 int main(void)
 {
-     9fc:	cf 93       	push	r28
-     9fe:	df 93       	push	r29
-     a00:	00 d0       	rcall	.+0      	; 0xa02 <main+0x6>
-     a02:	cd b7       	in	r28, 0x3d	; 61
-     a04:	de b7       	in	r29, 0x3e	; 62
-	
+     7a2:	cf 93       	push	r28
+     7a4:	df 93       	push	r29
+     7a6:	1f 92       	push	r1
+     7a8:	cd b7       	in	r28, 0x3d	; 61
+     7aa:	de b7       	in	r29, 0x3e	; 62
 	//Инициализация перефирии
 	I2C_Init();
-     a06:	b0 d4       	rcall	.+2400   	; 0x1368 <I2C_Init>
+     7ac:	53 d4       	rcall	.+2214   	; 0x1054 <I2C_Init>
 	PWM_init();
-     a08:	33 dd       	rcall	.-1434   	; 0x470 <PWM_init>
+     7ae:	6a de       	rcall	.-812    	; 0x484 <PWM_init>
 	BUT_Init();
-     a0a:	e0 db       	rcall	.-2112   	; 0x1cc <BUT_Init>
+     7b0:	0d dd       	rcall	.-1510   	; 0x1cc <BUT_Init>
 	BUTTON_SPROB_LED_DDR |= (1 << BUTTON_SPROB_LED_PIN);
-     a0c:	be 9a       	sbi	0x17, 6	; 23
+     7b2:	be 9a       	sbi	0x17, 6	; 23
 	
 	SPI_init();
-     a0e:	25 dd       	rcall	.-1462   	; 0x45a <SPI_init>
+     7b4:	5c de       	rcall	.-840    	; 0x46e <SPI_init>
 	timer1_led_init();
-     a10:	21 dc       	rcall	.-1982   	; 0x254 <timer1_led_init>
+     7b6:	4e dd       	rcall	.-1380   	; 0x254 <timer1_led_init>
 	
 	//на случай если зависнет мк, то при подаче питания свет будет включен
 	PORT_R |= (1<<R);
-     a12:	95 9a       	sbi	0x12, 5	; 18
+     7b8:	95 9a       	sbi	0x12, 5	; 18
 	PORT_G |= (1<<G);
-     a14:	96 9a       	sbi	0x12, 6	; 18
+     7ba:	96 9a       	sbi	0x12, 6	; 18
 	PORT_B |= (1<<B);
-     a16:	97 9a       	sbi	0x12, 7	; 18
+     7bc:	97 9a       	sbi	0x12, 7	; 18
 	PORT_W |= (1<<W);
-     a18:	c0 9a       	sbi	0x18, 0	; 24
+     7be:	c0 9a       	sbi	0x18, 0	; 24
 	
     sei(); 
-     a1a:	78 94       	sei
+     7c0:	78 94       	sei
 	
 	//1Hz generator
 	DDRC &= ~(1 << PC3);
-     a1c:	a3 98       	cbi	0x14, 3	; 20
+     7c2:	a3 98       	cbi	0x14, 3	; 20
 	I2C_StartCondition();
-     a1e:	a7 d4       	rcall	.+2382   	; 0x136e <I2C_StartCondition>
+     7c4:	4a d4       	rcall	.+2196   	; 0x105a <I2C_StartCondition>
 	I2C_SendByte(0b11010000);
-     a20:	80 ed       	ldi	r24, 0xD0	; 208
-     a22:	ae d4       	rcall	.+2396   	; 0x1380 <I2C_SendByte>
+     7c6:	80 ed       	ldi	r24, 0xD0	; 208
+     7c8:	51 d4       	rcall	.+2210   	; 0x106c <I2C_SendByte>
 	I2C_SendByte(7);//Переходим на 0x07
-     a24:	87 e0       	ldi	r24, 0x07	; 7
-     a26:	ac d4       	rcall	.+2392   	; 0x1380 <I2C_SendByte>
+     7ca:	87 e0       	ldi	r24, 0x07	; 7
+     7cc:	4f d4       	rcall	.+2206   	; 0x106c <I2C_SendByte>
 	I2C_SendByte(0b00010000); //включим SQWE
-     a28:	80 e1       	ldi	r24, 0x10	; 16
-     a2a:	aa d4       	rcall	.+2388   	; 0x1380 <I2C_SendByte>
+     7ce:	80 e1       	ldi	r24, 0x10	; 16
+     7d0:	4d d4       	rcall	.+2202   	; 0x106c <I2C_SendByte>
 	I2C_StopCondition();
-     a2c:	a6 d4       	rcall	.+2380   	; 0x137a <I2C_StopCondition>
+     7d2:	49 d4       	rcall	.+2194   	; 0x1066 <I2C_StopCondition>
 	
 
     OCR2 = 255;
-     a2e:	8f ef       	ldi	r24, 0xFF	; 255
-     a30:	83 bd       	out	0x23, r24	; 35
+     7d4:	8f ef       	ldi	r24, 0xFF	; 255
+     7d6:	83 bd       	out	0x23, r24	; 35
 
     TCCR2 |= (1 << WGM21);
-     a32:	85 b5       	in	r24, 0x25	; 37
-     a34:	88 60       	ori	r24, 0x08	; 8
-     a36:	85 bd       	out	0x25, r24	; 37
+     7d8:	85 b5       	in	r24, 0x25	; 37
+     7da:	88 60       	ori	r24, 0x08	; 8
+     7dc:	85 bd       	out	0x25, r24	; 37
     // Set to CTC Mode
 
     TIMSK |= (1 << OCIE2);
-     a38:	89 b7       	in	r24, 0x39	; 57
-     a3a:	80 68       	ori	r24, 0x80	; 128
-     a3c:	89 bf       	out	0x39, r24	; 57
+     7de:	89 b7       	in	r24, 0x39	; 57
+     7e0:	80 68       	ori	r24, 0x80	; 128
+     7e2:	89 bf       	out	0x39, r24	; 57
     //Set interrupt on compare match
 
     TCCR2 |= ((1 << CS21) | (1 << CS20) | (1 << CS20));
-     a3e:	85 b5       	in	r24, 0x25	; 37
-     a40:	83 60       	ori	r24, 0x03	; 3
-     a42:	85 bd       	out	0x25, r24	; 37
+     7e4:	85 b5       	in	r24, 0x25	; 37
+     7e6:	83 60       	ori	r24, 0x03	; 3
+     7e8:	85 bd       	out	0x25, r24	; 37
     // set prescaler to 64 and starts PWM
 	
 	
 	//Восстанавливаем значения из EEPOM
 	led_menu_dawn_hours = eeprom_read_word(&ee_led_menu_dawn_hours);
-     a44:	8a e0       	ldi	r24, 0x0A	; 10
-     a46:	90 e0       	ldi	r25, 0x00	; 0
-     a48:	3e d5       	rcall	.+2684   	; 0x14c6 <__eerd_word_m8a>
-     a4a:	90 93 bf 00 	sts	0x00BF, r25
-     a4e:	80 93 be 00 	sts	0x00BE, r24
+     7ea:	8a e0       	ldi	r24, 0x0A	; 10
+     7ec:	90 e0       	ldi	r25, 0x00	; 0
+     7ee:	f4 d4       	rcall	.+2536   	; 0x11d8 <__eerd_word_m8a>
+     7f0:	90 93 cb 00 	sts	0x00CB, r25
+     7f4:	80 93 ca 00 	sts	0x00CA, r24
 	led_menu_dawn_mins = eeprom_read_word(&ee_led_menu_dawn_mins);
-     a52:	88 e0       	ldi	r24, 0x08	; 8
-     a54:	90 e0       	ldi	r25, 0x00	; 0
-     a56:	37 d5       	rcall	.+2670   	; 0x14c6 <__eerd_word_m8a>
-     a58:	90 93 bd 00 	sts	0x00BD, r25
-     a5c:	80 93 bc 00 	sts	0x00BC, r24
+     7f8:	88 e0       	ldi	r24, 0x08	; 8
+     7fa:	90 e0       	ldi	r25, 0x00	; 0
+     7fc:	ed d4       	rcall	.+2522   	; 0x11d8 <__eerd_word_m8a>
+     7fe:	90 93 c9 00 	sts	0x00C9, r25
+     802:	80 93 c8 00 	sts	0x00C8, r24
 	led_menu_dawn_interval_mins = eeprom_read_word(&ee_led_menu_dawn_interval_mins);
-     a60:	86 e0       	ldi	r24, 0x06	; 6
-     a62:	90 e0       	ldi	r25, 0x00	; 0
-     a64:	30 d5       	rcall	.+2656   	; 0x14c6 <__eerd_word_m8a>
-     a66:	90 93 bb 00 	sts	0x00BB, r25
-     a6a:	80 93 ba 00 	sts	0x00BA, r24
+     806:	86 e0       	ldi	r24, 0x06	; 6
+     808:	90 e0       	ldi	r25, 0x00	; 0
+     80a:	e6 d4       	rcall	.+2508   	; 0x11d8 <__eerd_word_m8a>
+     80c:	90 93 c7 00 	sts	0x00C7, r25
+     810:	80 93 c6 00 	sts	0x00C6, r24
 	led_menu_sunset_hours = eeprom_read_word(&ee_led_menu_sunset_hours);
-     a6e:	84 e0       	ldi	r24, 0x04	; 4
-     a70:	90 e0       	ldi	r25, 0x00	; 0
-     a72:	29 d5       	rcall	.+2642   	; 0x14c6 <__eerd_word_m8a>
-     a74:	90 93 b9 00 	sts	0x00B9, r25
-     a78:	80 93 b8 00 	sts	0x00B8, r24
+     814:	84 e0       	ldi	r24, 0x04	; 4
+     816:	90 e0       	ldi	r25, 0x00	; 0
+     818:	df d4       	rcall	.+2494   	; 0x11d8 <__eerd_word_m8a>
+     81a:	90 93 c5 00 	sts	0x00C5, r25
+     81e:	80 93 c4 00 	sts	0x00C4, r24
 	led_menu_sunset_mins = eeprom_read_word(&ee_led_menu_sunset_mins);
-     a7c:	82 e0       	ldi	r24, 0x02	; 2
-     a7e:	90 e0       	ldi	r25, 0x00	; 0
-     a80:	22 d5       	rcall	.+2628   	; 0x14c6 <__eerd_word_m8a>
-     a82:	90 93 b7 00 	sts	0x00B7, r25
-     a86:	80 93 b6 00 	sts	0x00B6, r24
+     822:	82 e0       	ldi	r24, 0x02	; 2
+     824:	90 e0       	ldi	r25, 0x00	; 0
+     826:	d8 d4       	rcall	.+2480   	; 0x11d8 <__eerd_word_m8a>
+     828:	90 93 c3 00 	sts	0x00C3, r25
+     82c:	80 93 c2 00 	sts	0x00C2, r24
     led_menu_sunset_interval_mins = eeprom_read_word(&ee_led_menu_sunset_interval_mins);
-     a8a:	80 e0       	ldi	r24, 0x00	; 0
-     a8c:	90 e0       	ldi	r25, 0x00	; 0
-     a8e:	1b d5       	rcall	.+2614   	; 0x14c6 <__eerd_word_m8a>
-     a90:	90 93 b5 00 	sts	0x00B5, r25
-     a94:	80 93 b4 00 	sts	0x00B4, r24
-								excess_mins_sunset = temp_hours_sunset*60 - temp_mins_sunset;
-							}
-							if(excess_mins_sunset < led_menu_sunset_interval_mins){
-								PWM_set(RGBW, map(excess_mins_sunset, 1, led_menu_sunset_interval_mins, 255, 0));
-								now_mode_light = LIGHT_SUNSET;
-								}else{ PWM_set(RGBW, 0x00); now_mode_light = LIGHT_OFF;}
-     a98:	44 e0       	ldi	r20, 0x04	; 4
-     a9a:	84 2e       	mov	r8, r20
-     a9c:	91 2c       	mov	r9, r1
-								temp_mins_sunset = led_menu_sunset_mins-min;
-								excess_mins_sunset = temp_hours_sunset*60 - temp_mins_sunset;
-							}
-							if(excess_mins_sunset < led_menu_sunset_interval_mins){
-								PWM_set(RGBW, map(excess_mins_sunset, 1, led_menu_sunset_interval_mins, 255, 0));
-								now_mode_light = LIGHT_SUNSET;
-     a9e:	52 e0       	ldi	r21, 0x02	; 2
-     aa0:	a5 2e       	mov	r10, r21
-     aa2:	b1 2c       	mov	r11, r1
-								}else{ PWM_set(RGBW, 0x00); now_mode_light = LIGHT_OFF;}
-								}else{ PWM_set(RGBW, 0xFF); now_mode_light = LIGHT_FULL;}
-     aa4:	63 e0       	ldi	r22, 0x03	; 3
-     aa6:	c6 2e       	mov	r12, r22
-     aa8:	d1 2c       	mov	r13, r1
-						excess_mins_dawm = temp_hours_dawm*60 - temp_mins_dawm;
-					}
-			
-					if(excess_mins_dawm < led_menu_dawn_interval_mins){
-						PWM_set(RGBW, map(excess_mins_dawm, 1, led_menu_dawn_interval_mins, 0, 255));
-						now_mode_light = LIGHT_DAWM;
-     aaa:	ee 24       	eor	r14, r14
-     aac:	e3 94       	inc	r14
-     aae:	f1 2c       	mov	r15, r1
-					now_mode = MODE_EDIT_YEAR;
-				   }else if(now_mode == MODE_EDIT_YEAR){
-					ClearALLCharIndicator();
-					ClearALLDotsIndicator();
-					//День
-					now_mode = MODE_EDIT_WEEK_DAY;
-     ab0:	e6 e0       	ldi	r30, 0x06	; 6
-     ab2:	2e 2e       	mov	r2, r30
-							ClearALLCharIndicator();
-							now_mode_led_menu = MODE_EDIT_START_TIME_DAWN_HOURS;
-						  }else if(now_mode_led_menu == MODE_EDIT_START_TIME_DAWN_HOURS){
-							eeprom_write_word(&ee_led_menu_dawn_hours , led_menu_dawn_hours);
-							//Минуты начала рассвета
-							now_mode_led_menu = MODE_EDIT_START_TIME_DAWN_MINS;
-     ab4:	f8 e0       	ldi	r31, 0x08	; 8
-     ab6:	4f 2e       	mov	r4, r31
-     ab8:	51 2c       	mov	r5, r1
-				  if(now_mode == MODE_NONE && ((button_code == BUT_RELEASED_LONG_CODE && now_mode_led_menu == MODE_NONE) || (now_mode_led_menu != MODE_NONE && button_code == BUT_RELEASED_EN))){
-						  led_strob();
-						  if(now_mode_led_menu == MODE_NONE){
-							//Часы начала рассвета
-							ClearALLCharIndicator();
-							now_mode_led_menu = MODE_EDIT_START_TIME_DAWN_HOURS;
-     aba:	a7 e0       	ldi	r26, 0x07	; 7
-     abc:	6a 2e       	mov	r6, r26
-     abe:	71 2c       	mov	r7, r1
+     830:	80 e0       	ldi	r24, 0x00	; 0
+     832:	90 e0       	ldi	r25, 0x00	; 0
+     834:	d1 d4       	rcall	.+2466   	; 0x11d8 <__eerd_word_m8a>
+     836:	90 93 c1 00 	sts	0x00C1, r25
+     83a:	80 93 c0 00 	sts	0x00C0, r24
+	{   	  //Принудительное включение 
+				if(now_mode_led_menu == MODE_NONE && now_mode == MODE_NONE){
+				if((PINB & (1 << PB7))){	
+								//Супер дупер крутой рассвет и закат
+								
+								all_time_in_sec = (((long)hour * 60) + (long)min)*60 + (long)sec;
+     83e:	4c e3       	ldi	r20, 0x3C	; 60
+     840:	84 2e       	mov	r8, r20
+     842:	91 2c       	mov	r9, r1
+										if(all_time_in_sec_sunset  < all_time_in_sec){
+											excess_sec_sunset = all_time_in_sec - all_time_in_sec_sunset;
+											
+											if(((int)excess_sec_sunset / 60) < led_menu_sunset_interval_mins){
+												PWM_set(RGBW, map(excess_sec_sunset, 1, led_menu_sunset_interval_mins * 60, 255, 10));
+												now_mode_light = LIGHT_SUNSET;
+     844:	52 e0       	ldi	r21, 0x02	; 2
+     846:	25 2e       	mov	r2, r21
+     848:	31 2c       	mov	r3, r1
+								if(all_time_in_sec_dawn < all_time_in_sec){
+									excess_sec_dawm = all_time_in_sec - all_time_in_sec_dawn;
+									//Если закат начался
+			                        if(((int)excess_sec_dawm / 60) < led_menu_dawn_interval_mins){
+										PWM_set(RGBW, map(excess_sec_dawm, 1, led_menu_dawn_interval_mins * 60, 10, 255));
+										now_mode_light = LIGHT_DAWM;
+     84a:	aa 24       	eor	r10, r10
+     84c:	a3 94       	inc	r10
+     84e:	b1 2c       	mov	r11, r1
 				break;
 			
 			
 				case MODE_EDIT_INTERVAL_DAWN: 
 				  if(!twoHZ_status){
 					  setCharIndicator(led_menu_dawn_interval_mins/100, 1);
-     ac0:	04 e6       	ldi	r16, 0x64	; 100
-     ac2:	10 e0       	ldi	r17, 0x00	; 0
+     850:	04 e6       	ldi	r16, 0x64	; 100
+     852:	10 e0       	ldi	r17, 0x00	; 0
 	led_menu_sunset_mins = eeprom_read_word(&ee_led_menu_sunset_mins);
     led_menu_sunset_interval_mins = eeprom_read_word(&ee_led_menu_sunset_interval_mins);
-		
+	
 	while(1)
 	{   	  //Принудительное включение 
 				if(now_mode_led_menu == MODE_NONE && now_mode == MODE_NONE){
-     ac4:	80 91 b0 00 	lds	r24, 0x00B0
-     ac8:	90 91 b1 00 	lds	r25, 0x00B1
-     acc:	89 2b       	or	r24, r25
-     ace:	09 f0       	breq	.+2      	; 0xad2 <main+0xd6>
-     ad0:	65 c1       	rjmp	.+714    	; 0xd9c <main+0x3a0>
-     ad2:	80 91 b3 00 	lds	r24, 0x00B3
-     ad6:	81 11       	cpse	r24, r1
-     ad8:	61 c1       	rjmp	.+706    	; 0xd9c <main+0x3a0>
+     854:	80 91 bc 00 	lds	r24, 0x00BC
+     858:	90 91 bd 00 	lds	r25, 0x00BD
+     85c:	89 2b       	or	r24, r25
+     85e:	09 f0       	breq	.+2      	; 0x862 <main+0xc0>
+     860:	52 c1       	rjmp	.+676    	; 0xb06 <main+0x364>
+     862:	80 91 bf 00 	lds	r24, 0x00BF
+     866:	81 11       	cpse	r24, r1
+     868:	4e c1       	rjmp	.+668    	; 0xb06 <main+0x364>
 				if((PINB & (1 << PB7))){	
-     ada:	b7 9b       	sbis	0x16, 7	; 22
-     adc:	14 c1       	rjmp	.+552    	; 0xd06 <main+0x30a>
-				//Супер дупер крутой рассвет и закат
-				if((hour >= led_menu_dawn_hours && min > led_menu_dawn_mins) || (hour > led_menu_dawn_hours && min < led_menu_dawn_mins)){
-     ade:	20 91 cc 00 	lds	r18, 0x00CC
-     ae2:	2a 83       	std	Y+2, r18	; 0x02
-     ae4:	30 e0       	ldi	r19, 0x00	; 0
-     ae6:	60 91 be 00 	lds	r22, 0x00BE
-     aea:	70 91 bf 00 	lds	r23, 0x00BF
-     aee:	26 17       	cp	r18, r22
-     af0:	37 07       	cpc	r19, r23
-     af2:	50 f0       	brcs	.+20     	; 0xb08 <main+0x10c>
-     af4:	40 91 cd 00 	lds	r20, 0x00CD
-     af8:	50 e0       	ldi	r21, 0x00	; 0
-     afa:	80 91 bc 00 	lds	r24, 0x00BC
-     afe:	90 91 bd 00 	lds	r25, 0x00BD
-     b02:	84 17       	cp	r24, r20
-     b04:	95 07       	cpc	r25, r21
-     b06:	78 f0       	brcs	.+30     	; 0xb26 <main+0x12a>
-     b08:	62 17       	cp	r22, r18
-     b0a:	73 07       	cpc	r23, r19
-     b0c:	08 f0       	brcs	.+2      	; 0xb10 <main+0x114>
-     b0e:	dd c0       	rjmp	.+442    	; 0xcca <main+0x2ce>
-     b10:	40 91 cd 00 	lds	r20, 0x00CD
-     b14:	50 e0       	ldi	r21, 0x00	; 0
-     b16:	80 91 bc 00 	lds	r24, 0x00BC
-     b1a:	90 91 bd 00 	lds	r25, 0x00BD
-     b1e:	48 17       	cp	r20, r24
-     b20:	59 07       	cpc	r21, r25
-     b22:	08 f0       	brcs	.+2      	; 0xb26 <main+0x12a>
-     b24:	d2 c0       	rjmp	.+420    	; 0xcca <main+0x2ce>
-					if(hour >= led_menu_dawn_hours && min > led_menu_dawn_mins){
-     b26:	a0 91 cd 00 	lds	r26, 0x00CD
-     b2a:	4a 2f       	mov	r20, r26
-     b2c:	50 e0       	ldi	r21, 0x00	; 0
-     b2e:	80 91 bc 00 	lds	r24, 0x00BC
-     b32:	90 91 bd 00 	lds	r25, 0x00BD
-     b36:	84 17       	cp	r24, r20
-     b38:	95 07       	cpc	r25, r21
-     b3a:	90 f4       	brcc	.+36     	; 0xb60 <main+0x164>
-				
-						temp_hours_dawm = hour-led_menu_dawn_hours;
-     b3c:	3a 80       	ldd	r3, Y+2	; 0x02
-     b3e:	36 1a       	sub	r3, r22
-     b40:	30 92 c6 00 	sts	0x00C6, r3
-						temp_mins_dawm = min-led_menu_dawn_mins;
-     b44:	ea 2f       	mov	r30, r26
-     b46:	e8 1b       	sub	r30, r24
-     b48:	e0 93 c7 00 	sts	0x00C7, r30
-						excess_mins_dawm = temp_hours_dawm*60 + temp_mins_dawm;
-     b4c:	f0 e0       	ldi	r31, 0x00	; 0
-     b4e:	bc e3       	ldi	r27, 0x3C	; 60
-     b50:	3b 9e       	mul	r3, r27
-     b52:	e0 0d       	add	r30, r0
-     b54:	f1 1d       	adc	r31, r1
-     b56:	11 24       	eor	r1, r1
-     b58:	f0 93 c3 00 	sts	0x00C3, r31
-     b5c:	e0 93 c2 00 	sts	0x00C2, r30
-					}
-					if(hour > led_menu_dawn_hours && min < led_menu_dawn_mins){
-     b60:	62 17       	cp	r22, r18
-     b62:	73 07       	cpc	r23, r19
-     b64:	c0 f4       	brcc	.+48     	; 0xb96 <main+0x19a>
-     b66:	6a 2f       	mov	r22, r26
-     b68:	70 e0       	ldi	r23, 0x00	; 0
-     b6a:	68 17       	cp	r22, r24
-     b6c:	79 07       	cpc	r23, r25
-     b6e:	98 f4       	brcc	.+38     	; 0xb96 <main+0x19a>
-						temp_hours_dawm = hour-led_menu_dawn_hours;
-     b70:	90 91 be 00 	lds	r25, 0x00BE
-     b74:	6a 81       	ldd	r22, Y+2	; 0x02
-     b76:	69 1b       	sub	r22, r25
-     b78:	60 93 c6 00 	sts	0x00C6, r22
-						temp_mins_dawm = led_menu_dawn_mins-min;
-     b7c:	8a 1b       	sub	r24, r26
-     b7e:	80 93 c7 00 	sts	0x00C7, r24
-						excess_mins_dawm = temp_hours_dawm*60 - temp_mins_dawm;
-     b82:	ec e3       	ldi	r30, 0x3C	; 60
-     b84:	6e 9f       	mul	r22, r30
-     b86:	b0 01       	movw	r22, r0
-     b88:	11 24       	eor	r1, r1
-     b8a:	68 1b       	sub	r22, r24
-     b8c:	71 09       	sbc	r23, r1
-     b8e:	70 93 c3 00 	sts	0x00C3, r23
-     b92:	60 93 c2 00 	sts	0x00C2, r22
-					}
-			
-					if(excess_mins_dawm < led_menu_dawn_interval_mins){
-     b96:	80 91 c2 00 	lds	r24, 0x00C2
-     b9a:	90 91 c3 00 	lds	r25, 0x00C3
-     b9e:	e0 91 ba 00 	lds	r30, 0x00BA
-     ba2:	f0 91 bb 00 	lds	r31, 0x00BB
-     ba6:	8e 17       	cp	r24, r30
-     ba8:	9f 07       	cpc	r25, r31
-     baa:	c8 f4       	brcc	.+50     	; 0xbde <main+0x1e2>
-						PWM_set(RGBW, map(excess_mins_dawm, 1, led_menu_dawn_interval_mins, 0, 255));
-     bac:	9c 01       	movw	r18, r24
-     bae:	40 e0       	ldi	r20, 0x00	; 0
-     bb0:	50 e0       	ldi	r21, 0x00	; 0
+     86a:	b7 9b       	sbis	0x16, 7	; 22
+     86c:	01 c1       	rjmp	.+514    	; 0xa70 <main+0x2ce>
+								//Супер дупер крутой рассвет и закат
+								
+								all_time_in_sec = (((long)hour * 60) + (long)min)*60 + (long)sec;
+     86e:	20 91 d8 00 	lds	r18, 0x00D8
+     872:	30 e0       	ldi	r19, 0x00	; 0
+     874:	ac e3       	ldi	r26, 0x3C	; 60
+     876:	b0 e0       	ldi	r27, 0x00	; 0
+     878:	71 d4       	rcall	.+2274   	; 0x115c <__umulhisi3>
+     87a:	9b 01       	movw	r18, r22
+     87c:	ac 01       	movw	r20, r24
+     87e:	80 91 d9 00 	lds	r24, 0x00D9
+     882:	28 0f       	add	r18, r24
+     884:	31 1d       	adc	r19, r1
+     886:	41 1d       	adc	r20, r1
+     888:	51 1d       	adc	r21, r1
+     88a:	74 d4       	rcall	.+2280   	; 0x1174 <__muluhisi3>
+     88c:	6b 01       	movw	r12, r22
+     88e:	7c 01       	movw	r14, r24
+     890:	80 91 da 00 	lds	r24, 0x00DA
+     894:	c8 0e       	add	r12, r24
+     896:	d1 1c       	adc	r13, r1
+     898:	e1 1c       	adc	r14, r1
+     89a:	f1 1c       	adc	r15, r1
+     89c:	c0 92 b2 00 	sts	0x00B2, r12
+     8a0:	d0 92 b3 00 	sts	0x00B3, r13
+     8a4:	e0 92 b4 00 	sts	0x00B4, r14
+     8a8:	f0 92 b5 00 	sts	0x00B5, r15
+								all_time_in_sec_dawn = ((long)led_menu_dawn_hours * 60 * 60) + ((long)led_menu_dawn_mins * 60);
+     8ac:	20 91 ca 00 	lds	r18, 0x00CA
+     8b0:	30 91 cb 00 	lds	r19, 0x00CB
+     8b4:	40 91 c8 00 	lds	r20, 0x00C8
+     8b8:	50 91 c9 00 	lds	r21, 0x00C9
+     8bc:	a0 e1       	ldi	r26, 0x10	; 16
+     8be:	be e0       	ldi	r27, 0x0E	; 14
+     8c0:	4d d4       	rcall	.+2202   	; 0x115c <__umulhisi3>
+     8c2:	2b 01       	movw	r4, r22
+     8c4:	3c 01       	movw	r6, r24
+     8c6:	9a 01       	movw	r18, r20
+     8c8:	ac e3       	ldi	r26, 0x3C	; 60
+     8ca:	b0 e0       	ldi	r27, 0x00	; 0
+     8cc:	47 d4       	rcall	.+2190   	; 0x115c <__umulhisi3>
+     8ce:	46 0e       	add	r4, r22
+     8d0:	57 1e       	adc	r5, r23
+     8d2:	68 1e       	adc	r6, r24
+     8d4:	79 1e       	adc	r7, r25
+     8d6:	40 92 aa 00 	sts	0x00AA, r4
+     8da:	50 92 ab 00 	sts	0x00AB, r5
+     8de:	60 92 ac 00 	sts	0x00AC, r6
+     8e2:	70 92 ad 00 	sts	0x00AD, r7
+								
+								if(all_time_in_sec_dawn < all_time_in_sec){
+     8e6:	4c 14       	cp	r4, r12
+     8e8:	5d 04       	cpc	r5, r13
+     8ea:	6e 04       	cpc	r6, r14
+     8ec:	7f 04       	cpc	r7, r15
+     8ee:	08 f0       	brcs	.+2      	; 0x8f2 <main+0x150>
+     8f0:	9f c0       	rjmp	.+318    	; 0xa30 <main+0x28e>
+									excess_sec_dawm = all_time_in_sec - all_time_in_sec_dawn;
+     8f2:	d7 01       	movw	r26, r14
+     8f4:	c6 01       	movw	r24, r12
+     8f6:	84 19       	sub	r24, r4
+     8f8:	95 09       	sbc	r25, r5
+     8fa:	a6 09       	sbc	r26, r6
+     8fc:	b7 09       	sbc	r27, r7
+     8fe:	2c 01       	movw	r4, r24
+     900:	3d 01       	movw	r6, r26
+     902:	80 93 d0 00 	sts	0x00D0, r24
+     906:	90 93 d1 00 	sts	0x00D1, r25
+     90a:	a0 93 d2 00 	sts	0x00D2, r26
+     90e:	b0 93 d3 00 	sts	0x00D3, r27
+									//Если закат начался
+			                        if(((int)excess_sec_dawm / 60) < led_menu_dawn_interval_mins){
+     912:	e0 91 c6 00 	lds	r30, 0x00C6
+     916:	f0 91 c7 00 	lds	r31, 0x00C7
+     91a:	b4 01       	movw	r22, r8
+     91c:	f0 d3       	rcall	.+2016   	; 0x10fe <__divmodhi4>
+     91e:	6e 17       	cp	r22, r30
+     920:	7f 07       	cpc	r23, r31
+     922:	f0 f4       	brcc	.+60     	; 0x960 <main+0x1be>
 }
 
 //Преобразование диапазона
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-     bb2:	21 50       	subi	r18, 0x01	; 1
-     bb4:	31 09       	sbc	r19, r1
-     bb6:	41 09       	sbc	r20, r1
-     bb8:	51 09       	sbc	r21, r1
-     bba:	af ef       	ldi	r26, 0xFF	; 255
-     bbc:	b0 e0       	ldi	r27, 0x00	; 0
-     bbe:	45 d4       	rcall	.+2186   	; 0x144a <__muluhisi3>
-						temp_mins_dawm = led_menu_dawn_mins-min;
-						excess_mins_dawm = temp_hours_dawm*60 - temp_mins_dawm;
-					}
-			
-					if(excess_mins_dawm < led_menu_dawn_interval_mins){
-						PWM_set(RGBW, map(excess_mins_dawm, 1, led_menu_dawn_interval_mins, 0, 255));
-     bc0:	9f 01       	movw	r18, r30
-     bc2:	40 e0       	ldi	r20, 0x00	; 0
-     bc4:	50 e0       	ldi	r21, 0x00	; 0
+     924:	a3 01       	movw	r20, r6
+     926:	92 01       	movw	r18, r4
+     928:	21 50       	subi	r18, 0x01	; 1
+     92a:	31 09       	sbc	r19, r1
+     92c:	41 09       	sbc	r20, r1
+     92e:	51 09       	sbc	r21, r1
+     930:	a5 ef       	ldi	r26, 0xF5	; 245
+     932:	b0 e0       	ldi	r27, 0x00	; 0
+     934:	1f d4       	rcall	.+2110   	; 0x1174 <__muluhisi3>
+								
+								if(all_time_in_sec_dawn < all_time_in_sec){
+									excess_sec_dawm = all_time_in_sec - all_time_in_sec_dawn;
+									//Если закат начался
+			                        if(((int)excess_sec_dawm / 60) < led_menu_dawn_interval_mins){
+										PWM_set(RGBW, map(excess_sec_dawm, 1, led_menu_dawn_interval_mins * 60, 10, 255));
+     936:	ac e3       	ldi	r26, 0x3C	; 60
+     938:	ae 9f       	mul	r26, r30
+     93a:	90 01       	movw	r18, r0
+     93c:	af 9f       	mul	r26, r31
+     93e:	30 0d       	add	r19, r0
+     940:	11 24       	eor	r1, r1
+     942:	40 e0       	ldi	r20, 0x00	; 0
+     944:	50 e0       	ldi	r21, 0x00	; 0
 }
 
 //Преобразование диапазона
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-     bc6:	21 50       	subi	r18, 0x01	; 1
-     bc8:	31 09       	sbc	r19, r1
-     bca:	41 09       	sbc	r20, r1
-     bcc:	51 09       	sbc	r21, r1
-     bce:	21 d4       	rcall	.+2114   	; 0x1412 <__divmodsi4>
-     bd0:	82 2f       	mov	r24, r18
-     bd2:	c8 db       	rcall	.-2160   	; 0x364 <PWM_set.part.0>
-						excess_mins_dawm = temp_hours_dawm*60 - temp_mins_dawm;
-					}
-			
-					if(excess_mins_dawm < led_menu_dawn_interval_mins){
-						PWM_set(RGBW, map(excess_mins_dawm, 1, led_menu_dawn_interval_mins, 0, 255));
-						now_mode_light = LIGHT_DAWM;
-     bd4:	f0 92 ad 00 	sts	0x00AD, r15
-     bd8:	e0 92 ac 00 	sts	0x00AC, r14
-     bdc:	7c c0       	rjmp	.+248    	; 0xcd6 <main+0x2da>
-						}else{
-						if((hour >= led_menu_sunset_hours && min > led_menu_sunset_mins) || (hour > led_menu_sunset_hours && min < led_menu_sunset_mins)){
-     bde:	80 91 b8 00 	lds	r24, 0x00B8
-     be2:	90 91 b9 00 	lds	r25, 0x00B9
-     be6:	28 17       	cp	r18, r24
-     be8:	39 07       	cpc	r19, r25
-     bea:	38 f0       	brcs	.+14     	; 0xbfa <main+0x1fe>
-     bec:	60 91 b6 00 	lds	r22, 0x00B6
-     bf0:	70 91 b7 00 	lds	r23, 0x00B7
-     bf4:	64 17       	cp	r22, r20
-     bf6:	75 07       	cpc	r23, r21
-     bf8:	60 f0       	brcs	.+24     	; 0xc12 <main+0x216>
-     bfa:	82 17       	cp	r24, r18
-     bfc:	93 07       	cpc	r25, r19
-     bfe:	08 f0       	brcs	.+2      	; 0xc02 <main+0x206>
-     c00:	5d c0       	rjmp	.+186    	; 0xcbc <main+0x2c0>
-     c02:	60 91 b6 00 	lds	r22, 0x00B6
-     c06:	70 91 b7 00 	lds	r23, 0x00B7
-     c0a:	46 17       	cp	r20, r22
-     c0c:	57 07       	cpc	r21, r23
-     c0e:	08 f0       	brcs	.+2      	; 0xc12 <main+0x216>
-     c10:	55 c0       	rjmp	.+170    	; 0xcbc <main+0x2c0>
-							if(hour >= led_menu_sunset_hours && min > led_menu_sunset_mins){
-     c12:	60 91 b6 00 	lds	r22, 0x00B6
-     c16:	70 91 b7 00 	lds	r23, 0x00B7
-     c1a:	64 17       	cp	r22, r20
-     c1c:	75 07       	cpc	r23, r21
-     c1e:	90 f4       	brcc	.+36     	; 0xc44 <main+0x248>
-						
-								temp_hours_sunset = hour-led_menu_sunset_hours;
-     c20:	3a 80       	ldd	r3, Y+2	; 0x02
-     c22:	38 1a       	sub	r3, r24
-     c24:	30 92 c4 00 	sts	0x00C4, r3
-								temp_mins_sunset = min-led_menu_sunset_mins;
-     c28:	ea 2f       	mov	r30, r26
-     c2a:	e6 1b       	sub	r30, r22
-     c2c:	e0 93 c5 00 	sts	0x00C5, r30
-								excess_mins_sunset = temp_hours_sunset*60 + temp_mins_sunset;
-     c30:	f0 e0       	ldi	r31, 0x00	; 0
-     c32:	bc e3       	ldi	r27, 0x3C	; 60
-     c34:	3b 9e       	mul	r3, r27
-     c36:	e0 0d       	add	r30, r0
-     c38:	f1 1d       	adc	r31, r1
-     c3a:	11 24       	eor	r1, r1
-     c3c:	f0 93 c1 00 	sts	0x00C1, r31
-     c40:	e0 93 c0 00 	sts	0x00C0, r30
-							}
-							if(hour > led_menu_sunset_hours && min < led_menu_sunset_mins){
-     c44:	82 17       	cp	r24, r18
-     c46:	93 07       	cpc	r25, r19
-     c48:	a0 f4       	brcc	.+40     	; 0xc72 <main+0x276>
-     c4a:	46 17       	cp	r20, r22
-     c4c:	57 07       	cpc	r21, r23
-     c4e:	88 f4       	brcc	.+34     	; 0xc72 <main+0x276>
-								temp_hours_sunset = hour-led_menu_sunset_hours;
-     c50:	ba 81       	ldd	r27, Y+2	; 0x02
-     c52:	b8 1b       	sub	r27, r24
-     c54:	b0 93 c4 00 	sts	0x00C4, r27
-								temp_mins_sunset = led_menu_sunset_mins-min;
-     c58:	6a 1b       	sub	r22, r26
-     c5a:	60 93 c5 00 	sts	0x00C5, r22
-								excess_mins_sunset = temp_hours_sunset*60 - temp_mins_sunset;
-     c5e:	ec e3       	ldi	r30, 0x3C	; 60
-     c60:	be 9f       	mul	r27, r30
-     c62:	c0 01       	movw	r24, r0
-     c64:	11 24       	eor	r1, r1
-     c66:	86 1b       	sub	r24, r22
-     c68:	91 09       	sbc	r25, r1
-     c6a:	90 93 c1 00 	sts	0x00C1, r25
-     c6e:	80 93 c0 00 	sts	0x00C0, r24
-							}
-							if(excess_mins_sunset < led_menu_sunset_interval_mins){
-     c72:	80 91 c0 00 	lds	r24, 0x00C0
-     c76:	90 91 c1 00 	lds	r25, 0x00C1
-     c7a:	e0 91 b4 00 	lds	r30, 0x00B4
-     c7e:	f0 91 b5 00 	lds	r31, 0x00B5
-     c82:	8e 17       	cp	r24, r30
-     c84:	9f 07       	cpc	r25, r31
-     c86:	08 f5       	brcc	.+66     	; 0xcca <main+0x2ce>
-								PWM_set(RGBW, map(excess_mins_sunset, 1, led_menu_sunset_interval_mins, 255, 0));
-     c88:	9c 01       	movw	r18, r24
-     c8a:	40 e0       	ldi	r20, 0x00	; 0
-     c8c:	50 e0       	ldi	r21, 0x00	; 0
+     946:	21 50       	subi	r18, 0x01	; 1
+     948:	31 09       	sbc	r19, r1
+     94a:	41 09       	sbc	r20, r1
+     94c:	51 09       	sbc	r21, r1
+     94e:	ea d3       	rcall	.+2004   	; 0x1124 <__divmodsi4>
+     950:	8a e0       	ldi	r24, 0x0A	; 10
+     952:	82 0f       	add	r24, r18
+     954:	07 dd       	rcall	.-1522   	; 0x364 <PWM_set.part.0>
+								if(all_time_in_sec_dawn < all_time_in_sec){
+									excess_sec_dawm = all_time_in_sec - all_time_in_sec_dawn;
+									//Если закат начался
+			                        if(((int)excess_sec_dawm / 60) < led_menu_dawn_interval_mins){
+										PWM_set(RGBW, map(excess_sec_dawm, 1, led_menu_dawn_interval_mins * 60, 10, 255));
+										now_mode_light = LIGHT_DAWM;
+     956:	b0 92 b9 00 	sts	0x00B9, r11
+     95a:	a0 92 b8 00 	sts	0x00B8, r10
+     95e:	70 c0       	rjmp	.+224    	; 0xa40 <main+0x29e>
+									}else{
+										all_time_in_sec_sunset = ((long)led_menu_sunset_hours * 60 * 60) + ((long)led_menu_sunset_mins * 60);
+     960:	20 91 c4 00 	lds	r18, 0x00C4
+     964:	30 91 c5 00 	lds	r19, 0x00C5
+     968:	40 91 c2 00 	lds	r20, 0x00C2
+     96c:	50 91 c3 00 	lds	r21, 0x00C3
+     970:	a0 e1       	ldi	r26, 0x10	; 16
+     972:	be e0       	ldi	r27, 0x0E	; 14
+     974:	f3 d3       	rcall	.+2022   	; 0x115c <__umulhisi3>
+     976:	2b 01       	movw	r4, r22
+     978:	3c 01       	movw	r6, r24
+     97a:	9a 01       	movw	r18, r20
+     97c:	ac e3       	ldi	r26, 0x3C	; 60
+     97e:	b0 e0       	ldi	r27, 0x00	; 0
+     980:	ed d3       	rcall	.+2010   	; 0x115c <__umulhisi3>
+     982:	46 0e       	add	r4, r22
+     984:	57 1e       	adc	r5, r23
+     986:	68 1e       	adc	r6, r24
+     988:	79 1e       	adc	r7, r25
+     98a:	40 92 ae 00 	sts	0x00AE, r4
+     98e:	50 92 af 00 	sts	0x00AF, r5
+     992:	60 92 b0 00 	sts	0x00B0, r6
+     996:	70 92 b1 00 	sts	0x00B1, r7
+																				
+										if(all_time_in_sec_sunset  < all_time_in_sec){
+     99a:	4c 14       	cp	r4, r12
+     99c:	5d 04       	cpc	r5, r13
+     99e:	6e 04       	cpc	r6, r14
+     9a0:	7f 04       	cpc	r7, r15
+     9a2:	e8 f5       	brcc	.+122    	; 0xa1e <main+0x27c>
+											excess_sec_sunset = all_time_in_sec - all_time_in_sec_sunset;
+     9a4:	c4 18       	sub	r12, r4
+     9a6:	d5 08       	sbc	r13, r5
+     9a8:	e6 08       	sbc	r14, r6
+     9aa:	f7 08       	sbc	r15, r7
+     9ac:	c0 92 cc 00 	sts	0x00CC, r12
+     9b0:	d0 92 cd 00 	sts	0x00CD, r13
+     9b4:	e0 92 ce 00 	sts	0x00CE, r14
+     9b8:	f0 92 cf 00 	sts	0x00CF, r15
+											
+											if(((int)excess_sec_sunset / 60) < led_menu_sunset_interval_mins){
+     9bc:	e0 91 c0 00 	lds	r30, 0x00C0
+     9c0:	f0 91 c1 00 	lds	r31, 0x00C1
+     9c4:	c6 01       	movw	r24, r12
+     9c6:	b4 01       	movw	r22, r8
+     9c8:	9a d3       	rcall	.+1844   	; 0x10fe <__divmodhi4>
+     9ca:	6e 17       	cp	r22, r30
+     9cc:	7f 07       	cpc	r23, r31
+     9ce:	f0 f4       	brcc	.+60     	; 0xa0c <main+0x26a>
 }
 
 //Преобразование диапазона
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-     c8e:	21 50       	subi	r18, 0x01	; 1
-     c90:	31 09       	sbc	r19, r1
-     c92:	41 09       	sbc	r20, r1
-     c94:	51 09       	sbc	r21, r1
-     c96:	a1 e0       	ldi	r26, 0x01	; 1
-     c98:	bf ef       	ldi	r27, 0xFF	; 255
-     c9a:	e3 d3       	rcall	.+1990   	; 0x1462 <__mulohisi3>
-								temp_hours_sunset = hour-led_menu_sunset_hours;
-								temp_mins_sunset = led_menu_sunset_mins-min;
-								excess_mins_sunset = temp_hours_sunset*60 - temp_mins_sunset;
-							}
-							if(excess_mins_sunset < led_menu_sunset_interval_mins){
-								PWM_set(RGBW, map(excess_mins_sunset, 1, led_menu_sunset_interval_mins, 255, 0));
-     c9c:	9f 01       	movw	r18, r30
-     c9e:	40 e0       	ldi	r20, 0x00	; 0
-     ca0:	50 e0       	ldi	r21, 0x00	; 0
+     9d0:	a7 01       	movw	r20, r14
+     9d2:	96 01       	movw	r18, r12
+     9d4:	21 50       	subi	r18, 0x01	; 1
+     9d6:	31 09       	sbc	r19, r1
+     9d8:	41 09       	sbc	r20, r1
+     9da:	51 09       	sbc	r21, r1
+     9dc:	ab e0       	ldi	r26, 0x0B	; 11
+     9de:	bf ef       	ldi	r27, 0xFF	; 255
+     9e0:	d5 d3       	rcall	.+1962   	; 0x118c <__mulohisi3>
+																				
+										if(all_time_in_sec_sunset  < all_time_in_sec){
+											excess_sec_sunset = all_time_in_sec - all_time_in_sec_sunset;
+											
+											if(((int)excess_sec_sunset / 60) < led_menu_sunset_interval_mins){
+												PWM_set(RGBW, map(excess_sec_sunset, 1, led_menu_sunset_interval_mins * 60, 255, 10));
+     9e2:	bc e3       	ldi	r27, 0x3C	; 60
+     9e4:	be 9f       	mul	r27, r30
+     9e6:	90 01       	movw	r18, r0
+     9e8:	bf 9f       	mul	r27, r31
+     9ea:	30 0d       	add	r19, r0
+     9ec:	11 24       	eor	r1, r1
+     9ee:	40 e0       	ldi	r20, 0x00	; 0
+     9f0:	50 e0       	ldi	r21, 0x00	; 0
 }
 
 //Преобразование диапазона
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-     ca2:	21 50       	subi	r18, 0x01	; 1
-     ca4:	31 09       	sbc	r19, r1
-     ca6:	41 09       	sbc	r20, r1
-     ca8:	51 09       	sbc	r21, r1
-     caa:	b3 d3       	rcall	.+1894   	; 0x1412 <__divmodsi4>
-     cac:	8f ef       	ldi	r24, 0xFF	; 255
-     cae:	82 0f       	add	r24, r18
-     cb0:	59 db       	rcall	.-2382   	; 0x364 <PWM_set.part.0>
-								temp_mins_sunset = led_menu_sunset_mins-min;
-								excess_mins_sunset = temp_hours_sunset*60 - temp_mins_sunset;
-							}
-							if(excess_mins_sunset < led_menu_sunset_interval_mins){
-								PWM_set(RGBW, map(excess_mins_sunset, 1, led_menu_sunset_interval_mins, 255, 0));
-								now_mode_light = LIGHT_SUNSET;
-     cb2:	b0 92 ad 00 	sts	0x00AD, r11
-     cb6:	a0 92 ac 00 	sts	0x00AC, r10
-     cba:	0d c0       	rjmp	.+26     	; 0xcd6 <main+0x2da>
-     cbc:	8f ef       	ldi	r24, 0xFF	; 255
-     cbe:	52 db       	rcall	.-2396   	; 0x364 <PWM_set.part.0>
-								}else{ PWM_set(RGBW, 0x00); now_mode_light = LIGHT_OFF;}
-								}else{ PWM_set(RGBW, 0xFF); now_mode_light = LIGHT_FULL;}
-     cc0:	d0 92 ad 00 	sts	0x00AD, r13
-     cc4:	c0 92 ac 00 	sts	0x00AC, r12
-     cc8:	06 c0       	rjmp	.+12     	; 0xcd6 <main+0x2da>
-     cca:	80 e0       	ldi	r24, 0x00	; 0
-     ccc:	4b db       	rcall	.-2410   	; 0x364 <PWM_set.part.0>
-							}
-							}else{  
-								PWM_set(RGBW, 0x00); now_mode_light = LIGHT_OFF;
-     cce:	90 92 ad 00 	sts	0x00AD, r9
-     cd2:	80 92 ac 00 	sts	0x00AC, r8
-							}			
+     9f2:	21 50       	subi	r18, 0x01	; 1
+     9f4:	31 09       	sbc	r19, r1
+     9f6:	41 09       	sbc	r20, r1
+     9f8:	51 09       	sbc	r21, r1
+     9fa:	94 d3       	rcall	.+1832   	; 0x1124 <__divmodsi4>
+     9fc:	8f ef       	ldi	r24, 0xFF	; 255
+     9fe:	82 0f       	add	r24, r18
+     a00:	b1 dc       	rcall	.-1694   	; 0x364 <PWM_set.part.0>
+										if(all_time_in_sec_sunset  < all_time_in_sec){
+											excess_sec_sunset = all_time_in_sec - all_time_in_sec_sunset;
+											
+											if(((int)excess_sec_sunset / 60) < led_menu_sunset_interval_mins){
+												PWM_set(RGBW, map(excess_sec_sunset, 1, led_menu_sunset_interval_mins * 60, 255, 10));
+												now_mode_light = LIGHT_SUNSET;
+     a02:	30 92 b9 00 	sts	0x00B9, r3
+     a06:	20 92 b8 00 	sts	0x00B8, r2
+     a0a:	1a c0       	rjmp	.+52     	; 0xa40 <main+0x29e>
+     a0c:	80 e0       	ldi	r24, 0x00	; 0
+     a0e:	aa dc       	rcall	.-1708   	; 0x364 <PWM_set.part.0>
+										    }else{ 
+												PWM_set(RGBW, 0x00); 
+												now_mode_light = LIGHT_OFF;
+     a10:	e4 e0       	ldi	r30, 0x04	; 4
+     a12:	f0 e0       	ldi	r31, 0x00	; 0
+     a14:	f0 93 b9 00 	sts	0x00B9, r31
+     a18:	e0 93 b8 00 	sts	0x00B8, r30
+     a1c:	11 c0       	rjmp	.+34     	; 0xa40 <main+0x29e>
+     a1e:	8f ef       	ldi	r24, 0xFF	; 255
+     a20:	a1 dc       	rcall	.-1726   	; 0x364 <PWM_set.part.0>
+											}
+										}else{ 
+											PWM_set(RGBW, 0xFF); 
+											now_mode_light = LIGHT_FULL;
+     a22:	83 e0       	ldi	r24, 0x03	; 3
+     a24:	90 e0       	ldi	r25, 0x00	; 0
+     a26:	90 93 b9 00 	sts	0x00B9, r25
+     a2a:	80 93 b8 00 	sts	0x00B8, r24
+     a2e:	08 c0       	rjmp	.+16     	; 0xa40 <main+0x29e>
+     a30:	80 e0       	ldi	r24, 0x00	; 0
+     a32:	98 dc       	rcall	.-1744   	; 0x364 <PWM_set.part.0>
+										}
+									 }
+								}else{  
+									PWM_set(RGBW, 0x00); 
+									now_mode_light = LIGHT_OFF;
+     a34:	a4 e0       	ldi	r26, 0x04	; 4
+     a36:	b0 e0       	ldi	r27, 0x00	; 0
+     a38:	b0 93 b9 00 	sts	0x00B9, r27
+     a3c:	a0 93 b8 00 	sts	0x00B8, r26
+								}			
 					
-							if(prev_now_mode_light != now_mode_light ){
-     cd6:	20 91 aa 00 	lds	r18, 0x00AA
-     cda:	30 91 ab 00 	lds	r19, 0x00AB
-     cde:	80 91 ac 00 	lds	r24, 0x00AC
-     ce2:	90 91 ad 00 	lds	r25, 0x00AD
-     ce6:	28 17       	cp	r18, r24
-     ce8:	39 07       	cpc	r19, r25
-     cea:	09 f0       	breq	.+2      	; 0xcee <main+0x2f2>
-								ClearALLCharIndicator();
-     cec:	da da       	rcall	.-2636   	; 0x2a2 <ClearALLCharIndicator>
-							}
+								if(prev_now_mode_light != now_mode_light ){
+     a40:	20 91 b6 00 	lds	r18, 0x00B6
+     a44:	30 91 b7 00 	lds	r19, 0x00B7
+     a48:	80 91 b8 00 	lds	r24, 0x00B8
+     a4c:	90 91 b9 00 	lds	r25, 0x00B9
+     a50:	28 17       	cp	r18, r24
+     a52:	39 07       	cpc	r19, r25
+     a54:	09 f0       	breq	.+2      	; 0xa58 <main+0x2b6>
+									ClearALLCharIndicator();
+     a56:	25 dc       	rcall	.-1974   	; 0x2a2 <ClearALLCharIndicator>
+								}
 					
-							prev_now_mode_light = now_mode_light;
-     cee:	80 91 ac 00 	lds	r24, 0x00AC
-     cf2:	90 91 ad 00 	lds	r25, 0x00AD
-     cf6:	90 93 ab 00 	sts	0x00AB, r25
-     cfa:	80 93 aa 00 	sts	0x00AA, r24
-							TIMSK |= (1 << TOIE0);
-     cfe:	89 b7       	in	r24, 0x39	; 57
-     d00:	81 60       	ori	r24, 0x01	; 1
-     d02:	89 bf       	out	0x39, r24	; 57
-     d04:	07 c0       	rjmp	.+14     	; 0xd14 <main+0x318>
+								prev_now_mode_light = now_mode_light;
+     a58:	80 91 b8 00 	lds	r24, 0x00B8
+     a5c:	90 91 b9 00 	lds	r25, 0x00B9
+     a60:	90 93 b7 00 	sts	0x00B7, r25
+     a64:	80 93 b6 00 	sts	0x00B6, r24
+								TIMSK |= (1 << TOIE0);
+     a68:	89 b7       	in	r24, 0x39	; 57
+     a6a:	81 60       	ori	r24, 0x01	; 1
+     a6c:	89 bf       	out	0x39, r24	; 57
+     a6e:	07 c0       	rjmp	.+14     	; 0xa7e <main+0x2dc>
 					}else{
 						//Подаем + на драйвера если тумблер включен
 						TIMSK &=~ (1 << TOIE0);
-     d06:	89 b7       	in	r24, 0x39	; 57
-     d08:	8e 7f       	andi	r24, 0xFE	; 254
-     d0a:	89 bf       	out	0x39, r24	; 57
+     a70:	89 b7       	in	r24, 0x39	; 57
+     a72:	8e 7f       	andi	r24, 0xFE	; 254
+     a74:	89 bf       	out	0x39, r24	; 57
 						PORT_R |= (1<<R);
-     d0c:	95 9a       	sbi	0x12, 5	; 18
+     a76:	95 9a       	sbi	0x12, 5	; 18
 						PORT_G |= (1<<G);
-     d0e:	96 9a       	sbi	0x12, 6	; 18
+     a78:	96 9a       	sbi	0x12, 6	; 18
 						PORT_B |= (1<<B);
-     d10:	97 9a       	sbi	0x12, 7	; 18
+     a7a:	97 9a       	sbi	0x12, 7	; 18
 						PORT_W |= (1<<W);
-     d12:	c0 9a       	sbi	0x18, 0	; 24
+     a7c:	c0 9a       	sbi	0x18, 0	; 24
 					}
 					
 					//Читаем время
 						
 					I2C_SendByteByADDR(0,0b11010000);	//Установка адреса в 0
-     d14:	60 ed       	ldi	r22, 0xD0	; 208
-     d16:	80 e0       	ldi	r24, 0x00	; 0
-     d18:	3a d3       	rcall	.+1652   	; 0x138e <I2C_SendByteByADDR>
+     a7e:	60 ed       	ldi	r22, 0xD0	; 208
+     a80:	80 e0       	ldi	r24, 0x00	; 0
+     a82:	fb d2       	rcall	.+1526   	; 0x107a <I2C_SendByteByADDR>
 					I2C_StartCondition(); //Отправим условие START
-     d1a:	29 d3       	rcall	.+1618   	; 0x136e <I2C_StartCondition>
+     a84:	ea d2       	rcall	.+1492   	; 0x105a <I2C_StartCondition>
 					I2C_SendByte(0b11010001); //Бит на чтение
-     d1c:	81 ed       	ldi	r24, 0xD1	; 209
-     d1e:	30 d3       	rcall	.+1632   	; 0x1380 <I2C_SendByte>
+     a86:	81 ed       	ldi	r24, 0xD1	; 209
+     a88:	f1 d2       	rcall	.+1506   	; 0x106c <I2C_SendByte>
 					sec_ = I2C_ReadByte();
-     d20:	4a d3       	rcall	.+1684   	; 0x13b6 <I2C_ReadByte>
-     d22:	80 93 d7 00 	sts	0x00D7, r24
+     a8a:	0b d3       	rcall	.+1558   	; 0x10a2 <I2C_ReadByte>
+     a8c:	80 93 e3 00 	sts	0x00E3, r24
 					min_ = I2C_ReadByte();
-     d26:	47 d3       	rcall	.+1678   	; 0x13b6 <I2C_ReadByte>
-     d28:	80 93 d1 00 	sts	0x00D1, r24
+     a90:	08 d3       	rcall	.+1552   	; 0x10a2 <I2C_ReadByte>
+     a92:	80 93 dd 00 	sts	0x00DD, r24
 					hour_ = I2C_ReadByte();
-     d2c:	44 d3       	rcall	.+1672   	; 0x13b6 <I2C_ReadByte>
-     d2e:	80 93 d5 00 	sts	0x00D5, r24
+     a96:	05 d3       	rcall	.+1546   	; 0x10a2 <I2C_ReadByte>
+     a98:	80 93 e1 00 	sts	0x00E1, r24
 					day_ = I2C_ReadByte();
-     d32:	41 d3       	rcall	.+1666   	; 0x13b6 <I2C_ReadByte>
-     d34:	80 93 d3 00 	sts	0x00D3, r24
+     a9c:	02 d3       	rcall	.+1540   	; 0x10a2 <I2C_ReadByte>
+     a9e:	80 93 df 00 	sts	0x00DF, r24
 					date_ = I2C_ReadByte();
-     d38:	3e d3       	rcall	.+1660   	; 0x13b6 <I2C_ReadByte>
-     d3a:	80 93 cf 00 	sts	0x00CF, r24
+     aa2:	ff d2       	rcall	.+1534   	; 0x10a2 <I2C_ReadByte>
+     aa4:	80 93 db 00 	sts	0x00DB, r24
 					month_ = I2C_ReadByte();
-     d3e:	3b d3       	rcall	.+1654   	; 0x13b6 <I2C_ReadByte>
-     d40:	80 93 d8 00 	sts	0x00D8, r24
+     aa8:	fc d2       	rcall	.+1528   	; 0x10a2 <I2C_ReadByte>
+     aaa:	80 93 e4 00 	sts	0x00E4, r24
 					year_ = I2C_ReadLastByte();
-     d44:	3f d3       	rcall	.+1662   	; 0x13c4 <I2C_ReadLastByte>
-     d46:	80 93 d0 00 	sts	0x00D0, r24
+     aae:	00 d3       	rcall	.+1536   	; 0x10b0 <I2C_ReadLastByte>
+     ab0:	80 93 dc 00 	sts	0x00DC, r24
 					I2C_StopCondition(); //Отправим условие STOP
-     d4a:	17 d3       	rcall	.+1582   	; 0x137a <I2C_StopCondition>
+     ab4:	d8 d2       	rcall	.+1456   	; 0x1066 <I2C_StopCondition>
 					sec = RTC_ConvertFromDec(sec_); //Преобразуем в десятичный формат
-     d4c:	80 91 d7 00 	lds	r24, 0x00D7
-     d50:	f9 d2       	rcall	.+1522   	; 0x1344 <RTC_ConvertFromDec>
-     d52:	80 93 ce 00 	sts	0x00CE, r24
+     ab6:	80 91 e3 00 	lds	r24, 0x00E3
+     aba:	ba d2       	rcall	.+1396   	; 0x1030 <RTC_ConvertFromDec>
+     abc:	80 93 da 00 	sts	0x00DA, r24
 					min = RTC_ConvertFromDec(min_); //Преобразуем в десятичный формат
-     d56:	80 91 d1 00 	lds	r24, 0x00D1
-     d5a:	f4 d2       	rcall	.+1512   	; 0x1344 <RTC_ConvertFromDec>
-     d5c:	80 93 cd 00 	sts	0x00CD, r24
+     ac0:	80 91 dd 00 	lds	r24, 0x00DD
+     ac4:	b5 d2       	rcall	.+1386   	; 0x1030 <RTC_ConvertFromDec>
+     ac6:	80 93 d9 00 	sts	0x00D9, r24
 					hour = RTC_ConvertFromDec(hour_); //Преобразуем в десятичный формат
-     d60:	80 91 d5 00 	lds	r24, 0x00D5
-     d64:	ef d2       	rcall	.+1502   	; 0x1344 <RTC_ConvertFromDec>
-     d66:	80 93 cc 00 	sts	0x00CC, r24
+     aca:	80 91 e1 00 	lds	r24, 0x00E1
+     ace:	b0 d2       	rcall	.+1376   	; 0x1030 <RTC_ConvertFromDec>
+     ad0:	80 93 d8 00 	sts	0x00D8, r24
 					day = RTC_ConvertFromDec(day_); //Преобразуем в десятичный формат
-     d6a:	80 91 d3 00 	lds	r24, 0x00D3
-     d6e:	ea d2       	rcall	.+1492   	; 0x1344 <RTC_ConvertFromDec>
-     d70:	80 93 cb 00 	sts	0x00CB, r24
+     ad4:	80 91 df 00 	lds	r24, 0x00DF
+     ad8:	ab d2       	rcall	.+1366   	; 0x1030 <RTC_ConvertFromDec>
+     ada:	80 93 d7 00 	sts	0x00D7, r24
 					year = RTC_ConvertFromDec(year_); //Преобразуем в десятичный формат
-     d74:	80 91 d0 00 	lds	r24, 0x00D0
-     d78:	e5 d2       	rcall	.+1482   	; 0x1344 <RTC_ConvertFromDec>
-     d7a:	80 93 c8 00 	sts	0x00C8, r24
+     ade:	80 91 dc 00 	lds	r24, 0x00DC
+     ae2:	a6 d2       	rcall	.+1356   	; 0x1030 <RTC_ConvertFromDec>
+     ae4:	80 93 d4 00 	sts	0x00D4, r24
 					month = RTC_ConvertFromDec(month_); //Преобразуем в десятичный формат
-     d7e:	80 91 d8 00 	lds	r24, 0x00D8
-     d82:	e0 d2       	rcall	.+1472   	; 0x1344 <RTC_ConvertFromDec>
-     d84:	80 93 c9 00 	sts	0x00C9, r24
+     ae8:	80 91 e4 00 	lds	r24, 0x00E4
+     aec:	a1 d2       	rcall	.+1346   	; 0x1030 <RTC_ConvertFromDec>
+     aee:	80 93 d5 00 	sts	0x00D5, r24
 					date = RTC_ConvertFromDec(date_); //Преобразуем в десятичный формат
-     d88:	80 91 cf 00 	lds	r24, 0x00CF
-     d8c:	db d2       	rcall	.+1462   	; 0x1344 <RTC_ConvertFromDec>
-     d8e:	80 93 ca 00 	sts	0x00CA, r24
+     af2:	80 91 db 00 	lds	r24, 0x00DB
+     af6:	9c d2       	rcall	.+1336   	; 0x1030 <RTC_ConvertFromDec>
+     af8:	80 93 d6 00 	sts	0x00D6, r24
 					if((PINB & (1 << PB7))){
-     d92:	b7 9b       	sbis	0x16, 7	; 22
-     d94:	0a c0       	rjmp	.+20     	; 0xdaa <main+0x3ae>
+     afc:	b7 9b       	sbis	0x16, 7	; 22
+     afe:	0a c0       	rjmp	.+20     	; 0xb14 <main+0x372>
 					  TIMSK |= (1 << TOIE0);
-     d96:	89 b7       	in	r24, 0x39	; 57
-     d98:	81 60       	ori	r24, 0x01	; 1
-     d9a:	06 c0       	rjmp	.+12     	; 0xda8 <main+0x3ac>
+     b00:	89 b7       	in	r24, 0x39	; 57
+     b02:	81 60       	ori	r24, 0x01	; 1
+     b04:	06 c0       	rjmp	.+12     	; 0xb12 <main+0x370>
 					}
 		}else{
 		    PORT_R &= ~(1<<R);
-     d9c:	95 98       	cbi	0x12, 5	; 18
+     b06:	95 98       	cbi	0x12, 5	; 18
 			PORT_G &= ~(1<<G);
-     d9e:	96 98       	cbi	0x12, 6	; 18
+     b08:	96 98       	cbi	0x12, 6	; 18
 			PORT_B &= ~(1<<B);
-     da0:	97 98       	cbi	0x12, 7	; 18
+     b0a:	97 98       	cbi	0x12, 7	; 18
 			PORT_W &= ~(1<<W);
-     da2:	c0 98       	cbi	0x18, 0	; 24
+     b0c:	c0 98       	cbi	0x18, 0	; 24
 			TIMSK &=~ (1 << TOIE0);
-     da4:	89 b7       	in	r24, 0x39	; 57
-     da6:	8e 7f       	andi	r24, 0xFE	; 254
-     da8:	89 bf       	out	0x39, r24	; 57
+     b0e:	89 b7       	in	r24, 0x39	; 57
+     b10:	8e 7f       	andi	r24, 0xFE	; 254
+     b12:	89 bf       	out	0x39, r24	; 57
 		}
 		
 		//Модификация данных если выключены настроки и изменяется значение
 	    if((now_mode != MODE_NONE) && ((increment_mode == MODE_INC) || (increment_mode == MODE_DISINC)))
-     daa:	80 91 b3 00 	lds	r24, 0x00B3
-     dae:	88 23       	and	r24, r24
-     db0:	41 f0       	breq	.+16     	; 0xdc2 <main+0x3c6>
-     db2:	80 91 b2 00 	lds	r24, 0x00B2
-     db6:	81 50       	subi	r24, 0x01	; 1
-     db8:	82 30       	cpi	r24, 0x02	; 2
-     dba:	18 f4       	brcc	.+6      	; 0xdc2 <main+0x3c6>
+     b14:	80 91 bf 00 	lds	r24, 0x00BF
+     b18:	88 23       	and	r24, r24
+     b1a:	41 f0       	breq	.+16     	; 0xb2c <main+0x38a>
+     b1c:	80 91 be 00 	lds	r24, 0x00BE
+     b20:	81 50       	subi	r24, 0x01	; 1
+     b22:	82 30       	cpi	r24, 0x02	; 2
+     b24:	18 f4       	brcc	.+6      	; 0xb2c <main+0x38a>
 		{
 				ModifyRTC();
-     dbc:	6a db       	rcall	.-2348   	; 0x492 <ModifyRTC>
+     b26:	bf dc       	rcall	.-1666   	; 0x4a6 <ModifyRTC>
 				increment_mode = MODE_NONE_INC;
-     dbe:	10 92 b2 00 	sts	0x00B2, r1
+     b28:	10 92 be 00 	sts	0x00BE, r1
 	    }
 		
 	    if((now_mode_led_menu != MODE_NONE) && ((increment_mode_led_menu == MODE_INC) || (increment_mode_led_menu == MODE_DISINC)))
-     dc2:	80 91 b0 00 	lds	r24, 0x00B0
-     dc6:	90 91 b1 00 	lds	r25, 0x00B1
-     dca:	89 2b       	or	r24, r25
-     dcc:	61 f0       	breq	.+24     	; 0xde6 <main+0x3ea>
-     dce:	80 91 ae 00 	lds	r24, 0x00AE
-     dd2:	90 91 af 00 	lds	r25, 0x00AF
-     dd6:	01 97       	sbiw	r24, 0x01	; 1
-     dd8:	02 97       	sbiw	r24, 0x02	; 2
-     dda:	28 f4       	brcc	.+10     	; 0xde6 <main+0x3ea>
+     b2c:	80 91 bc 00 	lds	r24, 0x00BC
+     b30:	90 91 bd 00 	lds	r25, 0x00BD
+     b34:	89 2b       	or	r24, r25
+     b36:	61 f0       	breq	.+24     	; 0xb50 <main+0x3ae>
+     b38:	80 91 ba 00 	lds	r24, 0x00BA
+     b3c:	90 91 bb 00 	lds	r25, 0x00BB
+     b40:	01 97       	sbiw	r24, 0x01	; 1
+     b42:	02 97       	sbiw	r24, 0x02	; 2
+     b44:	28 f4       	brcc	.+10     	; 0xb50 <main+0x3ae>
 	    {
 				    ModifyLEDMenu();
-     ddc:	bd dc       	rcall	.-1670   	; 0x758 <ModifyLEDMenu>
+     b46:	0f dd       	rcall	.-1506   	; 0x566 <ModifyLEDMenu>
 				    increment_mode_led_menu = MODE_NONE_INC;
-     dde:	10 92 af 00 	sts	0x00AF, r1
-     de2:	10 92 ae 00 	sts	0x00AE, r1
+     b48:	10 92 bb 00 	sts	0x00BB, r1
+     b4c:	10 92 ba 00 	sts	0x00BA, r1
 	    }
 				
 		//Опрашиваем кнопки				
 		BUT_Poll();
-     de6:	1a da       	rcall	.-3020   	; 0x21c <BUT_Poll>
+     b50:	65 db       	rcall	.-2358   	; 0x21c <BUT_Poll>
 		button = BUT_GetBut(); 
-     de8:	dc d9       	rcall	.-3144   	; 0x1a2 <BUT_GetBut>
-     dea:	80 93 d4 00 	sts	0x00D4, r24
+     b52:	27 db       	rcall	.-2482   	; 0x1a2 <BUT_GetBut>
+     b54:	80 93 e0 00 	sts	0x00E0, r24
 		if(button){
-     dee:	88 23       	and	r24, r24
-     df0:	09 f4       	brne	.+2      	; 0xdf4 <main+0x3f8>
-     df2:	0d c1       	rjmp	.+538    	; 0x100e <main+0x612>
+     b58:	88 23       	and	r24, r24
+     b5a:	09 f4       	brne	.+2      	; 0xb5e <main+0x3bc>
+     b5c:	f6 c0       	rjmp	.+492    	; 0xd4a <main+0x5a8>
 		    button_code = BUT_GetBut();  
-     df4:	d6 d9       	rcall	.-3156   	; 0x1a2 <BUT_GetBut>
-     df6:	80 93 d2 00 	sts	0x00D2, r24
+     b5e:	21 db       	rcall	.-2494   	; 0x1a2 <BUT_GetBut>
+     b60:	80 93 de 00 	sts	0x00DE, r24
 			switch(button){
-     dfa:	90 91 d4 00 	lds	r25, 0x00D4
-     dfe:	92 30       	cpi	r25, 0x02	; 2
-     e00:	39 f1       	breq	.+78     	; 0xe50 <main+0x454>
-     e02:	18 f4       	brcc	.+6      	; 0xe0a <main+0x40e>
-     e04:	91 30       	cpi	r25, 0x01	; 1
-     e06:	59 f0       	breq	.+22     	; 0xe1e <main+0x422>
-     e08:	02 c1       	rjmp	.+516    	; 0x100e <main+0x612>
-     e0a:	20 91 b0 00 	lds	r18, 0x00B0
-     e0e:	30 91 b1 00 	lds	r19, 0x00B1
-     e12:	93 30       	cpi	r25, 0x03	; 3
-     e14:	b1 f1       	breq	.+108    	; 0xe82 <main+0x486>
-     e16:	94 30       	cpi	r25, 0x04	; 4
-     e18:	09 f4       	brne	.+2      	; 0xe1c <main+0x420>
-     e1a:	7d c0       	rjmp	.+250    	; 0xf16 <main+0x51a>
-     e1c:	f8 c0       	rjmp	.+496    	; 0x100e <main+0x612>
+     b64:	90 91 e0 00 	lds	r25, 0x00E0
+     b68:	92 30       	cpi	r25, 0x02	; 2
+     b6a:	39 f1       	breq	.+78     	; 0xbba <main+0x418>
+     b6c:	18 f4       	brcc	.+6      	; 0xb74 <main+0x3d2>
+     b6e:	91 30       	cpi	r25, 0x01	; 1
+     b70:	59 f0       	breq	.+22     	; 0xb88 <main+0x3e6>
+     b72:	eb c0       	rjmp	.+470    	; 0xd4a <main+0x5a8>
+     b74:	20 91 bc 00 	lds	r18, 0x00BC
+     b78:	30 91 bd 00 	lds	r19, 0x00BD
+     b7c:	93 30       	cpi	r25, 0x03	; 3
+     b7e:	b1 f1       	breq	.+108    	; 0xbec <main+0x44a>
+     b80:	94 30       	cpi	r25, 0x04	; 4
+     b82:	09 f4       	brne	.+2      	; 0xb86 <main+0x3e4>
+     b84:	65 c0       	rjmp	.+202    	; 0xc50 <main+0x4ae>
+     b86:	e1 c0       	rjmp	.+450    	; 0xd4a <main+0x5a8>
 				//Plus
 				case 1:   
 				 if(button_code == BUT_RELEASED_EN){
-     e1e:	81 30       	cpi	r24, 0x01	; 1
-     e20:	09 f0       	breq	.+2      	; 0xe24 <main+0x428>
-     e22:	f5 c0       	rjmp	.+490    	; 0x100e <main+0x612>
+     b88:	81 30       	cpi	r24, 0x01	; 1
+     b8a:	09 f0       	breq	.+2      	; 0xb8e <main+0x3ec>
+     b8c:	de c0       	rjmp	.+444    	; 0xd4a <main+0x5a8>
 				  led_strob();
-     e24:	89 83       	std	Y+1, r24	; 0x01
-     e26:	0d db       	rcall	.-2534   	; 0x442 <led_strob>
+     b8e:	89 83       	std	Y+1, r24	; 0x01
+     b90:	62 dc       	rcall	.-1852   	; 0x456 <led_strob>
 				  if(now_mode != MODE_NONE){
-     e28:	90 91 b3 00 	lds	r25, 0x00B3
-     e2c:	89 81       	ldd	r24, Y+1	; 0x01
-     e2e:	99 23       	and	r25, r25
-     e30:	19 f0       	breq	.+6      	; 0xe38 <main+0x43c>
+     b92:	90 91 bf 00 	lds	r25, 0x00BF
+     b96:	89 81       	ldd	r24, Y+1	; 0x01
+     b98:	99 23       	and	r25, r25
+     b9a:	19 f0       	breq	.+6      	; 0xba2 <main+0x400>
 				   increment_mode = MODE_INC; 
-     e32:	80 93 b2 00 	sts	0x00B2, r24
-     e36:	eb c0       	rjmp	.+470    	; 0x100e <main+0x612>
+     b9c:	80 93 be 00 	sts	0x00BE, r24
+     ba0:	d4 c0       	rjmp	.+424    	; 0xd4a <main+0x5a8>
 				  }else if(now_mode_led_menu != MODE_NONE){
-     e38:	80 91 b0 00 	lds	r24, 0x00B0
-     e3c:	90 91 b1 00 	lds	r25, 0x00B1
-     e40:	89 2b       	or	r24, r25
-     e42:	09 f4       	brne	.+2      	; 0xe46 <main+0x44a>
-     e44:	e4 c0       	rjmp	.+456    	; 0x100e <main+0x612>
+     ba2:	80 91 bc 00 	lds	r24, 0x00BC
+     ba6:	90 91 bd 00 	lds	r25, 0x00BD
+     baa:	89 2b       	or	r24, r25
+     bac:	09 f4       	brne	.+2      	; 0xbb0 <main+0x40e>
+     bae:	cd c0       	rjmp	.+410    	; 0xd4a <main+0x5a8>
 				   increment_mode_led_menu = MODE_INC;
-     e46:	f0 92 af 00 	sts	0x00AF, r15
-     e4a:	e0 92 ae 00 	sts	0x00AE, r14
-     e4e:	df c0       	rjmp	.+446    	; 0x100e <main+0x612>
+     bb0:	b0 92 bb 00 	sts	0x00BB, r11
+     bb4:	a0 92 ba 00 	sts	0x00BA, r10
+     bb8:	c8 c0       	rjmp	.+400    	; 0xd4a <main+0x5a8>
 				 }
 				break;
 			
 				//Minus
 				case 2: 
 				 if(button_code == BUT_RELEASED_EN){
-     e50:	81 30       	cpi	r24, 0x01	; 1
-     e52:	09 f0       	breq	.+2      	; 0xe56 <main+0x45a>
-     e54:	dc c0       	rjmp	.+440    	; 0x100e <main+0x612>
+     bba:	81 30       	cpi	r24, 0x01	; 1
+     bbc:	09 f0       	breq	.+2      	; 0xbc0 <main+0x41e>
+     bbe:	c5 c0       	rjmp	.+394    	; 0xd4a <main+0x5a8>
 				  led_strob();
-     e56:	99 83       	std	Y+1, r25	; 0x01
-     e58:	f4 da       	rcall	.-2584   	; 0x442 <led_strob>
+     bc0:	99 83       	std	Y+1, r25	; 0x01
+     bc2:	49 dc       	rcall	.-1902   	; 0x456 <led_strob>
 				  if(now_mode != MODE_NONE){
-     e5a:	80 91 b3 00 	lds	r24, 0x00B3
-     e5e:	99 81       	ldd	r25, Y+1	; 0x01
-     e60:	88 23       	and	r24, r24
-     e62:	19 f0       	breq	.+6      	; 0xe6a <main+0x46e>
+     bc4:	80 91 bf 00 	lds	r24, 0x00BF
+     bc8:	99 81       	ldd	r25, Y+1	; 0x01
+     bca:	88 23       	and	r24, r24
+     bcc:	19 f0       	breq	.+6      	; 0xbd4 <main+0x432>
 				   increment_mode = MODE_DISINC;
-     e64:	90 93 b2 00 	sts	0x00B2, r25
-     e68:	d2 c0       	rjmp	.+420    	; 0x100e <main+0x612>
+     bce:	90 93 be 00 	sts	0x00BE, r25
+     bd2:	bb c0       	rjmp	.+374    	; 0xd4a <main+0x5a8>
 				  }else if(now_mode_led_menu != MODE_NONE){
-     e6a:	80 91 b0 00 	lds	r24, 0x00B0
-     e6e:	90 91 b1 00 	lds	r25, 0x00B1
-     e72:	89 2b       	or	r24, r25
-     e74:	09 f4       	brne	.+2      	; 0xe78 <main+0x47c>
-     e76:	cb c0       	rjmp	.+406    	; 0x100e <main+0x612>
+     bd4:	80 91 bc 00 	lds	r24, 0x00BC
+     bd8:	90 91 bd 00 	lds	r25, 0x00BD
+     bdc:	89 2b       	or	r24, r25
+     bde:	09 f4       	brne	.+2      	; 0xbe2 <main+0x440>
+     be0:	b4 c0       	rjmp	.+360    	; 0xd4a <main+0x5a8>
 				   increment_mode_led_menu = MODE_DISINC;
-     e78:	b0 92 af 00 	sts	0x00AF, r11
-     e7c:	a0 92 ae 00 	sts	0x00AE, r10
-     e80:	c6 c0       	rjmp	.+396    	; 0x100e <main+0x612>
+     be2:	30 92 bb 00 	sts	0x00BB, r3
+     be6:	20 92 ba 00 	sts	0x00BA, r2
+     bea:	af c0       	rjmp	.+350    	; 0xd4a <main+0x5a8>
 				 }
 				break;
 			
 				//Okey
 				case 3: 
 				  if(now_mode_led_menu == MODE_NONE && ((button_code == BUT_RELEASED_LONG_CODE && now_mode == MODE_NONE) || (now_mode != MODE_NONE && button_code == BUT_RELEASED_EN))){ 
-     e82:	23 2b       	or	r18, r19
-     e84:	09 f0       	breq	.+2      	; 0xe88 <main+0x48c>
-     e86:	c3 c0       	rjmp	.+390    	; 0x100e <main+0x612>
-     e88:	90 91 b3 00 	lds	r25, 0x00B3
-     e8c:	84 30       	cpi	r24, 0x04	; 4
-     e8e:	11 f4       	brne	.+4      	; 0xe94 <main+0x498>
-     e90:	99 23       	and	r25, r25
-     e92:	31 f0       	breq	.+12     	; 0xea0 <main+0x4a4>
-     e94:	99 23       	and	r25, r25
-     e96:	09 f4       	brne	.+2      	; 0xe9a <main+0x49e>
-     e98:	ba c0       	rjmp	.+372    	; 0x100e <main+0x612>
-     e9a:	81 30       	cpi	r24, 0x01	; 1
-     e9c:	09 f0       	breq	.+2      	; 0xea0 <main+0x4a4>
-     e9e:	b7 c0       	rjmp	.+366    	; 0x100e <main+0x612>
+     bec:	23 2b       	or	r18, r19
+     bee:	09 f0       	breq	.+2      	; 0xbf2 <main+0x450>
+     bf0:	ac c0       	rjmp	.+344    	; 0xd4a <main+0x5a8>
+     bf2:	90 91 bf 00 	lds	r25, 0x00BF
+     bf6:	84 30       	cpi	r24, 0x04	; 4
+     bf8:	11 f4       	brne	.+4      	; 0xbfe <main+0x45c>
+     bfa:	99 23       	and	r25, r25
+     bfc:	31 f0       	breq	.+12     	; 0xc0a <main+0x468>
+     bfe:	99 23       	and	r25, r25
+     c00:	09 f4       	brne	.+2      	; 0xc04 <main+0x462>
+     c02:	a3 c0       	rjmp	.+326    	; 0xd4a <main+0x5a8>
+     c04:	81 30       	cpi	r24, 0x01	; 1
+     c06:	09 f0       	breq	.+2      	; 0xc0a <main+0x468>
+     c08:	a0 c0       	rjmp	.+320    	; 0xd4a <main+0x5a8>
 				   led_strob();
-     ea0:	d0 da       	rcall	.-2656   	; 0x442 <led_strob>
+     c0a:	25 dc       	rcall	.-1974   	; 0x456 <led_strob>
 				   if(now_mode == MODE_NONE){
-     ea2:	80 91 b3 00 	lds	r24, 0x00B3
-     ea6:	81 11       	cpse	r24, r1
-     ea8:	06 c0       	rjmp	.+12     	; 0xeb6 <main+0x4ba>
+     c0c:	80 91 bf 00 	lds	r24, 0x00BF
+     c10:	81 11       	cpse	r24, r1
+     c12:	06 c0       	rjmp	.+12     	; 0xc20 <main+0x47e>
 					//Редактируем часы
 					now_mode = MODE_EDIT_HOURS;
-     eaa:	81 e0       	ldi	r24, 0x01	; 1
-     eac:	80 93 b3 00 	sts	0x00B3, r24
+     c14:	81 e0       	ldi	r24, 0x01	; 1
+     c16:	80 93 bf 00 	sts	0x00BF, r24
                     ClearALLCharIndicator();
-     eb0:	f8 d9       	rcall	.-3088   	; 0x2a2 <ClearALLCharIndicator>
+     c1a:	43 db       	rcall	.-2426   	; 0x2a2 <ClearALLCharIndicator>
                     ClearALLDotsIndicator();
-     eb2:	ea d9       	rcall	.-3116   	; 0x288 <ClearALLDotsIndicator>
-     eb4:	ac c0       	rjmp	.+344    	; 0x100e <main+0x612>
+     c1c:	35 db       	rcall	.-2454   	; 0x288 <ClearALLDotsIndicator>
+     c1e:	95 c0       	rjmp	.+298    	; 0xd4a <main+0x5a8>
 				   }else if(now_mode == MODE_EDIT_HOURS){
-     eb6:	81 30       	cpi	r24, 0x01	; 1
-     eb8:	11 f4       	brne	.+4      	; 0xebe <main+0x4c2>
+     c20:	81 30       	cpi	r24, 0x01	; 1
+     c22:	21 f4       	brne	.+8      	; 0xc2c <main+0x48a>
 					//Минуты
 					now_mode = MODE_EDIT_MINUTES; 
-     eba:	82 e0       	ldi	r24, 0x02	; 2
-     ebc:	0a c0       	rjmp	.+20     	; 0xed2 <main+0x4d6>
+     c24:	82 e0       	ldi	r24, 0x02	; 2
+     c26:	80 93 bf 00 	sts	0x00BF, r24
+     c2a:	8f c0       	rjmp	.+286    	; 0xd4a <main+0x5a8>
 				   }else if(now_mode == MODE_EDIT_MINUTES){
-     ebe:	82 30       	cpi	r24, 0x02	; 2
-     ec0:	29 f4       	brne	.+10     	; 0xecc <main+0x4d0>
-					//Число
-					now_mode = MODE_EDIT_DAY;
-     ec2:	83 e0       	ldi	r24, 0x03	; 3
-     ec4:	80 93 b3 00 	sts	0x00B3, r24
-					ClearALLCharIndicator();
-     ec8:	ec d9       	rcall	.-3112   	; 0x2a2 <ClearALLCharIndicator>
-     eca:	a1 c0       	rjmp	.+322    	; 0x100e <main+0x612>
-				   }else if(now_mode == MODE_EDIT_DAY){
-     ecc:	83 30       	cpi	r24, 0x03	; 3
-     ece:	21 f4       	brne	.+8      	; 0xed8 <main+0x4dc>
-					//Месяц
-					now_mode = MODE_EDIT_MOUTH;
-     ed0:	84 e0       	ldi	r24, 0x04	; 4
-     ed2:	80 93 b3 00 	sts	0x00B3, r24
-     ed6:	9b c0       	rjmp	.+310    	; 0x100e <main+0x612>
-				   }else if(now_mode == MODE_EDIT_MOUTH){
-     ed8:	84 30       	cpi	r24, 0x04	; 4
-     eda:	21 f4       	brne	.+8      	; 0xee4 <main+0x4e8>
-					//Год
-					now_mode = MODE_EDIT_YEAR;
-     edc:	f5 e0       	ldi	r31, 0x05	; 5
-     ede:	f0 93 b3 00 	sts	0x00B3, r31
-     ee2:	95 c0       	rjmp	.+298    	; 0x100e <main+0x612>
-				   }else if(now_mode == MODE_EDIT_YEAR){
-     ee4:	85 30       	cpi	r24, 0x05	; 5
-     ee6:	29 f4       	brne	.+10     	; 0xef2 <main+0x4f6>
-					ClearALLCharIndicator();
-     ee8:	dc d9       	rcall	.-3144   	; 0x2a2 <ClearALLCharIndicator>
-					ClearALLDotsIndicator();
-     eea:	ce d9       	rcall	.-3172   	; 0x288 <ClearALLDotsIndicator>
-					//День
-					now_mode = MODE_EDIT_WEEK_DAY;
-     eec:	20 92 b3 00 	sts	0x00B3, r2
-     ef0:	8e c0       	rjmp	.+284    	; 0x100e <main+0x612>
-				   }else if(now_mode == MODE_EDIT_WEEK_DAY){
-     ef2:	86 30       	cpi	r24, 0x06	; 6
-     ef4:	09 f0       	breq	.+2      	; 0xef8 <main+0x4fc>
-     ef6:	8b c0       	rjmp	.+278    	; 0x100e <main+0x612>
+     c2c:	82 30       	cpi	r24, 0x02	; 2
+     c2e:	09 f0       	breq	.+2      	; 0xc32 <main+0x490>
+     c30:	8c c0       	rjmp	.+280    	; 0xd4a <main+0x5a8>
 					I2C_StartCondition();
-     ef8:	3a d2       	rcall	.+1140   	; 0x136e <I2C_StartCondition>
+     c32:	13 d2       	rcall	.+1062   	; 0x105a <I2C_StartCondition>
 					I2C_SendByte(0b11010000);
-     efa:	80 ed       	ldi	r24, 0xD0	; 208
-     efc:	41 d2       	rcall	.+1154   	; 0x1380 <I2C_SendByte>
+     c34:	80 ed       	ldi	r24, 0xD0	; 208
+     c36:	1a d2       	rcall	.+1076   	; 0x106c <I2C_SendByte>
 					I2C_SendByte(0);
-     efe:	80 e0       	ldi	r24, 0x00	; 0
-     f00:	3f d2       	rcall	.+1150   	; 0x1380 <I2C_SendByte>
+     c38:	80 e0       	ldi	r24, 0x00	; 0
+     c3a:	18 d2       	rcall	.+1072   	; 0x106c <I2C_SendByte>
 					I2C_SendByte(RTC_ConvertFromBinDec(1));
-     f02:	81 e0       	ldi	r24, 0x01	; 1
-     f04:	28 d2       	rcall	.+1104   	; 0x1356 <RTC_ConvertFromBinDec>
-     f06:	3c d2       	rcall	.+1144   	; 0x1380 <I2C_SendByte>
+     c3c:	81 e0       	ldi	r24, 0x01	; 1
+     c3e:	01 d2       	rcall	.+1026   	; 0x1042 <RTC_ConvertFromBinDec>
+     c40:	15 d2       	rcall	.+1066   	; 0x106c <I2C_SendByte>
 					I2C_StopCondition();
-     f08:	38 d2       	rcall	.+1136   	; 0x137a <I2C_StopCondition>
+     c42:	11 d2       	rcall	.+1058   	; 0x1066 <I2C_StopCondition>
 					ClearALLCharIndicator();
-     f0a:	cb d9       	rcall	.-3178   	; 0x2a2 <ClearALLCharIndicator>
+     c44:	2e db       	rcall	.-2468   	; 0x2a2 <ClearALLCharIndicator>
 					now_mode = MODE_NONE;
-     f0c:	10 92 b3 00 	sts	0x00B3, r1
+     c46:	10 92 bf 00 	sts	0x00BF, r1
 					increment_mode = MODE_NONE_INC;
-     f10:	10 92 b2 00 	sts	0x00B2, r1
-     f14:	7c c0       	rjmp	.+248    	; 0x100e <main+0x612>
-				   }
+     c4a:	10 92 be 00 	sts	0x00BE, r1
+     c4e:	7d c0       	rjmp	.+250    	; 0xd4a <main+0x5a8>
+				   }*/
 				  }
 				break;
 			
 				case 4: 
 				  if(now_mode == MODE_NONE && ((button_code == BUT_RELEASED_LONG_CODE && now_mode_led_menu == MODE_NONE) || (now_mode_led_menu != MODE_NONE && button_code == BUT_RELEASED_EN))){
-     f16:	90 91 b3 00 	lds	r25, 0x00B3
-     f1a:	91 11       	cpse	r25, r1
-     f1c:	78 c0       	rjmp	.+240    	; 0x100e <main+0x612>
-     f1e:	84 30       	cpi	r24, 0x04	; 4
-     f20:	19 f4       	brne	.+6      	; 0xf28 <main+0x52c>
-     f22:	21 15       	cp	r18, r1
-     f24:	31 05       	cpc	r19, r1
-     f26:	31 f0       	breq	.+12     	; 0xf34 <main+0x538>
-     f28:	23 2b       	or	r18, r19
-     f2a:	09 f4       	brne	.+2      	; 0xf2e <main+0x532>
-     f2c:	70 c0       	rjmp	.+224    	; 0x100e <main+0x612>
-     f2e:	81 30       	cpi	r24, 0x01	; 1
-     f30:	09 f0       	breq	.+2      	; 0xf34 <main+0x538>
-     f32:	6d c0       	rjmp	.+218    	; 0x100e <main+0x612>
+     c50:	90 91 bf 00 	lds	r25, 0x00BF
+     c54:	91 11       	cpse	r25, r1
+     c56:	79 c0       	rjmp	.+242    	; 0xd4a <main+0x5a8>
+     c58:	84 30       	cpi	r24, 0x04	; 4
+     c5a:	19 f4       	brne	.+6      	; 0xc62 <main+0x4c0>
+     c5c:	21 15       	cp	r18, r1
+     c5e:	31 05       	cpc	r19, r1
+     c60:	31 f0       	breq	.+12     	; 0xc6e <main+0x4cc>
+     c62:	23 2b       	or	r18, r19
+     c64:	09 f4       	brne	.+2      	; 0xc68 <main+0x4c6>
+     c66:	71 c0       	rjmp	.+226    	; 0xd4a <main+0x5a8>
+     c68:	81 30       	cpi	r24, 0x01	; 1
+     c6a:	09 f0       	breq	.+2      	; 0xc6e <main+0x4cc>
+     c6c:	6e c0       	rjmp	.+220    	; 0xd4a <main+0x5a8>
 						  led_strob();
-     f34:	86 da       	rcall	.-2804   	; 0x442 <led_strob>
+     c6e:	f3 db       	rcall	.-2074   	; 0x456 <led_strob>
 						  if(now_mode_led_menu == MODE_NONE){
-     f36:	80 91 b0 00 	lds	r24, 0x00B0
-     f3a:	90 91 b1 00 	lds	r25, 0x00B1
-     f3e:	00 97       	sbiw	r24, 0x00	; 0
-     f40:	31 f4       	brne	.+12     	; 0xf4e <main+0x552>
+     c70:	80 91 bc 00 	lds	r24, 0x00BC
+     c74:	90 91 bd 00 	lds	r25, 0x00BD
+     c78:	00 97       	sbiw	r24, 0x00	; 0
+     c7a:	29 f4       	brne	.+10     	; 0xc86 <main+0x4e4>
 							//Часы начала рассвета
 							ClearALLCharIndicator();
-     f42:	af d9       	rcall	.-3234   	; 0x2a2 <ClearALLCharIndicator>
+     c7c:	12 db       	rcall	.-2524   	; 0x2a2 <ClearALLCharIndicator>
+							ClearALLDotsIndicator();
+     c7e:	04 db       	rcall	.-2552   	; 0x288 <ClearALLDotsIndicator>
 							now_mode_led_menu = MODE_EDIT_START_TIME_DAWN_HOURS;
-     f44:	70 92 b1 00 	sts	0x00B1, r7
-     f48:	60 92 b0 00 	sts	0x00B0, r6
-     f4c:	60 c0       	rjmp	.+192    	; 0x100e <main+0x612>
+     c80:	e7 e0       	ldi	r30, 0x07	; 7
+     c82:	f0 e0       	ldi	r31, 0x00	; 0
+     c84:	28 c0       	rjmp	.+80     	; 0xcd6 <main+0x534>
 						  }else if(now_mode_led_menu == MODE_EDIT_START_TIME_DAWN_HOURS){
-     f4e:	87 30       	cpi	r24, 0x07	; 7
-     f50:	91 05       	cpc	r25, r1
-     f52:	61 f4       	brne	.+24     	; 0xf6c <main+0x570>
+     c86:	87 30       	cpi	r24, 0x07	; 7
+     c88:	91 05       	cpc	r25, r1
+     c8a:	51 f4       	brne	.+20     	; 0xca0 <main+0x4fe>
 							eeprom_write_word(&ee_led_menu_dawn_hours , led_menu_dawn_hours);
-     f54:	60 91 be 00 	lds	r22, 0x00BE
-     f58:	70 91 bf 00 	lds	r23, 0x00BF
-     f5c:	8a e0       	ldi	r24, 0x0A	; 10
-     f5e:	90 e0       	ldi	r25, 0x00	; 0
-     f60:	b7 d2       	rcall	.+1390   	; 0x14d0 <__eewr_word_m8a>
+     c8c:	60 91 ca 00 	lds	r22, 0x00CA
+     c90:	70 91 cb 00 	lds	r23, 0x00CB
+     c94:	8a e0       	ldi	r24, 0x0A	; 10
+     c96:	90 e0       	ldi	r25, 0x00	; 0
+     c98:	a4 d2       	rcall	.+1352   	; 0x11e2 <__eewr_word_m8a>
 							//Минуты начала рассвета
 							now_mode_led_menu = MODE_EDIT_START_TIME_DAWN_MINS;
-     f62:	50 92 b1 00 	sts	0x00B1, r5
-     f66:	40 92 b0 00 	sts	0x00B0, r4
-     f6a:	51 c0       	rjmp	.+162    	; 0x100e <main+0x612>
+     c9a:	88 e0       	ldi	r24, 0x08	; 8
+     c9c:	90 e0       	ldi	r25, 0x00	; 0
+     c9e:	2c c0       	rjmp	.+88     	; 0xcf8 <main+0x556>
 						  }else if(now_mode_led_menu == MODE_EDIT_START_TIME_DAWN_MINS){
-     f6c:	88 30       	cpi	r24, 0x08	; 8
-     f6e:	91 05       	cpc	r25, r1
-     f70:	59 f4       	brne	.+22     	; 0xf88 <main+0x58c>
+     ca0:	88 30       	cpi	r24, 0x08	; 8
+     ca2:	91 05       	cpc	r25, r1
+     ca4:	59 f4       	brne	.+22     	; 0xcbc <main+0x51a>
 							eeprom_write_word(&ee_led_menu_dawn_mins, led_menu_dawn_mins);
-     f72:	60 91 bc 00 	lds	r22, 0x00BC
-     f76:	70 91 bd 00 	lds	r23, 0x00BD
-     f7a:	88 e0       	ldi	r24, 0x08	; 8
-     f7c:	90 e0       	ldi	r25, 0x00	; 0
-     f7e:	a8 d2       	rcall	.+1360   	; 0x14d0 <__eewr_word_m8a>
+     ca6:	60 91 c8 00 	lds	r22, 0x00C8
+     caa:	70 91 c9 00 	lds	r23, 0x00C9
+     cae:	88 e0       	ldi	r24, 0x08	; 8
+     cb0:	90 e0       	ldi	r25, 0x00	; 0
+     cb2:	97 d2       	rcall	.+1326   	; 0x11e2 <__eewr_word_m8a>
 							//Длительность рассвета
 							ClearALLCharIndicator();
-     f80:	90 d9       	rcall	.-3296   	; 0x2a2 <ClearALLCharIndicator>
+     cb4:	f6 da       	rcall	.-2580   	; 0x2a2 <ClearALLCharIndicator>
 							now_mode_led_menu = MODE_EDIT_INTERVAL_DAWN;
-     f82:	89 e0       	ldi	r24, 0x09	; 9
-     f84:	90 e0       	ldi	r25, 0x00	; 0
-     f86:	1a c0       	rjmp	.+52     	; 0xfbc <main+0x5c0>
+     cb6:	a9 e0       	ldi	r26, 0x09	; 9
+     cb8:	b0 e0       	ldi	r27, 0x00	; 0
+     cba:	30 c0       	rjmp	.+96     	; 0xd1c <main+0x57a>
 						  }else if(now_mode_led_menu == MODE_EDIT_INTERVAL_DAWN){
-     f88:	89 30       	cpi	r24, 0x09	; 9
-     f8a:	91 05       	cpc	r25, r1
-     f8c:	59 f4       	brne	.+22     	; 0xfa4 <main+0x5a8>
+     cbc:	89 30       	cpi	r24, 0x09	; 9
+     cbe:	91 05       	cpc	r25, r1
+     cc0:	79 f4       	brne	.+30     	; 0xce0 <main+0x53e>
 							  eeprom_write_word(&ee_led_menu_dawn_interval_mins, led_menu_dawn_interval_mins);
-     f8e:	60 91 ba 00 	lds	r22, 0x00BA
-     f92:	70 91 bb 00 	lds	r23, 0x00BB
-     f96:	86 e0       	ldi	r24, 0x06	; 6
-     f98:	90 e0       	ldi	r25, 0x00	; 0
-     f9a:	9a d2       	rcall	.+1332   	; 0x14d0 <__eewr_word_m8a>
+     cc2:	60 91 c6 00 	lds	r22, 0x00C6
+     cc6:	70 91 c7 00 	lds	r23, 0x00C7
+     cca:	86 e0       	ldi	r24, 0x06	; 6
+     ccc:	90 e0       	ldi	r25, 0x00	; 0
+     cce:	89 d2       	rcall	.+1298   	; 0x11e2 <__eewr_word_m8a>
 							//Часы начала заката
 							ClearALLCharIndicator();
-     f9c:	82 d9       	rcall	.-3324   	; 0x2a2 <ClearALLCharIndicator>
+     cd0:	e8 da       	rcall	.-2608   	; 0x2a2 <ClearALLCharIndicator>
 							now_mode_led_menu = MODE_EDIT_START_TIME_SUNSET_HOURS;
-     f9e:	ea e0       	ldi	r30, 0x0A	; 10
-     fa0:	f0 e0       	ldi	r31, 0x00	; 0
-     fa2:	1e c0       	rjmp	.+60     	; 0xfe0 <main+0x5e4>
+     cd2:	ea e0       	ldi	r30, 0x0A	; 10
+     cd4:	f0 e0       	ldi	r31, 0x00	; 0
+     cd6:	f0 93 bd 00 	sts	0x00BD, r31
+     cda:	e0 93 bc 00 	sts	0x00BC, r30
+     cde:	35 c0       	rjmp	.+106    	; 0xd4a <main+0x5a8>
 						  }else if(now_mode_led_menu == MODE_EDIT_START_TIME_SUNSET_HOURS){
-     fa4:	8a 30       	cpi	r24, 0x0A	; 10
-     fa6:	91 05       	cpc	r25, r1
-     fa8:	71 f4       	brne	.+28     	; 0xfc6 <main+0x5ca>
+     ce0:	8a 30       	cpi	r24, 0x0A	; 10
+     ce2:	91 05       	cpc	r25, r1
+     ce4:	71 f4       	brne	.+28     	; 0xd02 <main+0x560>
 							 eeprom_write_word(&ee_led_menu_sunset_hours, led_menu_sunset_hours);
-     faa:	60 91 b8 00 	lds	r22, 0x00B8
-     fae:	70 91 b9 00 	lds	r23, 0x00B9
-     fb2:	84 e0       	ldi	r24, 0x04	; 4
-     fb4:	90 e0       	ldi	r25, 0x00	; 0
-     fb6:	8c d2       	rcall	.+1304   	; 0x14d0 <__eewr_word_m8a>
+     ce6:	60 91 c4 00 	lds	r22, 0x00C4
+     cea:	70 91 c5 00 	lds	r23, 0x00C5
+     cee:	84 e0       	ldi	r24, 0x04	; 4
+     cf0:	90 e0       	ldi	r25, 0x00	; 0
+     cf2:	77 d2       	rcall	.+1262   	; 0x11e2 <__eewr_word_m8a>
 							 //Минуты начала заката
 							 now_mode_led_menu = MODE_EDIT_START_TIME_SUNSET_MINS;
-     fb8:	8b e0       	ldi	r24, 0x0B	; 11
-     fba:	90 e0       	ldi	r25, 0x00	; 0
-     fbc:	90 93 b1 00 	sts	0x00B1, r25
-     fc0:	80 93 b0 00 	sts	0x00B0, r24
-     fc4:	24 c0       	rjmp	.+72     	; 0x100e <main+0x612>
+     cf4:	8b e0       	ldi	r24, 0x0B	; 11
+     cf6:	90 e0       	ldi	r25, 0x00	; 0
+     cf8:	90 93 bd 00 	sts	0x00BD, r25
+     cfc:	80 93 bc 00 	sts	0x00BC, r24
+     d00:	24 c0       	rjmp	.+72     	; 0xd4a <main+0x5a8>
 						  }else if(now_mode_led_menu == MODE_EDIT_START_TIME_SUNSET_MINS){
-     fc6:	8b 30       	cpi	r24, 0x0B	; 11
-     fc8:	91 05       	cpc	r25, r1
-     fca:	79 f4       	brne	.+30     	; 0xfea <main+0x5ee>
+     d02:	8b 30       	cpi	r24, 0x0B	; 11
+     d04:	91 05       	cpc	r25, r1
+     d06:	79 f4       	brne	.+30     	; 0xd26 <main+0x584>
 							 eeprom_write_word(&ee_led_menu_sunset_mins, led_menu_sunset_mins);
-     fcc:	60 91 b6 00 	lds	r22, 0x00B6
-     fd0:	70 91 b7 00 	lds	r23, 0x00B7
-     fd4:	82 e0       	ldi	r24, 0x02	; 2
-     fd6:	90 e0       	ldi	r25, 0x00	; 0
-     fd8:	7b d2       	rcall	.+1270   	; 0x14d0 <__eewr_word_m8a>
+     d08:	60 91 c2 00 	lds	r22, 0x00C2
+     d0c:	70 91 c3 00 	lds	r23, 0x00C3
+     d10:	82 e0       	ldi	r24, 0x02	; 2
+     d12:	90 e0       	ldi	r25, 0x00	; 0
+     d14:	66 d2       	rcall	.+1228   	; 0x11e2 <__eewr_word_m8a>
 							 //Длительность заката
 							 ClearALLCharIndicator();
-     fda:	63 d9       	rcall	.-3386   	; 0x2a2 <ClearALLCharIndicator>
+     d16:	c5 da       	rcall	.-2678   	; 0x2a2 <ClearALLCharIndicator>
 							 now_mode_led_menu = MODE_EDIT_INTERVAL_SUNSET;
-     fdc:	ec e0       	ldi	r30, 0x0C	; 12
-     fde:	f0 e0       	ldi	r31, 0x00	; 0
-     fe0:	f0 93 b1 00 	sts	0x00B1, r31
-     fe4:	e0 93 b0 00 	sts	0x00B0, r30
-     fe8:	12 c0       	rjmp	.+36     	; 0x100e <main+0x612>
+     d18:	ac e0       	ldi	r26, 0x0C	; 12
+     d1a:	b0 e0       	ldi	r27, 0x00	; 0
+     d1c:	b0 93 bd 00 	sts	0x00BD, r27
+     d20:	a0 93 bc 00 	sts	0x00BC, r26
+     d24:	12 c0       	rjmp	.+36     	; 0xd4a <main+0x5a8>
 						  }else if(now_mode_led_menu == MODE_EDIT_INTERVAL_SUNSET){
-     fea:	0c 97       	sbiw	r24, 0x0c	; 12
-     fec:	81 f4       	brne	.+32     	; 0x100e <main+0x612>
+     d26:	0c 97       	sbiw	r24, 0x0c	; 12
+     d28:	81 f4       	brne	.+32     	; 0xd4a <main+0x5a8>
 							eeprom_write_word(&ee_led_menu_sunset_interval_mins, led_menu_sunset_interval_mins);
-     fee:	60 91 b4 00 	lds	r22, 0x00B4
-     ff2:	70 91 b5 00 	lds	r23, 0x00B5
-     ff6:	80 e0       	ldi	r24, 0x00	; 0
-     ff8:	90 e0       	ldi	r25, 0x00	; 0
-     ffa:	6a d2       	rcall	.+1236   	; 0x14d0 <__eewr_word_m8a>
+     d2a:	60 91 c0 00 	lds	r22, 0x00C0
+     d2e:	70 91 c1 00 	lds	r23, 0x00C1
+     d32:	80 e0       	ldi	r24, 0x00	; 0
+     d34:	90 e0       	ldi	r25, 0x00	; 0
+     d36:	55 d2       	rcall	.+1194   	; 0x11e2 <__eewr_word_m8a>
 							ClearALLCharIndicator();
-     ffc:	52 d9       	rcall	.-3420   	; 0x2a2 <ClearALLCharIndicator>
+     d38:	b4 da       	rcall	.-2712   	; 0x2a2 <ClearALLCharIndicator>
 							now_mode_led_menu = MODE_NONE;
-     ffe:	10 92 b1 00 	sts	0x00B1, r1
-    1002:	10 92 b0 00 	sts	0x00B0, r1
+     d3a:	10 92 bd 00 	sts	0x00BD, r1
+     d3e:	10 92 bc 00 	sts	0x00BC, r1
 							increment_mode_led_menu = MODE_NONE_INC;
-    1006:	10 92 af 00 	sts	0x00AF, r1
-    100a:	10 92 ae 00 	sts	0x00AE, r1
+     d42:	10 92 bb 00 	sts	0x00BB, r1
+     d46:	10 92 ba 00 	sts	0x00BA, r1
 			}
 		}
 
         //Вывод текущего режима, если мы не в меню
 		
         if(now_mode_led_menu == MODE_NONE && now_mode == MODE_NONE){
-    100e:	80 91 b0 00 	lds	r24, 0x00B0
-    1012:	90 91 b1 00 	lds	r25, 0x00B1
-    1016:	89 2b       	or	r24, r25
-    1018:	11 f5       	brne	.+68     	; 0x105e <main+0x662>
-    101a:	80 91 b3 00 	lds	r24, 0x00B3
-    101e:	81 11       	cpse	r24, r1
-    1020:	1e c0       	rjmp	.+60     	; 0x105e <main+0x662>
+     d4a:	80 91 bc 00 	lds	r24, 0x00BC
+     d4e:	90 91 bd 00 	lds	r25, 0x00BD
+     d52:	89 2b       	or	r24, r25
+     d54:	11 f5       	brne	.+68     	; 0xd9a <main+0x5f8>
+     d56:	80 91 bf 00 	lds	r24, 0x00BF
+     d5a:	81 11       	cpse	r24, r1
+     d5c:	1e c0       	rjmp	.+60     	; 0xd9a <main+0x5f8>
 			ShowTime(hour, min);
-    1022:	60 91 cd 00 	lds	r22, 0x00CD
-    1026:	80 91 cc 00 	lds	r24, 0x00CC
-    102a:	93 dc       	rcall	.-1754   	; 0x952 <ShowTime>
+     d5e:	60 91 d9 00 	lds	r22, 0x00D9
+     d62:	80 91 d8 00 	lds	r24, 0x00D8
+     d66:	fc dc       	rcall	.-1544   	; 0x760 <ShowTime>
 			setDotIndicator(2, (PINC & (1 << PC3)));
-    102c:	63 b3       	in	r22, 0x13	; 19
-    102e:	68 70       	andi	r22, 0x08	; 8
-    1030:	82 e0       	ldi	r24, 0x02	; 2
-    1032:	24 d9       	rcall	.-3512   	; 0x27c <setDotIndicator>
+     d68:	63 b3       	in	r22, 0x13	; 19
+     d6a:	68 70       	andi	r22, 0x08	; 8
+     d6c:	82 e0       	ldi	r24, 0x02	; 2
+     d6e:	86 da       	rcall	.-2804   	; 0x27c <setDotIndicator>
 			if(now_mode_light == LIGHT_DAWM){
-    1034:	80 91 ac 00 	lds	r24, 0x00AC
-    1038:	90 91 ad 00 	lds	r25, 0x00AD
-    103c:	81 30       	cpi	r24, 0x01	; 1
-    103e:	91 05       	cpc	r25, r1
-    1040:	31 f4       	brne	.+12     	; 0x104e <main+0x652>
+     d70:	80 91 b8 00 	lds	r24, 0x00B8
+     d74:	90 91 b9 00 	lds	r25, 0x00B9
+     d78:	81 30       	cpi	r24, 0x01	; 1
+     d7a:	91 05       	cpc	r25, r1
+     d7c:	31 f4       	brne	.+12     	; 0xd8a <main+0x5e8>
 				setCharIndicator(18, 0);
-    1042:	60 e0       	ldi	r22, 0x00	; 0
-    1044:	82 e1       	ldi	r24, 0x12	; 18
-    1046:	14 d9       	rcall	.-3544   	; 0x270 <setCharIndicator>
+     d7e:	60 e0       	ldi	r22, 0x00	; 0
+     d80:	82 e1       	ldi	r24, 0x12	; 18
+     d82:	76 da       	rcall	.-2836   	; 0x270 <setCharIndicator>
 				setCharIndicator(18, 5);
-    1048:	65 e0       	ldi	r22, 0x05	; 5
-    104a:	82 e1       	ldi	r24, 0x12	; 18
-    104c:	07 c0       	rjmp	.+14     	; 0x105c <main+0x660>
+     d84:	65 e0       	ldi	r22, 0x05	; 5
+     d86:	82 e1       	ldi	r24, 0x12	; 18
+     d88:	07 c0       	rjmp	.+14     	; 0xd98 <main+0x5f6>
 			}else if(now_mode_light == LIGHT_SUNSET){
-    104e:	02 97       	sbiw	r24, 0x02	; 2
-    1050:	31 f4       	brne	.+12     	; 0x105e <main+0x662>
+     d8a:	02 97       	sbiw	r24, 0x02	; 2
+     d8c:	31 f4       	brne	.+12     	; 0xd9a <main+0x5f8>
 				setCharIndicator(19, 0);
-    1052:	60 e0       	ldi	r22, 0x00	; 0
-    1054:	83 e1       	ldi	r24, 0x13	; 19
-    1056:	0c d9       	rcall	.-3560   	; 0x270 <setCharIndicator>
+     d8e:	60 e0       	ldi	r22, 0x00	; 0
+     d90:	83 e1       	ldi	r24, 0x13	; 19
+     d92:	6e da       	rcall	.-2852   	; 0x270 <setCharIndicator>
 				setCharIndicator(19, 5);
-    1058:	65 e0       	ldi	r22, 0x05	; 5
-    105a:	83 e1       	ldi	r24, 0x13	; 19
-    105c:	09 d9       	rcall	.-3566   	; 0x270 <setCharIndicator>
+     d94:	65 e0       	ldi	r22, 0x05	; 5
+     d96:	83 e1       	ldi	r24, 0x13	; 19
+     d98:	6b da       	rcall	.-2858   	; 0x270 <setCharIndicator>
 			   setCharIndicator(19, 5);
            }
 		   */
         }
 		
 		if(now_mode_led_menu){
-    105e:	80 91 b0 00 	lds	r24, 0x00B0
-    1062:	90 91 b1 00 	lds	r25, 0x00B1
-    1066:	00 97       	sbiw	r24, 0x00	; 0
-    1068:	09 f4       	brne	.+2      	; 0x106c <main+0x670>
-    106a:	f5 c0       	rjmp	.+490    	; 0x1256 <main+0x85a>
+     d9a:	80 91 bc 00 	lds	r24, 0x00BC
+     d9e:	90 91 bd 00 	lds	r25, 0x00BD
+     da2:	00 97       	sbiw	r24, 0x00	; 0
+     da4:	09 f4       	brne	.+2      	; 0xda8 <main+0x606>
+     da6:	f5 c0       	rjmp	.+490    	; 0xf92 <main+0x7f0>
 			//Меню настроки заката/рассвета
 			switch(now_mode_led_menu){
-    106c:	89 30       	cpi	r24, 0x09	; 9
-    106e:	91 05       	cpc	r25, r1
-    1070:	09 f4       	brne	.+2      	; 0x1074 <main+0x678>
-    1072:	73 c0       	rjmp	.+230    	; 0x115a <main+0x75e>
-    1074:	30 f4       	brcc	.+12     	; 0x1082 <main+0x686>
-    1076:	87 30       	cpi	r24, 0x07	; 7
-    1078:	91 05       	cpc	r25, r1
-    107a:	69 f0       	breq	.+26     	; 0x1096 <main+0x69a>
-    107c:	08 97       	sbiw	r24, 0x08	; 8
-    107e:	b9 f1       	breq	.+110    	; 0x10ee <main+0x6f2>
-    1080:	ea c0       	rjmp	.+468    	; 0x1256 <main+0x85a>
-    1082:	8b 30       	cpi	r24, 0x0B	; 11
-    1084:	91 05       	cpc	r25, r1
-    1086:	09 f4       	brne	.+2      	; 0x108a <main+0x68e>
-    1088:	4a c0       	rjmp	.+148    	; 0x111e <main+0x722>
-    108a:	08 f4       	brcc	.+2      	; 0x108e <main+0x692>
-    108c:	8d c0       	rjmp	.+282    	; 0x11a8 <main+0x7ac>
-    108e:	0c 97       	sbiw	r24, 0x0c	; 12
-    1090:	09 f4       	brne	.+2      	; 0x1094 <main+0x698>
-    1092:	ba c0       	rjmp	.+372    	; 0x1208 <main+0x80c>
-    1094:	e0 c0       	rjmp	.+448    	; 0x1256 <main+0x85a>
+     da8:	89 30       	cpi	r24, 0x09	; 9
+     daa:	91 05       	cpc	r25, r1
+     dac:	09 f4       	brne	.+2      	; 0xdb0 <main+0x60e>
+     dae:	73 c0       	rjmp	.+230    	; 0xe96 <main+0x6f4>
+     db0:	30 f4       	brcc	.+12     	; 0xdbe <main+0x61c>
+     db2:	87 30       	cpi	r24, 0x07	; 7
+     db4:	91 05       	cpc	r25, r1
+     db6:	69 f0       	breq	.+26     	; 0xdd2 <main+0x630>
+     db8:	08 97       	sbiw	r24, 0x08	; 8
+     dba:	b9 f1       	breq	.+110    	; 0xe2a <main+0x688>
+     dbc:	ea c0       	rjmp	.+468    	; 0xf92 <main+0x7f0>
+     dbe:	8b 30       	cpi	r24, 0x0B	; 11
+     dc0:	91 05       	cpc	r25, r1
+     dc2:	09 f4       	brne	.+2      	; 0xdc6 <main+0x624>
+     dc4:	4a c0       	rjmp	.+148    	; 0xe5a <main+0x6b8>
+     dc6:	08 f4       	brcc	.+2      	; 0xdca <main+0x628>
+     dc8:	8d c0       	rjmp	.+282    	; 0xee4 <main+0x742>
+     dca:	0c 97       	sbiw	r24, 0x0c	; 12
+     dcc:	09 f4       	brne	.+2      	; 0xdd0 <main+0x62e>
+     dce:	ba c0       	rjmp	.+372    	; 0xf44 <main+0x7a2>
+     dd0:	e0 c0       	rjmp	.+448    	; 0xf92 <main+0x7f0>
 				case MODE_EDIT_START_TIME_DAWN_HOURS: 
 				  if(!twoHZ_status){
-    1096:	80 91 a1 00 	lds	r24, 0x00A1
-    109a:	81 11       	cpse	r24, r1
-    109c:	13 c0       	rjmp	.+38     	; 0x10c4 <main+0x6c8>
+     dd2:	80 91 a1 00 	lds	r24, 0x00A1
+     dd6:	81 11       	cpse	r24, r1
+     dd8:	13 c0       	rjmp	.+38     	; 0xe00 <main+0x65e>
 					   setCharIndicator(led_menu_dawn_hours/10, 1);
-    109e:	80 91 be 00 	lds	r24, 0x00BE
-    10a2:	90 91 bf 00 	lds	r25, 0x00BF
-    10a6:	6a e0       	ldi	r22, 0x0A	; 10
-    10a8:	70 e0       	ldi	r23, 0x00	; 0
-    10aa:	9f d1       	rcall	.+830    	; 0x13ea <__udivmodhi4>
-    10ac:	86 2f       	mov	r24, r22
-    10ae:	61 e0       	ldi	r22, 0x01	; 1
-    10b0:	df d8       	rcall	.-3650   	; 0x270 <setCharIndicator>
+     dda:	80 91 ca 00 	lds	r24, 0x00CA
+     dde:	90 91 cb 00 	lds	r25, 0x00CB
+     de2:	6a e0       	ldi	r22, 0x0A	; 10
+     de4:	70 e0       	ldi	r23, 0x00	; 0
+     de6:	77 d1       	rcall	.+750    	; 0x10d6 <__udivmodhi4>
+     de8:	86 2f       	mov	r24, r22
+     dea:	61 e0       	ldi	r22, 0x01	; 1
+     dec:	41 da       	rcall	.-2942   	; 0x270 <setCharIndicator>
 					   setCharIndicator(led_menu_dawn_hours%10, 2);
-    10b2:	80 91 be 00 	lds	r24, 0x00BE
-    10b6:	90 91 bf 00 	lds	r25, 0x00BF
-    10ba:	6a e0       	ldi	r22, 0x0A	; 10
-    10bc:	70 e0       	ldi	r23, 0x00	; 0
-    10be:	95 d1       	rcall	.+810    	; 0x13ea <__udivmodhi4>
-    10c0:	62 e0       	ldi	r22, 0x02	; 2
-    10c2:	05 c0       	rjmp	.+10     	; 0x10ce <main+0x6d2>
+     dee:	80 91 ca 00 	lds	r24, 0x00CA
+     df2:	90 91 cb 00 	lds	r25, 0x00CB
+     df6:	6a e0       	ldi	r22, 0x0A	; 10
+     df8:	70 e0       	ldi	r23, 0x00	; 0
+     dfa:	6d d1       	rcall	.+730    	; 0x10d6 <__udivmodhi4>
+     dfc:	62 e0       	ldi	r22, 0x02	; 2
+     dfe:	05 c0       	rjmp	.+10     	; 0xe0a <main+0x668>
 					   }else{
 					   setCharIndicator(11, 1);
-    10c4:	61 e0       	ldi	r22, 0x01	; 1
-    10c6:	8b e0       	ldi	r24, 0x0B	; 11
-    10c8:	d3 d8       	rcall	.-3674   	; 0x270 <setCharIndicator>
+     e00:	61 e0       	ldi	r22, 0x01	; 1
+     e02:	8b e0       	ldi	r24, 0x0B	; 11
+     e04:	35 da       	rcall	.-2966   	; 0x270 <setCharIndicator>
 					   setCharIndicator(11, 2);
-    10ca:	62 e0       	ldi	r22, 0x02	; 2
-    10cc:	8b e0       	ldi	r24, 0x0B	; 11
-    10ce:	d0 d8       	rcall	.-3680   	; 0x270 <setCharIndicator>
+     e06:	62 e0       	ldi	r22, 0x02	; 2
+     e08:	8b e0       	ldi	r24, 0x0B	; 11
+     e0a:	32 da       	rcall	.-2972   	; 0x270 <setCharIndicator>
 				   }
 				   setCharIndicator(led_menu_dawn_mins/10, 3);
-    10d0:	80 91 bc 00 	lds	r24, 0x00BC
-    10d4:	90 91 bd 00 	lds	r25, 0x00BD
-    10d8:	6a e0       	ldi	r22, 0x0A	; 10
-    10da:	70 e0       	ldi	r23, 0x00	; 0
-    10dc:	86 d1       	rcall	.+780    	; 0x13ea <__udivmodhi4>
-    10de:	86 2f       	mov	r24, r22
-    10e0:	63 e0       	ldi	r22, 0x03	; 3
-    10e2:	c6 d8       	rcall	.-3700   	; 0x270 <setCharIndicator>
+     e0c:	80 91 c8 00 	lds	r24, 0x00C8
+     e10:	90 91 c9 00 	lds	r25, 0x00C9
+     e14:	6a e0       	ldi	r22, 0x0A	; 10
+     e16:	70 e0       	ldi	r23, 0x00	; 0
+     e18:	5e d1       	rcall	.+700    	; 0x10d6 <__udivmodhi4>
+     e1a:	86 2f       	mov	r24, r22
+     e1c:	63 e0       	ldi	r22, 0x03	; 3
+     e1e:	28 da       	rcall	.-2992   	; 0x270 <setCharIndicator>
 				   setCharIndicator(led_menu_dawn_mins%10, 4);				
-    10e4:	80 91 bc 00 	lds	r24, 0x00BC
-    10e8:	90 91 bd 00 	lds	r25, 0x00BD
-    10ec:	88 c0       	rjmp	.+272    	; 0x11fe <main+0x802>
+     e20:	80 91 c8 00 	lds	r24, 0x00C8
+     e24:	90 91 c9 00 	lds	r25, 0x00C9
+     e28:	88 c0       	rjmp	.+272    	; 0xf3a <main+0x798>
 				break;
 
 				case MODE_EDIT_START_TIME_DAWN_MINS: 
 				  setCharIndicator(led_menu_dawn_hours/10, 1);
-    10ee:	80 91 be 00 	lds	r24, 0x00BE
-    10f2:	90 91 bf 00 	lds	r25, 0x00BF
-    10f6:	6a e0       	ldi	r22, 0x0A	; 10
-    10f8:	70 e0       	ldi	r23, 0x00	; 0
-    10fa:	77 d1       	rcall	.+750    	; 0x13ea <__udivmodhi4>
-    10fc:	86 2f       	mov	r24, r22
-    10fe:	61 e0       	ldi	r22, 0x01	; 1
-    1100:	b7 d8       	rcall	.-3730   	; 0x270 <setCharIndicator>
+     e2a:	80 91 ca 00 	lds	r24, 0x00CA
+     e2e:	90 91 cb 00 	lds	r25, 0x00CB
+     e32:	6a e0       	ldi	r22, 0x0A	; 10
+     e34:	70 e0       	ldi	r23, 0x00	; 0
+     e36:	4f d1       	rcall	.+670    	; 0x10d6 <__udivmodhi4>
+     e38:	86 2f       	mov	r24, r22
+     e3a:	61 e0       	ldi	r22, 0x01	; 1
+     e3c:	19 da       	rcall	.-3022   	; 0x270 <setCharIndicator>
 				  setCharIndicator(led_menu_dawn_hours%10, 2);
-    1102:	80 91 be 00 	lds	r24, 0x00BE
-    1106:	90 91 bf 00 	lds	r25, 0x00BF
-    110a:	6a e0       	ldi	r22, 0x0A	; 10
-    110c:	70 e0       	ldi	r23, 0x00	; 0
-    110e:	6d d1       	rcall	.+730    	; 0x13ea <__udivmodhi4>
-    1110:	62 e0       	ldi	r22, 0x02	; 2
-    1112:	ae d8       	rcall	.-3748   	; 0x270 <setCharIndicator>
+     e3e:	80 91 ca 00 	lds	r24, 0x00CA
+     e42:	90 91 cb 00 	lds	r25, 0x00CB
+     e46:	6a e0       	ldi	r22, 0x0A	; 10
+     e48:	70 e0       	ldi	r23, 0x00	; 0
+     e4a:	45 d1       	rcall	.+650    	; 0x10d6 <__udivmodhi4>
+     e4c:	62 e0       	ldi	r22, 0x02	; 2
+     e4e:	10 da       	rcall	.-3040   	; 0x270 <setCharIndicator>
 				  if(!twoHZ_status){
-    1114:	80 91 a1 00 	lds	r24, 0x00A1
-    1118:	81 11       	cpse	r24, r1
-    111a:	19 c0       	rjmp	.+50     	; 0x114e <main+0x752>
-    111c:	d9 cf       	rjmp	.-78     	; 0x10d0 <main+0x6d4>
+     e50:	80 91 a1 00 	lds	r24, 0x00A1
+     e54:	81 11       	cpse	r24, r1
+     e56:	19 c0       	rjmp	.+50     	; 0xe8a <main+0x6e8>
+     e58:	d9 cf       	rjmp	.-78     	; 0xe0c <main+0x66a>
 				  setCharIndicator(led_menu_sunset_mins%10, 4);				
 				break;
 			
 			
 				case MODE_EDIT_START_TIME_SUNSET_MINS: 
 				  setCharIndicator(led_menu_sunset_hours/10, 1);
-    111e:	80 91 b8 00 	lds	r24, 0x00B8
-    1122:	90 91 b9 00 	lds	r25, 0x00B9
-    1126:	6a e0       	ldi	r22, 0x0A	; 10
-    1128:	70 e0       	ldi	r23, 0x00	; 0
-    112a:	5f d1       	rcall	.+702    	; 0x13ea <__udivmodhi4>
-    112c:	86 2f       	mov	r24, r22
-    112e:	61 e0       	ldi	r22, 0x01	; 1
-    1130:	9f d8       	rcall	.-3778   	; 0x270 <setCharIndicator>
+     e5a:	80 91 c4 00 	lds	r24, 0x00C4
+     e5e:	90 91 c5 00 	lds	r25, 0x00C5
+     e62:	6a e0       	ldi	r22, 0x0A	; 10
+     e64:	70 e0       	ldi	r23, 0x00	; 0
+     e66:	37 d1       	rcall	.+622    	; 0x10d6 <__udivmodhi4>
+     e68:	86 2f       	mov	r24, r22
+     e6a:	61 e0       	ldi	r22, 0x01	; 1
+     e6c:	01 da       	rcall	.-3070   	; 0x270 <setCharIndicator>
 				  setCharIndicator(led_menu_sunset_hours%10, 2);
-    1132:	80 91 b8 00 	lds	r24, 0x00B8
-    1136:	90 91 b9 00 	lds	r25, 0x00B9
-    113a:	6a e0       	ldi	r22, 0x0A	; 10
-    113c:	70 e0       	ldi	r23, 0x00	; 0
-    113e:	55 d1       	rcall	.+682    	; 0x13ea <__udivmodhi4>
-    1140:	62 e0       	ldi	r22, 0x02	; 2
-    1142:	96 d8       	rcall	.-3796   	; 0x270 <setCharIndicator>
+     e6e:	80 91 c4 00 	lds	r24, 0x00C4
+     e72:	90 91 c5 00 	lds	r25, 0x00C5
+     e76:	6a e0       	ldi	r22, 0x0A	; 10
+     e78:	70 e0       	ldi	r23, 0x00	; 0
+     e7a:	2d d1       	rcall	.+602    	; 0x10d6 <__udivmodhi4>
+     e7c:	62 e0       	ldi	r22, 0x02	; 2
+     e7e:	f8 d9       	rcall	.-3088   	; 0x270 <setCharIndicator>
 				  if(!twoHZ_status){
-    1144:	80 91 a1 00 	lds	r24, 0x00A1
-    1148:	88 23       	and	r24, r24
-    114a:	09 f4       	brne	.+2      	; 0x114e <main+0x752>
-    114c:	4a c0       	rjmp	.+148    	; 0x11e2 <main+0x7e6>
+     e80:	80 91 a1 00 	lds	r24, 0x00A1
+     e84:	88 23       	and	r24, r24
+     e86:	09 f4       	brne	.+2      	; 0xe8a <main+0x6e8>
+     e88:	4a c0       	rjmp	.+148    	; 0xf1e <main+0x77c>
 				  setCharIndicator(led_menu_dawn_hours%10, 2);
 				  if(!twoHZ_status){
 					   setCharIndicator(led_menu_dawn_mins/10, 3);
 					   setCharIndicator(led_menu_dawn_mins%10, 4);
 				  }else{
 					   setCharIndicator(11, 3);
-    114e:	63 e0       	ldi	r22, 0x03	; 3
-    1150:	8b e0       	ldi	r24, 0x0B	; 11
-    1152:	8e d8       	rcall	.-3812   	; 0x270 <setCharIndicator>
+     e8a:	63 e0       	ldi	r22, 0x03	; 3
+     e8c:	8b e0       	ldi	r24, 0x0B	; 11
+     e8e:	f0 d9       	rcall	.-3104   	; 0x270 <setCharIndicator>
 					   setCharIndicator(11, 4);
-    1154:	64 e0       	ldi	r22, 0x04	; 4
-    1156:	8b e0       	ldi	r24, 0x0B	; 11
-    1158:	7d c0       	rjmp	.+250    	; 0x1254 <main+0x858>
+     e90:	64 e0       	ldi	r22, 0x04	; 4
+     e92:	8b e0       	ldi	r24, 0x0B	; 11
+     e94:	7d c0       	rjmp	.+250    	; 0xf90 <main+0x7ee>
 				  }
 				break;
 			
 			
 				case MODE_EDIT_INTERVAL_DAWN: 
 				  if(!twoHZ_status){
-    115a:	80 91 a1 00 	lds	r24, 0x00A1
-    115e:	81 11       	cpse	r24, r1
-    1160:	1a c0       	rjmp	.+52     	; 0x1196 <main+0x79a>
+     e96:	80 91 a1 00 	lds	r24, 0x00A1
+     e9a:	81 11       	cpse	r24, r1
+     e9c:	1a c0       	rjmp	.+52     	; 0xed2 <main+0x730>
 					  setCharIndicator(led_menu_dawn_interval_mins/100, 1);
-    1162:	80 91 ba 00 	lds	r24, 0x00BA
-    1166:	90 91 bb 00 	lds	r25, 0x00BB
-    116a:	b8 01       	movw	r22, r16
-    116c:	3e d1       	rcall	.+636    	; 0x13ea <__udivmodhi4>
-    116e:	86 2f       	mov	r24, r22
-    1170:	61 e0       	ldi	r22, 0x01	; 1
-    1172:	7e d8       	rcall	.-3844   	; 0x270 <setCharIndicator>
+     e9e:	80 91 c6 00 	lds	r24, 0x00C6
+     ea2:	90 91 c7 00 	lds	r25, 0x00C7
+     ea6:	b8 01       	movw	r22, r16
+     ea8:	16 d1       	rcall	.+556    	; 0x10d6 <__udivmodhi4>
+     eaa:	86 2f       	mov	r24, r22
+     eac:	61 e0       	ldi	r22, 0x01	; 1
+     eae:	e0 d9       	rcall	.-3136   	; 0x270 <setCharIndicator>
 					  setCharIndicator((led_menu_dawn_interval_mins%100)/10, 2);
-    1174:	80 91 ba 00 	lds	r24, 0x00BA
-    1178:	90 91 bb 00 	lds	r25, 0x00BB
-    117c:	b8 01       	movw	r22, r16
-    117e:	35 d1       	rcall	.+618    	; 0x13ea <__udivmodhi4>
-    1180:	6a e0       	ldi	r22, 0x0A	; 10
-    1182:	70 e0       	ldi	r23, 0x00	; 0
-    1184:	32 d1       	rcall	.+612    	; 0x13ea <__udivmodhi4>
-    1186:	86 2f       	mov	r24, r22
-    1188:	62 e0       	ldi	r22, 0x02	; 2
-    118a:	72 d8       	rcall	.-3868   	; 0x270 <setCharIndicator>
+     eb0:	80 91 c6 00 	lds	r24, 0x00C6
+     eb4:	90 91 c7 00 	lds	r25, 0x00C7
+     eb8:	b8 01       	movw	r22, r16
+     eba:	0d d1       	rcall	.+538    	; 0x10d6 <__udivmodhi4>
+     ebc:	6a e0       	ldi	r22, 0x0A	; 10
+     ebe:	70 e0       	ldi	r23, 0x00	; 0
+     ec0:	0a d1       	rcall	.+532    	; 0x10d6 <__udivmodhi4>
+     ec2:	86 2f       	mov	r24, r22
+     ec4:	62 e0       	ldi	r22, 0x02	; 2
+     ec6:	d4 d9       	rcall	.-3160   	; 0x270 <setCharIndicator>
 					  setCharIndicator(led_menu_dawn_interval_mins%100%10, 3);
-    118c:	80 91 ba 00 	lds	r24, 0x00BA
-    1190:	90 91 bb 00 	lds	r25, 0x00BB
-    1194:	56 c0       	rjmp	.+172    	; 0x1242 <main+0x846>
+     ec8:	80 91 c6 00 	lds	r24, 0x00C6
+     ecc:	90 91 c7 00 	lds	r25, 0x00C7
+     ed0:	56 c0       	rjmp	.+172    	; 0xf7e <main+0x7dc>
 					  setCharIndicator(13, 4);
 				  }else{
 					  setCharIndicator(11, 1);
-    1196:	61 e0       	ldi	r22, 0x01	; 1
-    1198:	8b e0       	ldi	r24, 0x0B	; 11
-    119a:	6a d8       	rcall	.-3884   	; 0x270 <setCharIndicator>
+     ed2:	61 e0       	ldi	r22, 0x01	; 1
+     ed4:	8b e0       	ldi	r24, 0x0B	; 11
+     ed6:	cc d9       	rcall	.-3176   	; 0x270 <setCharIndicator>
 					  setCharIndicator(11, 2);
-    119c:	62 e0       	ldi	r22, 0x02	; 2
-    119e:	8b e0       	ldi	r24, 0x0B	; 11
-    11a0:	67 d8       	rcall	.-3890   	; 0x270 <setCharIndicator>
+     ed8:	62 e0       	ldi	r22, 0x02	; 2
+     eda:	8b e0       	ldi	r24, 0x0B	; 11
+     edc:	c9 d9       	rcall	.-3182   	; 0x270 <setCharIndicator>
 					  setCharIndicator(11, 3);
-    11a2:	63 e0       	ldi	r22, 0x03	; 3
-    11a4:	8b e0       	ldi	r24, 0x0B	; 11
-    11a6:	53 c0       	rjmp	.+166    	; 0x124e <main+0x852>
+     ede:	63 e0       	ldi	r22, 0x03	; 3
+     ee0:	8b e0       	ldi	r24, 0x0B	; 11
+     ee2:	53 c0       	rjmp	.+166    	; 0xf8a <main+0x7e8>
 				  }
 
 				break;
 			
 				case MODE_EDIT_START_TIME_SUNSET_HOURS:
 				  if(!twoHZ_status){
-    11a8:	80 91 a1 00 	lds	r24, 0x00A1
-    11ac:	81 11       	cpse	r24, r1
-    11ae:	13 c0       	rjmp	.+38     	; 0x11d6 <main+0x7da>
+     ee4:	80 91 a1 00 	lds	r24, 0x00A1
+     ee8:	81 11       	cpse	r24, r1
+     eea:	13 c0       	rjmp	.+38     	; 0xf12 <main+0x770>
 					  setCharIndicator(led_menu_sunset_hours/10, 1);
-    11b0:	80 91 b8 00 	lds	r24, 0x00B8
-    11b4:	90 91 b9 00 	lds	r25, 0x00B9
-    11b8:	6a e0       	ldi	r22, 0x0A	; 10
-    11ba:	70 e0       	ldi	r23, 0x00	; 0
-    11bc:	16 d1       	rcall	.+556    	; 0x13ea <__udivmodhi4>
-    11be:	86 2f       	mov	r24, r22
-    11c0:	61 e0       	ldi	r22, 0x01	; 1
-    11c2:	56 d8       	rcall	.-3924   	; 0x270 <setCharIndicator>
+     eec:	80 91 c4 00 	lds	r24, 0x00C4
+     ef0:	90 91 c5 00 	lds	r25, 0x00C5
+     ef4:	6a e0       	ldi	r22, 0x0A	; 10
+     ef6:	70 e0       	ldi	r23, 0x00	; 0
+     ef8:	ee d0       	rcall	.+476    	; 0x10d6 <__udivmodhi4>
+     efa:	86 2f       	mov	r24, r22
+     efc:	61 e0       	ldi	r22, 0x01	; 1
+     efe:	b8 d9       	rcall	.-3216   	; 0x270 <setCharIndicator>
 					  setCharIndicator(led_menu_sunset_hours%10, 2);
-    11c4:	80 91 b8 00 	lds	r24, 0x00B8
-    11c8:	90 91 b9 00 	lds	r25, 0x00B9
-    11cc:	6a e0       	ldi	r22, 0x0A	; 10
-    11ce:	70 e0       	ldi	r23, 0x00	; 0
-    11d0:	0c d1       	rcall	.+536    	; 0x13ea <__udivmodhi4>
-    11d2:	62 e0       	ldi	r22, 0x02	; 2
-    11d4:	05 c0       	rjmp	.+10     	; 0x11e0 <main+0x7e4>
+     f00:	80 91 c4 00 	lds	r24, 0x00C4
+     f04:	90 91 c5 00 	lds	r25, 0x00C5
+     f08:	6a e0       	ldi	r22, 0x0A	; 10
+     f0a:	70 e0       	ldi	r23, 0x00	; 0
+     f0c:	e4 d0       	rcall	.+456    	; 0x10d6 <__udivmodhi4>
+     f0e:	62 e0       	ldi	r22, 0x02	; 2
+     f10:	05 c0       	rjmp	.+10     	; 0xf1c <main+0x77a>
 					  }else{
 					  setCharIndicator(11, 1);
-    11d6:	61 e0       	ldi	r22, 0x01	; 1
-    11d8:	8b e0       	ldi	r24, 0x0B	; 11
-    11da:	4a d8       	rcall	.-3948   	; 0x270 <setCharIndicator>
+     f12:	61 e0       	ldi	r22, 0x01	; 1
+     f14:	8b e0       	ldi	r24, 0x0B	; 11
+     f16:	ac d9       	rcall	.-3240   	; 0x270 <setCharIndicator>
 					  setCharIndicator(11, 2);
-    11dc:	62 e0       	ldi	r22, 0x02	; 2
-    11de:	8b e0       	ldi	r24, 0x0B	; 11
-    11e0:	47 d8       	rcall	.-3954   	; 0x270 <setCharIndicator>
+     f18:	62 e0       	ldi	r22, 0x02	; 2
+     f1a:	8b e0       	ldi	r24, 0x0B	; 11
+     f1c:	a9 d9       	rcall	.-3246   	; 0x270 <setCharIndicator>
 			
 				case MODE_EDIT_START_TIME_SUNSET_MINS: 
 				  setCharIndicator(led_menu_sunset_hours/10, 1);
 				  setCharIndicator(led_menu_sunset_hours%10, 2);
 				  if(!twoHZ_status){
 					  setCharIndicator(led_menu_sunset_mins/10, 3);
-    11e2:	80 91 b6 00 	lds	r24, 0x00B6
-    11e6:	90 91 b7 00 	lds	r25, 0x00B7
-    11ea:	6a e0       	ldi	r22, 0x0A	; 10
-    11ec:	70 e0       	ldi	r23, 0x00	; 0
-    11ee:	fd d0       	rcall	.+506    	; 0x13ea <__udivmodhi4>
-    11f0:	86 2f       	mov	r24, r22
-    11f2:	63 e0       	ldi	r22, 0x03	; 3
-    11f4:	3d d8       	rcall	.-3974   	; 0x270 <setCharIndicator>
+     f1e:	80 91 c2 00 	lds	r24, 0x00C2
+     f22:	90 91 c3 00 	lds	r25, 0x00C3
+     f26:	6a e0       	ldi	r22, 0x0A	; 10
+     f28:	70 e0       	ldi	r23, 0x00	; 0
+     f2a:	d5 d0       	rcall	.+426    	; 0x10d6 <__udivmodhi4>
+     f2c:	86 2f       	mov	r24, r22
+     f2e:	63 e0       	ldi	r22, 0x03	; 3
+     f30:	9f d9       	rcall	.-3266   	; 0x270 <setCharIndicator>
 					  setCharIndicator(led_menu_sunset_mins%10, 4);
-    11f6:	80 91 b6 00 	lds	r24, 0x00B6
-    11fa:	90 91 b7 00 	lds	r25, 0x00B7
-    11fe:	6a e0       	ldi	r22, 0x0A	; 10
-    1200:	70 e0       	ldi	r23, 0x00	; 0
-    1202:	f3 d0       	rcall	.+486    	; 0x13ea <__udivmodhi4>
-    1204:	64 e0       	ldi	r22, 0x04	; 4
-    1206:	26 c0       	rjmp	.+76     	; 0x1254 <main+0x858>
+     f32:	80 91 c2 00 	lds	r24, 0x00C2
+     f36:	90 91 c3 00 	lds	r25, 0x00C3
+     f3a:	6a e0       	ldi	r22, 0x0A	; 10
+     f3c:	70 e0       	ldi	r23, 0x00	; 0
+     f3e:	cb d0       	rcall	.+406    	; 0x10d6 <__udivmodhi4>
+     f40:	64 e0       	ldi	r22, 0x04	; 4
+     f42:	26 c0       	rjmp	.+76     	; 0xf90 <main+0x7ee>
 				  }
 				break;
 			
 			
 				case MODE_EDIT_INTERVAL_SUNSET: 		  
 				  if(!twoHZ_status){
-    1208:	80 91 a1 00 	lds	r24, 0x00A1
-    120c:	81 11       	cpse	r24, r1
-    120e:	c3 cf       	rjmp	.-122    	; 0x1196 <main+0x79a>
+     f44:	80 91 a1 00 	lds	r24, 0x00A1
+     f48:	81 11       	cpse	r24, r1
+     f4a:	c3 cf       	rjmp	.-122    	; 0xed2 <main+0x730>
 					  setCharIndicator(led_menu_sunset_interval_mins/100, 1);
-    1210:	80 91 b4 00 	lds	r24, 0x00B4
-    1214:	90 91 b5 00 	lds	r25, 0x00B5
-    1218:	b8 01       	movw	r22, r16
-    121a:	e7 d0       	rcall	.+462    	; 0x13ea <__udivmodhi4>
-    121c:	86 2f       	mov	r24, r22
-    121e:	61 e0       	ldi	r22, 0x01	; 1
-    1220:	27 d8       	rcall	.-4018   	; 0x270 <setCharIndicator>
+     f4c:	80 91 c0 00 	lds	r24, 0x00C0
+     f50:	90 91 c1 00 	lds	r25, 0x00C1
+     f54:	b8 01       	movw	r22, r16
+     f56:	bf d0       	rcall	.+382    	; 0x10d6 <__udivmodhi4>
+     f58:	86 2f       	mov	r24, r22
+     f5a:	61 e0       	ldi	r22, 0x01	; 1
+     f5c:	89 d9       	rcall	.-3310   	; 0x270 <setCharIndicator>
 					  setCharIndicator((led_menu_sunset_interval_mins%100)/10, 2);
-    1222:	80 91 b4 00 	lds	r24, 0x00B4
-    1226:	90 91 b5 00 	lds	r25, 0x00B5
-    122a:	b8 01       	movw	r22, r16
-    122c:	de d0       	rcall	.+444    	; 0x13ea <__udivmodhi4>
-    122e:	6a e0       	ldi	r22, 0x0A	; 10
-    1230:	70 e0       	ldi	r23, 0x00	; 0
-    1232:	db d0       	rcall	.+438    	; 0x13ea <__udivmodhi4>
-    1234:	86 2f       	mov	r24, r22
-    1236:	62 e0       	ldi	r22, 0x02	; 2
-    1238:	1b d8       	rcall	.-4042   	; 0x270 <setCharIndicator>
+     f5e:	80 91 c0 00 	lds	r24, 0x00C0
+     f62:	90 91 c1 00 	lds	r25, 0x00C1
+     f66:	b8 01       	movw	r22, r16
+     f68:	b6 d0       	rcall	.+364    	; 0x10d6 <__udivmodhi4>
+     f6a:	6a e0       	ldi	r22, 0x0A	; 10
+     f6c:	70 e0       	ldi	r23, 0x00	; 0
+     f6e:	b3 d0       	rcall	.+358    	; 0x10d6 <__udivmodhi4>
+     f70:	86 2f       	mov	r24, r22
+     f72:	62 e0       	ldi	r22, 0x02	; 2
+     f74:	7d d9       	rcall	.-3334   	; 0x270 <setCharIndicator>
 					  setCharIndicator(led_menu_sunset_interval_mins%100%10, 3);
-    123a:	80 91 b4 00 	lds	r24, 0x00B4
-    123e:	90 91 b5 00 	lds	r25, 0x00B5
-    1242:	b8 01       	movw	r22, r16
-    1244:	d2 d0       	rcall	.+420    	; 0x13ea <__udivmodhi4>
-    1246:	6a e0       	ldi	r22, 0x0A	; 10
-    1248:	70 e0       	ldi	r23, 0x00	; 0
-    124a:	cf d0       	rcall	.+414    	; 0x13ea <__udivmodhi4>
-    124c:	63 e0       	ldi	r22, 0x03	; 3
-    124e:	10 d8       	rcall	.-4064   	; 0x270 <setCharIndicator>
+     f76:	80 91 c0 00 	lds	r24, 0x00C0
+     f7a:	90 91 c1 00 	lds	r25, 0x00C1
+     f7e:	b8 01       	movw	r22, r16
+     f80:	aa d0       	rcall	.+340    	; 0x10d6 <__udivmodhi4>
+     f82:	6a e0       	ldi	r22, 0x0A	; 10
+     f84:	70 e0       	ldi	r23, 0x00	; 0
+     f86:	a7 d0       	rcall	.+334    	; 0x10d6 <__udivmodhi4>
+     f88:	63 e0       	ldi	r22, 0x03	; 3
+     f8a:	72 d9       	rcall	.-3356   	; 0x270 <setCharIndicator>
 					  setCharIndicator(13, 4);
-    1250:	64 e0       	ldi	r22, 0x04	; 4
-    1252:	8d e0       	ldi	r24, 0x0D	; 13
-    1254:	0d d8       	rcall	.-4070   	; 0x270 <setCharIndicator>
+     f8c:	64 e0       	ldi	r22, 0x04	; 4
+     f8e:	8d e0       	ldi	r24, 0x0D	; 13
+     f90:	6f d9       	rcall	.-3362   	; 0x270 <setCharIndicator>
 					  setCharIndicator(13, 4);
 				  }				break;
 			
 			}
 		}
 		if(now_mode){
-    1256:	80 91 b3 00 	lds	r24, 0x00B3
-    125a:	88 23       	and	r24, r24
-    125c:	09 f4       	brne	.+2      	; 0x1260 <main+0x864>
-    125e:	32 cc       	rjmp	.-1948   	; 0xac4 <main+0xc8>
+     f92:	80 91 bf 00 	lds	r24, 0x00BF
+     f96:	88 23       	and	r24, r24
+     f98:	09 f4       	brne	.+2      	; 0xf9c <main+0x7fa>
+     f9a:	5c cc       	rjmp	.-1864   	; 0x854 <main+0xb2>
 			//Меню настроки часов
 			switch(now_mode){
-    1260:	83 30       	cpi	r24, 0x03	; 3
-    1262:	09 f4       	brne	.+2      	; 0x1266 <main+0x86a>
-    1264:	65 c0       	rjmp	.+202    	; 0x1330 <main+0x934>
-    1266:	28 f4       	brcc	.+10     	; 0x1272 <main+0x876>
-    1268:	81 30       	cpi	r24, 0x01	; 1
-    126a:	f1 f0       	breq	.+60     	; 0x12a8 <main+0x8ac>
-    126c:	82 30       	cpi	r24, 0x02	; 2
-    126e:	d1 f1       	breq	.+116    	; 0x12e4 <main+0x8e8>
-    1270:	29 cc       	rjmp	.-1966   	; 0xac4 <main+0xc8>
-    1272:	85 30       	cpi	r24, 0x05	; 5
-    1274:	09 f4       	brne	.+2      	; 0x1278 <main+0x87c>
-    1276:	5c c0       	rjmp	.+184    	; 0x1330 <main+0x934>
-    1278:	08 f4       	brcc	.+2      	; 0x127c <main+0x880>
-    127a:	5a c0       	rjmp	.+180    	; 0x1330 <main+0x934>
-    127c:	86 30       	cpi	r24, 0x06	; 6
-    127e:	09 f0       	breq	.+2      	; 0x1282 <main+0x886>
-    1280:	21 cc       	rjmp	.-1982   	; 0xac4 <main+0xc8>
-				   ShowDate(date, month, year);
-				break;
-				
-				
-				case MODE_EDIT_WEEK_DAY: // день недели
-					setCharIndicator(10, 0);
-    1282:	60 e0       	ldi	r22, 0x00	; 0
-    1284:	8a e0       	ldi	r24, 0x0A	; 10
-    1286:	f4 d7       	rcall	.+4072   	; 0x2270 <__data_load_end+0xd40>
-					setCharIndicator(10, 1);
-    1288:	61 e0       	ldi	r22, 0x01	; 1
-    128a:	8a e0       	ldi	r24, 0x0A	; 10
-    128c:	f1 d7       	rcall	.+4066   	; 0x2270 <__data_load_end+0xd40>
-			   		setCharIndicator(0, 2);
-    128e:	62 e0       	ldi	r22, 0x02	; 2
-    1290:	80 e0       	ldi	r24, 0x00	; 0
-    1292:	ee d7       	rcall	.+4060   	; 0x2270 <__data_load_end+0xd40>
-			   		setCharIndicator(day, 3);
-    1294:	63 e0       	ldi	r22, 0x03	; 3
-    1296:	80 91 cb 00 	lds	r24, 0x00CB
-    129a:	ea d7       	rcall	.+4052   	; 0x2270 <__data_load_end+0xd40>
-					setCharIndicator(10, 4);
-    129c:	64 e0       	ldi	r22, 0x04	; 4
-    129e:	8a e0       	ldi	r24, 0x0A	; 10
-    12a0:	e7 d7       	rcall	.+4046   	; 0x2270 <__data_load_end+0xd40>
-					setCharIndicator(10, 5);
-    12a2:	65 e0       	ldi	r22, 0x05	; 5
-    12a4:	8a e0       	ldi	r24, 0x0A	; 10
-    12a6:	4c c0       	rjmp	.+152    	; 0x1340 <main+0x944>
-		}
-		if(now_mode){
-			//Меню настроки часов
-			switch(now_mode){
+     f9c:	81 30       	cpi	r24, 0x01	; 1
+     f9e:	19 f0       	breq	.+6      	; 0xfa6 <main+0x804>
+     fa0:	82 30       	cpi	r24, 0x02	; 2
+     fa2:	f9 f0       	breq	.+62     	; 0xfe2 <main+0x840>
+     fa4:	57 cc       	rjmp	.-1874   	; 0x854 <main+0xb2>
 				case MODE_EDIT_HOURS: //часы
 				   if(!twoHZ_status){
-    12a8:	80 91 a1 00 	lds	r24, 0x00A1
-    12ac:	81 11       	cpse	r24, r1
-    12ae:	0f c0       	rjmp	.+30     	; 0x12ce <main+0x8d2>
+     fa6:	80 91 a1 00 	lds	r24, 0x00A1
+     faa:	81 11       	cpse	r24, r1
+     fac:	0f c0       	rjmp	.+30     	; 0xfcc <main+0x82a>
 				    setCharIndicator(hour/10, 1);
-    12b0:	80 91 cc 00 	lds	r24, 0x00CC
-    12b4:	3a e0       	ldi	r19, 0x0A	; 10
-    12b6:	33 2e       	mov	r3, r19
-    12b8:	63 2d       	mov	r22, r3
-    12ba:	8b d0       	rcall	.+278    	; 0x13d2 <__udivmodqi4>
-    12bc:	61 e0       	ldi	r22, 0x01	; 1
-    12be:	d8 d7       	rcall	.+4016   	; 0x2270 <__data_load_end+0xd40>
+     fae:	80 91 d8 00 	lds	r24, 0x00D8
+     fb2:	3a e0       	ldi	r19, 0x0A	; 10
+     fb4:	f3 2e       	mov	r15, r19
+     fb6:	6f 2d       	mov	r22, r15
+     fb8:	82 d0       	rcall	.+260    	; 0x10be <__udivmodqi4>
+     fba:	61 e0       	ldi	r22, 0x01	; 1
+     fbc:	59 d9       	rcall	.-3406   	; 0x270 <setCharIndicator>
 				    setCharIndicator(hour%10, 2);
-    12c0:	80 91 cc 00 	lds	r24, 0x00CC
-    12c4:	63 2d       	mov	r22, r3
-    12c6:	85 d0       	rcall	.+266    	; 0x13d2 <__udivmodqi4>
-    12c8:	89 2f       	mov	r24, r25
-    12ca:	62 e0       	ldi	r22, 0x02	; 2
-    12cc:	05 c0       	rjmp	.+10     	; 0x12d8 <main+0x8dc>
+     fbe:	80 91 d8 00 	lds	r24, 0x00D8
+     fc2:	6f 2d       	mov	r22, r15
+     fc4:	7c d0       	rcall	.+248    	; 0x10be <__udivmodqi4>
+     fc6:	89 2f       	mov	r24, r25
+     fc8:	62 e0       	ldi	r22, 0x02	; 2
+     fca:	05 c0       	rjmp	.+10     	; 0xfd6 <main+0x834>
 				   }else{
 					setCharIndicator(11, 1);
-    12ce:	61 e0       	ldi	r22, 0x01	; 1
-    12d0:	8b e0       	ldi	r24, 0x0B	; 11
-    12d2:	ce d7       	rcall	.+3996   	; 0x2270 <__data_load_end+0xd40>
+     fcc:	61 e0       	ldi	r22, 0x01	; 1
+     fce:	8b e0       	ldi	r24, 0x0B	; 11
+     fd0:	4f d9       	rcall	.-3426   	; 0x270 <setCharIndicator>
 					setCharIndicator(11, 2);				   
-    12d4:	62 e0       	ldi	r22, 0x02	; 2
-    12d6:	8b e0       	ldi	r24, 0x0B	; 11
-    12d8:	cb d7       	rcall	.+3990   	; 0x2270 <__data_load_end+0xd40>
+     fd2:	62 e0       	ldi	r22, 0x02	; 2
+     fd4:	8b e0       	ldi	r24, 0x0B	; 11
+     fd6:	4c d9       	rcall	.-3432   	; 0x270 <setCharIndicator>
 				   }
 				   setCharIndicator(min/10, 3);
-    12da:	80 91 cd 00 	lds	r24, 0x00CD
-    12de:	2a e0       	ldi	r18, 0x0A	; 10
-    12e0:	32 2e       	mov	r3, r18
-    12e2:	15 c0       	rjmp	.+42     	; 0x130e <main+0x912>
+     fd8:	80 91 d9 00 	lds	r24, 0x00D9
+     fdc:	2a e0       	ldi	r18, 0x0A	; 10
+     fde:	f2 2e       	mov	r15, r18
+     fe0:	15 c0       	rjmp	.+42     	; 0x100c <main+0x86a>
 				   setCharIndicator(min%10, 4);
 				break;
 
 				case MODE_EDIT_MINUTES: // минуты
 				   setCharIndicator(hour/10, 1);
-    12e4:	80 91 cc 00 	lds	r24, 0x00CC
-    12e8:	9a e0       	ldi	r25, 0x0A	; 10
-    12ea:	39 2e       	mov	r3, r25
-    12ec:	63 2d       	mov	r22, r3
-    12ee:	71 d0       	rcall	.+226    	; 0x13d2 <__udivmodqi4>
-    12f0:	61 e0       	ldi	r22, 0x01	; 1
-    12f2:	be d7       	rcall	.+3964   	; 0x2270 <__data_load_end+0xd40>
+     fe2:	80 91 d8 00 	lds	r24, 0x00D8
+     fe6:	9a e0       	ldi	r25, 0x0A	; 10
+     fe8:	f9 2e       	mov	r15, r25
+     fea:	6f 2d       	mov	r22, r15
+     fec:	68 d0       	rcall	.+208    	; 0x10be <__udivmodqi4>
+     fee:	61 e0       	ldi	r22, 0x01	; 1
+     ff0:	3f d9       	rcall	.-3458   	; 0x270 <setCharIndicator>
 				   setCharIndicator(hour%10, 2);
-    12f4:	80 91 cc 00 	lds	r24, 0x00CC
-    12f8:	63 2d       	mov	r22, r3
-    12fa:	6b d0       	rcall	.+214    	; 0x13d2 <__udivmodqi4>
-    12fc:	89 2f       	mov	r24, r25
-    12fe:	62 e0       	ldi	r22, 0x02	; 2
-    1300:	b7 d7       	rcall	.+3950   	; 0x2270 <__data_load_end+0xd40>
+     ff2:	80 91 d8 00 	lds	r24, 0x00D8
+     ff6:	6f 2d       	mov	r22, r15
+     ff8:	62 d0       	rcall	.+196    	; 0x10be <__udivmodqi4>
+     ffa:	89 2f       	mov	r24, r25
+     ffc:	62 e0       	ldi	r22, 0x02	; 2
+     ffe:	38 d9       	rcall	.-3472   	; 0x270 <setCharIndicator>
 				   if(!twoHZ_status){
-    1302:	80 91 a1 00 	lds	r24, 0x00A1
-    1306:	81 11       	cpse	r24, r1
-    1308:	0d c0       	rjmp	.+26     	; 0x1324 <main+0x928>
+    1000:	80 91 a1 00 	lds	r24, 0x00A1
+    1004:	81 11       	cpse	r24, r1
+    1006:	0d c0       	rjmp	.+26     	; 0x1022 <main+0x880>
 					  setCharIndicator(min/10, 3);
-    130a:	80 91 cd 00 	lds	r24, 0x00CD
-    130e:	63 2d       	mov	r22, r3
-    1310:	60 d0       	rcall	.+192    	; 0x13d2 <__udivmodqi4>
-    1312:	63 e0       	ldi	r22, 0x03	; 3
-    1314:	ad d7       	rcall	.+3930   	; 0x2270 <__data_load_end+0xd40>
+    1008:	80 91 d9 00 	lds	r24, 0x00D9
+    100c:	6f 2d       	mov	r22, r15
+    100e:	57 d0       	rcall	.+174    	; 0x10be <__udivmodqi4>
+    1010:	63 e0       	ldi	r22, 0x03	; 3
+    1012:	2e d9       	rcall	.-3492   	; 0x270 <setCharIndicator>
 					  setCharIndicator(min%10, 4);
-    1316:	80 91 cd 00 	lds	r24, 0x00CD
-    131a:	63 2d       	mov	r22, r3
-    131c:	5a d0       	rcall	.+180    	; 0x13d2 <__udivmodqi4>
-    131e:	89 2f       	mov	r24, r25
-    1320:	64 e0       	ldi	r22, 0x04	; 4
-    1322:	0e c0       	rjmp	.+28     	; 0x1340 <main+0x944>
+    1014:	80 91 d9 00 	lds	r24, 0x00D9
+    1018:	6f 2d       	mov	r22, r15
+    101a:	51 d0       	rcall	.+162    	; 0x10be <__udivmodqi4>
+    101c:	89 2f       	mov	r24, r25
+    101e:	64 e0       	ldi	r22, 0x04	; 4
+    1020:	05 c0       	rjmp	.+10     	; 0x102c <main+0x88a>
 				   }else{
 					  setCharIndicator(11, 3);
-    1324:	63 e0       	ldi	r22, 0x03	; 3
-    1326:	8b e0       	ldi	r24, 0x0B	; 11
-    1328:	a3 d7       	rcall	.+3910   	; 0x2270 <__data_load_end+0xd40>
+    1022:	63 e0       	ldi	r22, 0x03	; 3
+    1024:	8b e0       	ldi	r24, 0x0B	; 11
+    1026:	24 d9       	rcall	.-3512   	; 0x270 <setCharIndicator>
 					  setCharIndicator(11, 4);
-    132a:	64 e0       	ldi	r22, 0x04	; 4
-    132c:	8b e0       	ldi	r24, 0x0B	; 11
-    132e:	08 c0       	rjmp	.+16     	; 0x1340 <main+0x944>
-				   ShowDate(date, month, year);
-				break;
-				
-				
-				case MODE_EDIT_YEAR: // год
-				   ShowDate(date, month, year);
-    1330:	40 91 c8 00 	lds	r20, 0x00C8
-    1334:	60 91 c9 00 	lds	r22, 0x00C9
-    1338:	80 91 ca 00 	lds	r24, 0x00CA
-    133c:	2b db       	rcall	.-2474   	; 0x994 <ShowDate>
-				break;
-    133e:	c2 cb       	rjmp	.-2172   	; 0xac4 <main+0xc8>
-					setCharIndicator(10, 0);
-					setCharIndicator(10, 1);
-			   		setCharIndicator(0, 2);
-			   		setCharIndicator(day, 3);
-					setCharIndicator(10, 4);
-					setCharIndicator(10, 5);
-    1340:	97 d7       	rcall	.+3886   	; 0x2270 <__data_load_end+0xd40>
-				break;
-    1342:	c0 cb       	rjmp	.-2176   	; 0xac4 <main+0xc8>
+    1028:	64 e0       	ldi	r22, 0x04	; 4
+    102a:	8b e0       	ldi	r24, 0x0B	; 11
+    102c:	21 d9       	rcall	.-3518   	; 0x270 <setCharIndicator>
+    102e:	12 cc       	rjmp	.-2012   	; 0x854 <main+0xb2>
 
-00001344 <RTC_ConvertFromDec>:
+00001030 <RTC_ConvertFromDec>:
 ﻿#include "RTC.h"
 
 unsigned char RTC_ConvertFromDec(unsigned char c)
 {
 	unsigned char ch = ((c>>4)*10+(0b00001111&c));
-    1344:	98 2f       	mov	r25, r24
-    1346:	92 95       	swap	r25
-    1348:	9f 70       	andi	r25, 0x0F	; 15
-    134a:	8f 70       	andi	r24, 0x0F	; 15
+    1030:	98 2f       	mov	r25, r24
+    1032:	92 95       	swap	r25
+    1034:	9f 70       	andi	r25, 0x0F	; 15
+    1036:	8f 70       	andi	r24, 0x0F	; 15
 	return ch;
 }
-    134c:	2a e0       	ldi	r18, 0x0A	; 10
-    134e:	92 9f       	mul	r25, r18
-    1350:	80 0d       	add	r24, r0
-    1352:	11 24       	eor	r1, r1
-    1354:	08 95       	ret
+    1038:	2a e0       	ldi	r18, 0x0A	; 10
+    103a:	92 9f       	mul	r25, r18
+    103c:	80 0d       	add	r24, r0
+    103e:	11 24       	eor	r1, r1
+    1040:	08 95       	ret
 
-00001356 <RTC_ConvertFromBinDec>:
+00001042 <RTC_ConvertFromBinDec>:
 
 unsigned char RTC_ConvertFromBinDec(unsigned char c)
 {
 	unsigned char ch = ((c/10)<<4)|(c%10);
-    1356:	6a e0       	ldi	r22, 0x0A	; 10
-    1358:	3c d0       	rcall	.+120    	; 0x13d2 <__udivmodqi4>
-    135a:	29 2f       	mov	r18, r25
-    135c:	30 e1       	ldi	r19, 0x10	; 16
-    135e:	83 9f       	mul	r24, r19
-    1360:	c0 01       	movw	r24, r0
-    1362:	11 24       	eor	r1, r1
+    1042:	6a e0       	ldi	r22, 0x0A	; 10
+    1044:	3c d0       	rcall	.+120    	; 0x10be <__udivmodqi4>
+    1046:	29 2f       	mov	r18, r25
+    1048:	30 e1       	ldi	r19, 0x10	; 16
+    104a:	83 9f       	mul	r24, r19
+    104c:	c0 01       	movw	r24, r0
+    104e:	11 24       	eor	r1, r1
 	return ch;
-    1364:	82 2b       	or	r24, r18
-    1366:	08 95       	ret
+    1050:	82 2b       	or	r24, r18
+    1052:	08 95       	ret
 
-00001368 <I2C_Init>:
+00001054 <I2C_Init>:
 ﻿#include "twi.h"
 
 void I2C_Init (void)
 {
 	TWBR=0x20;//скорость передачи (при 8 мгц получается 100 кгц, что и необходимо для общения с ds1307)
-    1368:	80 e2       	ldi	r24, 0x20	; 32
-    136a:	80 b9       	out	0x00, r24	; 0
-    136c:	08 95       	ret
+    1054:	80 e2       	ldi	r24, 0x20	; 32
+    1056:	80 b9       	out	0x00, r24	; 0
+    1058:	08 95       	ret
 
-0000136e <I2C_StartCondition>:
+0000105a <I2C_StartCondition>:
 }
 
 
 void I2C_StartCondition(void)
 {
 	TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN);
-    136e:	84 ea       	ldi	r24, 0xA4	; 164
-    1370:	86 bf       	out	0x36, r24	; 54
+    105a:	84 ea       	ldi	r24, 0xA4	; 164
+    105c:	86 bf       	out	0x36, r24	; 54
 	while (!(TWCR & (1<<TWINT)));//подождем пока установится TWIN
-    1372:	06 b6       	in	r0, 0x36	; 54
-    1374:	07 fe       	sbrs	r0, 7
-    1376:	fd cf       	rjmp	.-6      	; 0x1372 <I2C_StartCondition+0x4>
+    105e:	06 b6       	in	r0, 0x36	; 54
+    1060:	07 fe       	sbrs	r0, 7
+    1062:	fd cf       	rjmp	.-6      	; 0x105e <I2C_StartCondition+0x4>
 }
-    1378:	08 95       	ret
+    1064:	08 95       	ret
 
-0000137a <I2C_StopCondition>:
+00001066 <I2C_StopCondition>:
 
 void I2C_StopCondition(void)
 {
 	TWCR = (1<<TWINT)|(1<<TWSTO)|(1<<TWEN);
-    137a:	84 e9       	ldi	r24, 0x94	; 148
-    137c:	86 bf       	out	0x36, r24	; 54
-    137e:	08 95       	ret
+    1066:	84 e9       	ldi	r24, 0x94	; 148
+    1068:	86 bf       	out	0x36, r24	; 54
+    106a:	08 95       	ret
 
-00001380 <I2C_SendByte>:
+0000106c <I2C_SendByte>:
 }
 
 void I2C_SendByte(unsigned char c)
 {
 	TWDR = c;//запишем байт в регистр данных
-    1380:	83 b9       	out	0x03, r24	; 3
+    106c:	83 b9       	out	0x03, r24	; 3
 	TWCR = (1<<TWINT)|(1<<TWEN);//включим передачу байта
-    1382:	84 e8       	ldi	r24, 0x84	; 132
-    1384:	86 bf       	out	0x36, r24	; 54
+    106e:	84 e8       	ldi	r24, 0x84	; 132
+    1070:	86 bf       	out	0x36, r24	; 54
 	while (!(TWCR & (1<<TWINT)));//подождем пока установится TWIN
-    1386:	06 b6       	in	r0, 0x36	; 54
-    1388:	07 fe       	sbrs	r0, 7
-    138a:	fd cf       	rjmp	.-6      	; 0x1386 <I2C_SendByte+0x6>
+    1072:	06 b6       	in	r0, 0x36	; 54
+    1074:	07 fe       	sbrs	r0, 7
+    1076:	fd cf       	rjmp	.-6      	; 0x1072 <I2C_SendByte+0x6>
 }
-    138c:	08 95       	ret
+    1078:	08 95       	ret
 
-0000138e <I2C_SendByteByADDR>:
+0000107a <I2C_SendByteByADDR>:
 
 void I2C_SendByteByADDR(unsigned char c,unsigned char addr)
 {
-    138e:	1f 93       	push	r17
-    1390:	cf 93       	push	r28
-    1392:	df 93       	push	r29
-    1394:	1f 92       	push	r1
-    1396:	cd b7       	in	r28, 0x3d	; 61
-    1398:	de b7       	in	r29, 0x3e	; 62
-    139a:	18 2f       	mov	r17, r24
+    107a:	1f 93       	push	r17
+    107c:	cf 93       	push	r28
+    107e:	df 93       	push	r29
+    1080:	1f 92       	push	r1
+    1082:	cd b7       	in	r28, 0x3d	; 61
+    1084:	de b7       	in	r29, 0x3e	; 62
+    1086:	18 2f       	mov	r17, r24
 	I2C_StartCondition(); // Отправим условие START
-    139c:	69 83       	std	Y+1, r22	; 0x01
-    139e:	e7 df       	rcall	.-50     	; 0x136e <I2C_StartCondition>
+    1088:	69 83       	std	Y+1, r22	; 0x01
+    108a:	e7 df       	rcall	.-50     	; 0x105a <I2C_StartCondition>
 	I2C_SendByte(addr); // Отправим в шину адрес устройства + бит чтения-записи
-    13a0:	89 81       	ldd	r24, Y+1	; 0x01
-    13a2:	ee df       	rcall	.-36     	; 0x1380 <I2C_SendByte>
+    108c:	89 81       	ldd	r24, Y+1	; 0x01
+    108e:	ee df       	rcall	.-36     	; 0x106c <I2C_SendByte>
 	I2C_SendByte(c);// Отправим байт данных
-    13a4:	81 2f       	mov	r24, r17
-    13a6:	ec df       	rcall	.-40     	; 0x1380 <I2C_SendByte>
+    1090:	81 2f       	mov	r24, r17
+    1092:	ec df       	rcall	.-40     	; 0x106c <I2C_SendByte>
 	while (!(TWCR & (1<<TWINT)));//подождем пока установится TWIN
 }
 
 void I2C_StopCondition(void)
 {
 	TWCR = (1<<TWINT)|(1<<TWSTO)|(1<<TWEN);
-    13a8:	84 e9       	ldi	r24, 0x94	; 148
-    13aa:	86 bf       	out	0x36, r24	; 54
+    1094:	84 e9       	ldi	r24, 0x94	; 148
+    1096:	86 bf       	out	0x36, r24	; 54
 {
 	I2C_StartCondition(); // Отправим условие START
 	I2C_SendByte(addr); // Отправим в шину адрес устройства + бит чтения-записи
 	I2C_SendByte(c);// Отправим байт данных
 	I2C_StopCondition();// Отправим условие STOP
 }
-    13ac:	0f 90       	pop	r0
-    13ae:	df 91       	pop	r29
-    13b0:	cf 91       	pop	r28
-    13b2:	1f 91       	pop	r17
-    13b4:	08 95       	ret
+    1098:	0f 90       	pop	r0
+    109a:	df 91       	pop	r29
+    109c:	cf 91       	pop	r28
+    109e:	1f 91       	pop	r17
+    10a0:	08 95       	ret
 
-000013b6 <I2C_ReadByte>:
+000010a2 <I2C_ReadByte>:
 
 unsigned char I2C_ReadByte(void)
 {
 	TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWEA);
-    13b6:	84 ec       	ldi	r24, 0xC4	; 196
-    13b8:	86 bf       	out	0x36, r24	; 54
+    10a2:	84 ec       	ldi	r24, 0xC4	; 196
+    10a4:	86 bf       	out	0x36, r24	; 54
 	while (!(TWCR & (1<<TWINT)));//ожидание установки бита TWIN
-    13ba:	06 b6       	in	r0, 0x36	; 54
-    13bc:	07 fe       	sbrs	r0, 7
-    13be:	fd cf       	rjmp	.-6      	; 0x13ba <I2C_ReadByte+0x4>
+    10a6:	06 b6       	in	r0, 0x36	; 54
+    10a8:	07 fe       	sbrs	r0, 7
+    10aa:	fd cf       	rjmp	.-6      	; 0x10a6 <I2C_ReadByte+0x4>
 	return TWDR;//читаем регистр данных
-    13c0:	83 b1       	in	r24, 0x03	; 3
+    10ac:	83 b1       	in	r24, 0x03	; 3
 }
-    13c2:	08 95       	ret
+    10ae:	08 95       	ret
 
-000013c4 <I2C_ReadLastByte>:
+000010b0 <I2C_ReadLastByte>:
 
 unsigned char I2C_ReadLastByte(void)
 {
 	TWCR = (1<<TWINT)|(1<<TWEN);
-    13c4:	84 e8       	ldi	r24, 0x84	; 132
-    13c6:	86 bf       	out	0x36, r24	; 54
+    10b0:	84 e8       	ldi	r24, 0x84	; 132
+    10b2:	86 bf       	out	0x36, r24	; 54
 	while (!(TWCR & (1<<TWINT)));//ожидание установки бита TWIN
-    13c8:	06 b6       	in	r0, 0x36	; 54
-    13ca:	07 fe       	sbrs	r0, 7
-    13cc:	fd cf       	rjmp	.-6      	; 0x13c8 <I2C_ReadLastByte+0x4>
+    10b4:	06 b6       	in	r0, 0x36	; 54
+    10b6:	07 fe       	sbrs	r0, 7
+    10b8:	fd cf       	rjmp	.-6      	; 0x10b4 <I2C_ReadLastByte+0x4>
 	return TWDR;//читаем регистр данных
-    13ce:	83 b1       	in	r24, 0x03	; 3
-    13d0:	08 95       	ret
+    10ba:	83 b1       	in	r24, 0x03	; 3
+    10bc:	08 95       	ret
 
-000013d2 <__udivmodqi4>:
-    13d2:	99 1b       	sub	r25, r25
-    13d4:	79 e0       	ldi	r23, 0x09	; 9
-    13d6:	04 c0       	rjmp	.+8      	; 0x13e0 <__udivmodqi4_ep>
+000010be <__udivmodqi4>:
+    10be:	99 1b       	sub	r25, r25
+    10c0:	79 e0       	ldi	r23, 0x09	; 9
+    10c2:	04 c0       	rjmp	.+8      	; 0x10cc <__udivmodqi4_ep>
 
-000013d8 <__udivmodqi4_loop>:
-    13d8:	99 1f       	adc	r25, r25
-    13da:	96 17       	cp	r25, r22
-    13dc:	08 f0       	brcs	.+2      	; 0x13e0 <__udivmodqi4_ep>
-    13de:	96 1b       	sub	r25, r22
+000010c4 <__udivmodqi4_loop>:
+    10c4:	99 1f       	adc	r25, r25
+    10c6:	96 17       	cp	r25, r22
+    10c8:	08 f0       	brcs	.+2      	; 0x10cc <__udivmodqi4_ep>
+    10ca:	96 1b       	sub	r25, r22
 
-000013e0 <__udivmodqi4_ep>:
-    13e0:	88 1f       	adc	r24, r24
-    13e2:	7a 95       	dec	r23
-    13e4:	c9 f7       	brne	.-14     	; 0x13d8 <__udivmodqi4_loop>
-    13e6:	80 95       	com	r24
-    13e8:	08 95       	ret
+000010cc <__udivmodqi4_ep>:
+    10cc:	88 1f       	adc	r24, r24
+    10ce:	7a 95       	dec	r23
+    10d0:	c9 f7       	brne	.-14     	; 0x10c4 <__udivmodqi4_loop>
+    10d2:	80 95       	com	r24
+    10d4:	08 95       	ret
 
-000013ea <__udivmodhi4>:
-    13ea:	aa 1b       	sub	r26, r26
-    13ec:	bb 1b       	sub	r27, r27
-    13ee:	51 e1       	ldi	r21, 0x11	; 17
-    13f0:	07 c0       	rjmp	.+14     	; 0x1400 <__udivmodhi4_ep>
+000010d6 <__udivmodhi4>:
+    10d6:	aa 1b       	sub	r26, r26
+    10d8:	bb 1b       	sub	r27, r27
+    10da:	51 e1       	ldi	r21, 0x11	; 17
+    10dc:	07 c0       	rjmp	.+14     	; 0x10ec <__udivmodhi4_ep>
 
-000013f2 <__udivmodhi4_loop>:
-    13f2:	aa 1f       	adc	r26, r26
-    13f4:	bb 1f       	adc	r27, r27
-    13f6:	a6 17       	cp	r26, r22
-    13f8:	b7 07       	cpc	r27, r23
-    13fa:	10 f0       	brcs	.+4      	; 0x1400 <__udivmodhi4_ep>
-    13fc:	a6 1b       	sub	r26, r22
-    13fe:	b7 0b       	sbc	r27, r23
+000010de <__udivmodhi4_loop>:
+    10de:	aa 1f       	adc	r26, r26
+    10e0:	bb 1f       	adc	r27, r27
+    10e2:	a6 17       	cp	r26, r22
+    10e4:	b7 07       	cpc	r27, r23
+    10e6:	10 f0       	brcs	.+4      	; 0x10ec <__udivmodhi4_ep>
+    10e8:	a6 1b       	sub	r26, r22
+    10ea:	b7 0b       	sbc	r27, r23
 
-00001400 <__udivmodhi4_ep>:
-    1400:	88 1f       	adc	r24, r24
-    1402:	99 1f       	adc	r25, r25
-    1404:	5a 95       	dec	r21
-    1406:	a9 f7       	brne	.-22     	; 0x13f2 <__udivmodhi4_loop>
-    1408:	80 95       	com	r24
-    140a:	90 95       	com	r25
-    140c:	bc 01       	movw	r22, r24
-    140e:	cd 01       	movw	r24, r26
-    1410:	08 95       	ret
+000010ec <__udivmodhi4_ep>:
+    10ec:	88 1f       	adc	r24, r24
+    10ee:	99 1f       	adc	r25, r25
+    10f0:	5a 95       	dec	r21
+    10f2:	a9 f7       	brne	.-22     	; 0x10de <__udivmodhi4_loop>
+    10f4:	80 95       	com	r24
+    10f6:	90 95       	com	r25
+    10f8:	bc 01       	movw	r22, r24
+    10fa:	cd 01       	movw	r24, r26
+    10fc:	08 95       	ret
 
-00001412 <__divmodsi4>:
-    1412:	05 2e       	mov	r0, r21
-    1414:	97 fb       	bst	r25, 7
-    1416:	16 f4       	brtc	.+4      	; 0x141c <__divmodsi4+0xa>
-    1418:	00 94       	com	r0
-    141a:	0f d0       	rcall	.+30     	; 0x143a <__negsi2>
-    141c:	57 fd       	sbrc	r21, 7
-    141e:	05 d0       	rcall	.+10     	; 0x142a <__divmodsi4_neg2>
-    1420:	24 d0       	rcall	.+72     	; 0x146a <__udivmodsi4>
-    1422:	07 fc       	sbrc	r0, 7
-    1424:	02 d0       	rcall	.+4      	; 0x142a <__divmodsi4_neg2>
-    1426:	46 f4       	brtc	.+16     	; 0x1438 <__divmodsi4_exit>
-    1428:	08 c0       	rjmp	.+16     	; 0x143a <__negsi2>
+000010fe <__divmodhi4>:
+    10fe:	97 fb       	bst	r25, 7
+    1100:	07 2e       	mov	r0, r23
+    1102:	16 f4       	brtc	.+4      	; 0x1108 <__divmodhi4+0xa>
+    1104:	00 94       	com	r0
+    1106:	06 d0       	rcall	.+12     	; 0x1114 <__divmodhi4_neg1>
+    1108:	77 fd       	sbrc	r23, 7
+    110a:	08 d0       	rcall	.+16     	; 0x111c <__divmodhi4_neg2>
+    110c:	e4 df       	rcall	.-56     	; 0x10d6 <__udivmodhi4>
+    110e:	07 fc       	sbrc	r0, 7
+    1110:	05 d0       	rcall	.+10     	; 0x111c <__divmodhi4_neg2>
+    1112:	3e f4       	brtc	.+14     	; 0x1122 <__divmodhi4_exit>
 
-0000142a <__divmodsi4_neg2>:
-    142a:	50 95       	com	r21
-    142c:	40 95       	com	r20
-    142e:	30 95       	com	r19
-    1430:	21 95       	neg	r18
-    1432:	3f 4f       	sbci	r19, 0xFF	; 255
-    1434:	4f 4f       	sbci	r20, 0xFF	; 255
-    1436:	5f 4f       	sbci	r21, 0xFF	; 255
+00001114 <__divmodhi4_neg1>:
+    1114:	90 95       	com	r25
+    1116:	81 95       	neg	r24
+    1118:	9f 4f       	sbci	r25, 0xFF	; 255
+    111a:	08 95       	ret
 
-00001438 <__divmodsi4_exit>:
-    1438:	08 95       	ret
+0000111c <__divmodhi4_neg2>:
+    111c:	70 95       	com	r23
+    111e:	61 95       	neg	r22
+    1120:	7f 4f       	sbci	r23, 0xFF	; 255
 
-0000143a <__negsi2>:
-    143a:	90 95       	com	r25
-    143c:	80 95       	com	r24
-    143e:	70 95       	com	r23
-    1440:	61 95       	neg	r22
-    1442:	7f 4f       	sbci	r23, 0xFF	; 255
-    1444:	8f 4f       	sbci	r24, 0xFF	; 255
-    1446:	9f 4f       	sbci	r25, 0xFF	; 255
-    1448:	08 95       	ret
+00001122 <__divmodhi4_exit>:
+    1122:	08 95       	ret
 
-0000144a <__muluhisi3>:
-    144a:	31 d0       	rcall	.+98     	; 0x14ae <__umulhisi3>
-    144c:	a5 9f       	mul	r26, r21
-    144e:	90 0d       	add	r25, r0
-    1450:	b4 9f       	mul	r27, r20
-    1452:	90 0d       	add	r25, r0
-    1454:	a4 9f       	mul	r26, r20
-    1456:	80 0d       	add	r24, r0
-    1458:	91 1d       	adc	r25, r1
-    145a:	11 24       	eor	r1, r1
-    145c:	08 95       	ret
+00001124 <__divmodsi4>:
+    1124:	05 2e       	mov	r0, r21
+    1126:	97 fb       	bst	r25, 7
+    1128:	16 f4       	brtc	.+4      	; 0x112e <__divmodsi4+0xa>
+    112a:	00 94       	com	r0
+    112c:	0f d0       	rcall	.+30     	; 0x114c <__negsi2>
+    112e:	57 fd       	sbrc	r21, 7
+    1130:	05 d0       	rcall	.+10     	; 0x113c <__divmodsi4_neg2>
+    1132:	30 d0       	rcall	.+96     	; 0x1194 <__udivmodsi4>
+    1134:	07 fc       	sbrc	r0, 7
+    1136:	02 d0       	rcall	.+4      	; 0x113c <__divmodsi4_neg2>
+    1138:	46 f4       	brtc	.+16     	; 0x114a <__divmodsi4_exit>
+    113a:	08 c0       	rjmp	.+16     	; 0x114c <__negsi2>
 
-0000145e <__mulshisi3>:
-    145e:	b7 ff       	sbrs	r27, 7
-    1460:	f4 cf       	rjmp	.-24     	; 0x144a <__muluhisi3>
+0000113c <__divmodsi4_neg2>:
+    113c:	50 95       	com	r21
+    113e:	40 95       	com	r20
+    1140:	30 95       	com	r19
+    1142:	21 95       	neg	r18
+    1144:	3f 4f       	sbci	r19, 0xFF	; 255
+    1146:	4f 4f       	sbci	r20, 0xFF	; 255
+    1148:	5f 4f       	sbci	r21, 0xFF	; 255
 
-00001462 <__mulohisi3>:
-    1462:	f3 df       	rcall	.-26     	; 0x144a <__muluhisi3>
-    1464:	82 1b       	sub	r24, r18
-    1466:	93 0b       	sbc	r25, r19
-    1468:	08 95       	ret
+0000114a <__divmodsi4_exit>:
+    114a:	08 95       	ret
 
-0000146a <__udivmodsi4>:
-    146a:	a1 e2       	ldi	r26, 0x21	; 33
-    146c:	1a 2e       	mov	r1, r26
-    146e:	aa 1b       	sub	r26, r26
-    1470:	bb 1b       	sub	r27, r27
-    1472:	fd 01       	movw	r30, r26
-    1474:	0d c0       	rjmp	.+26     	; 0x1490 <__udivmodsi4_ep>
+0000114c <__negsi2>:
+    114c:	90 95       	com	r25
+    114e:	80 95       	com	r24
+    1150:	70 95       	com	r23
+    1152:	61 95       	neg	r22
+    1154:	7f 4f       	sbci	r23, 0xFF	; 255
+    1156:	8f 4f       	sbci	r24, 0xFF	; 255
+    1158:	9f 4f       	sbci	r25, 0xFF	; 255
+    115a:	08 95       	ret
 
-00001476 <__udivmodsi4_loop>:
-    1476:	aa 1f       	adc	r26, r26
-    1478:	bb 1f       	adc	r27, r27
-    147a:	ee 1f       	adc	r30, r30
-    147c:	ff 1f       	adc	r31, r31
-    147e:	a2 17       	cp	r26, r18
-    1480:	b3 07       	cpc	r27, r19
-    1482:	e4 07       	cpc	r30, r20
-    1484:	f5 07       	cpc	r31, r21
-    1486:	20 f0       	brcs	.+8      	; 0x1490 <__udivmodsi4_ep>
-    1488:	a2 1b       	sub	r26, r18
-    148a:	b3 0b       	sbc	r27, r19
-    148c:	e4 0b       	sbc	r30, r20
-    148e:	f5 0b       	sbc	r31, r21
+0000115c <__umulhisi3>:
+    115c:	a2 9f       	mul	r26, r18
+    115e:	b0 01       	movw	r22, r0
+    1160:	b3 9f       	mul	r27, r19
+    1162:	c0 01       	movw	r24, r0
+    1164:	a3 9f       	mul	r26, r19
+    1166:	01 d0       	rcall	.+2      	; 0x116a <__umulhisi3+0xe>
+    1168:	b2 9f       	mul	r27, r18
+    116a:	70 0d       	add	r23, r0
+    116c:	81 1d       	adc	r24, r1
+    116e:	11 24       	eor	r1, r1
+    1170:	91 1d       	adc	r25, r1
+    1172:	08 95       	ret
 
-00001490 <__udivmodsi4_ep>:
-    1490:	66 1f       	adc	r22, r22
-    1492:	77 1f       	adc	r23, r23
-    1494:	88 1f       	adc	r24, r24
-    1496:	99 1f       	adc	r25, r25
-    1498:	1a 94       	dec	r1
-    149a:	69 f7       	brne	.-38     	; 0x1476 <__udivmodsi4_loop>
-    149c:	60 95       	com	r22
-    149e:	70 95       	com	r23
-    14a0:	80 95       	com	r24
-    14a2:	90 95       	com	r25
-    14a4:	9b 01       	movw	r18, r22
-    14a6:	ac 01       	movw	r20, r24
-    14a8:	bd 01       	movw	r22, r26
-    14aa:	cf 01       	movw	r24, r30
-    14ac:	08 95       	ret
+00001174 <__muluhisi3>:
+    1174:	f3 df       	rcall	.-26     	; 0x115c <__umulhisi3>
+    1176:	a5 9f       	mul	r26, r21
+    1178:	90 0d       	add	r25, r0
+    117a:	b4 9f       	mul	r27, r20
+    117c:	90 0d       	add	r25, r0
+    117e:	a4 9f       	mul	r26, r20
+    1180:	80 0d       	add	r24, r0
+    1182:	91 1d       	adc	r25, r1
+    1184:	11 24       	eor	r1, r1
+    1186:	08 95       	ret
 
-000014ae <__umulhisi3>:
-    14ae:	a2 9f       	mul	r26, r18
-    14b0:	b0 01       	movw	r22, r0
-    14b2:	b3 9f       	mul	r27, r19
-    14b4:	c0 01       	movw	r24, r0
-    14b6:	a3 9f       	mul	r26, r19
-    14b8:	01 d0       	rcall	.+2      	; 0x14bc <__umulhisi3+0xe>
-    14ba:	b2 9f       	mul	r27, r18
-    14bc:	70 0d       	add	r23, r0
-    14be:	81 1d       	adc	r24, r1
-    14c0:	11 24       	eor	r1, r1
-    14c2:	91 1d       	adc	r25, r1
-    14c4:	08 95       	ret
+00001188 <__mulshisi3>:
+    1188:	b7 ff       	sbrs	r27, 7
+    118a:	f4 cf       	rjmp	.-24     	; 0x1174 <__muluhisi3>
 
-000014c6 <__eerd_word_m8a>:
-    14c6:	a8 e1       	ldi	r26, 0x18	; 24
-    14c8:	b0 e0       	ldi	r27, 0x00	; 0
-    14ca:	42 e0       	ldi	r20, 0x02	; 2
-    14cc:	50 e0       	ldi	r21, 0x00	; 0
-    14ce:	05 c0       	rjmp	.+10     	; 0x14da <__eerd_blraw_m8a>
+0000118c <__mulohisi3>:
+    118c:	f3 df       	rcall	.-26     	; 0x1174 <__muluhisi3>
+    118e:	82 1b       	sub	r24, r18
+    1190:	93 0b       	sbc	r25, r19
+    1192:	08 95       	ret
 
-000014d0 <__eewr_word_m8a>:
-    14d0:	12 d0       	rcall	.+36     	; 0x14f6 <__eewr_byte_m8a>
-    14d2:	27 2f       	mov	r18, r23
-    14d4:	11 c0       	rjmp	.+34     	; 0x14f8 <__eewr_r18_m8a>
+00001194 <__udivmodsi4>:
+    1194:	a1 e2       	ldi	r26, 0x21	; 33
+    1196:	1a 2e       	mov	r1, r26
+    1198:	aa 1b       	sub	r26, r26
+    119a:	bb 1b       	sub	r27, r27
+    119c:	fd 01       	movw	r30, r26
+    119e:	0d c0       	rjmp	.+26     	; 0x11ba <__udivmodsi4_ep>
 
-000014d6 <__eerd_block_m8a>:
-    14d6:	dc 01       	movw	r26, r24
-    14d8:	cb 01       	movw	r24, r22
+000011a0 <__udivmodsi4_loop>:
+    11a0:	aa 1f       	adc	r26, r26
+    11a2:	bb 1f       	adc	r27, r27
+    11a4:	ee 1f       	adc	r30, r30
+    11a6:	ff 1f       	adc	r31, r31
+    11a8:	a2 17       	cp	r26, r18
+    11aa:	b3 07       	cpc	r27, r19
+    11ac:	e4 07       	cpc	r30, r20
+    11ae:	f5 07       	cpc	r31, r21
+    11b0:	20 f0       	brcs	.+8      	; 0x11ba <__udivmodsi4_ep>
+    11b2:	a2 1b       	sub	r26, r18
+    11b4:	b3 0b       	sbc	r27, r19
+    11b6:	e4 0b       	sbc	r30, r20
+    11b8:	f5 0b       	sbc	r31, r21
 
-000014da <__eerd_blraw_m8a>:
-    14da:	fc 01       	movw	r30, r24
-    14dc:	e1 99       	sbic	0x1c, 1	; 28
-    14de:	fe cf       	rjmp	.-4      	; 0x14dc <__eerd_blraw_m8a+0x2>
-    14e0:	06 c0       	rjmp	.+12     	; 0x14ee <__eerd_blraw_m8a+0x14>
-    14e2:	ff bb       	out	0x1f, r31	; 31
-    14e4:	ee bb       	out	0x1e, r30	; 30
-    14e6:	e0 9a       	sbi	0x1c, 0	; 28
-    14e8:	31 96       	adiw	r30, 0x01	; 1
-    14ea:	0d b2       	in	r0, 0x1d	; 29
-    14ec:	0d 92       	st	X+, r0
-    14ee:	41 50       	subi	r20, 0x01	; 1
-    14f0:	50 40       	sbci	r21, 0x00	; 0
-    14f2:	b8 f7       	brcc	.-18     	; 0x14e2 <__eerd_blraw_m8a+0x8>
-    14f4:	08 95       	ret
+000011ba <__udivmodsi4_ep>:
+    11ba:	66 1f       	adc	r22, r22
+    11bc:	77 1f       	adc	r23, r23
+    11be:	88 1f       	adc	r24, r24
+    11c0:	99 1f       	adc	r25, r25
+    11c2:	1a 94       	dec	r1
+    11c4:	69 f7       	brne	.-38     	; 0x11a0 <__udivmodsi4_loop>
+    11c6:	60 95       	com	r22
+    11c8:	70 95       	com	r23
+    11ca:	80 95       	com	r24
+    11cc:	90 95       	com	r25
+    11ce:	9b 01       	movw	r18, r22
+    11d0:	ac 01       	movw	r20, r24
+    11d2:	bd 01       	movw	r22, r26
+    11d4:	cf 01       	movw	r24, r30
+    11d6:	08 95       	ret
 
-000014f6 <__eewr_byte_m8a>:
-    14f6:	26 2f       	mov	r18, r22
+000011d8 <__eerd_word_m8a>:
+    11d8:	a8 e1       	ldi	r26, 0x18	; 24
+    11da:	b0 e0       	ldi	r27, 0x00	; 0
+    11dc:	42 e0       	ldi	r20, 0x02	; 2
+    11de:	50 e0       	ldi	r21, 0x00	; 0
+    11e0:	05 c0       	rjmp	.+10     	; 0x11ec <__eerd_blraw_m8a>
 
-000014f8 <__eewr_r18_m8a>:
-    14f8:	e1 99       	sbic	0x1c, 1	; 28
-    14fa:	fe cf       	rjmp	.-4      	; 0x14f8 <__eewr_r18_m8a>
-    14fc:	9f bb       	out	0x1f, r25	; 31
-    14fe:	8e bb       	out	0x1e, r24	; 30
-    1500:	2d bb       	out	0x1d, r18	; 29
-    1502:	0f b6       	in	r0, 0x3f	; 63
-    1504:	f8 94       	cli
-    1506:	e2 9a       	sbi	0x1c, 2	; 28
-    1508:	e1 9a       	sbi	0x1c, 1	; 28
-    150a:	0f be       	out	0x3f, r0	; 63
-    150c:	01 96       	adiw	r24, 0x01	; 1
-    150e:	08 95       	ret
+000011e2 <__eewr_word_m8a>:
+    11e2:	12 d0       	rcall	.+36     	; 0x1208 <__eewr_byte_m8a>
+    11e4:	27 2f       	mov	r18, r23
+    11e6:	11 c0       	rjmp	.+34     	; 0x120a <__eewr_r18_m8a>
 
-00001510 <_exit>:
-    1510:	f8 94       	cli
+000011e8 <__eerd_block_m8a>:
+    11e8:	dc 01       	movw	r26, r24
+    11ea:	cb 01       	movw	r24, r22
 
-00001512 <__stop_program>:
-    1512:	ff cf       	rjmp	.-2      	; 0x1512 <__stop_program>
+000011ec <__eerd_blraw_m8a>:
+    11ec:	fc 01       	movw	r30, r24
+    11ee:	e1 99       	sbic	0x1c, 1	; 28
+    11f0:	fe cf       	rjmp	.-4      	; 0x11ee <__eerd_blraw_m8a+0x2>
+    11f2:	06 c0       	rjmp	.+12     	; 0x1200 <__eerd_blraw_m8a+0x14>
+    11f4:	ff bb       	out	0x1f, r31	; 31
+    11f6:	ee bb       	out	0x1e, r30	; 30
+    11f8:	e0 9a       	sbi	0x1c, 0	; 28
+    11fa:	31 96       	adiw	r30, 0x01	; 1
+    11fc:	0d b2       	in	r0, 0x1d	; 29
+    11fe:	0d 92       	st	X+, r0
+    1200:	41 50       	subi	r20, 0x01	; 1
+    1202:	50 40       	sbci	r21, 0x00	; 0
+    1204:	b8 f7       	brcc	.-18     	; 0x11f4 <__eerd_blraw_m8a+0x8>
+    1206:	08 95       	ret
+
+00001208 <__eewr_byte_m8a>:
+    1208:	26 2f       	mov	r18, r22
+
+0000120a <__eewr_r18_m8a>:
+    120a:	e1 99       	sbic	0x1c, 1	; 28
+    120c:	fe cf       	rjmp	.-4      	; 0x120a <__eewr_r18_m8a>
+    120e:	9f bb       	out	0x1f, r25	; 31
+    1210:	8e bb       	out	0x1e, r24	; 30
+    1212:	2d bb       	out	0x1d, r18	; 29
+    1214:	0f b6       	in	r0, 0x3f	; 63
+    1216:	f8 94       	cli
+    1218:	e2 9a       	sbi	0x1c, 2	; 28
+    121a:	e1 9a       	sbi	0x1c, 1	; 28
+    121c:	0f be       	out	0x3f, r0	; 63
+    121e:	01 96       	adiw	r24, 0x01	; 1
+    1220:	08 95       	ret
+
+00001222 <_exit>:
+    1222:	f8 94       	cli
+
+00001224 <__stop_program>:
+    1224:	ff cf       	rjmp	.-2      	; 0x1224 <__stop_program>

@@ -9,7 +9,7 @@
 #include <avr/eeprom.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <avr/wdt.h>
 #include "twi.h"
 #include "RTC.h"
 #include "buttons.h"

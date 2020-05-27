@@ -10,6 +10,6 @@ void I2C_SendByte(unsigned char c); //передача байта в шину
 void I2C_SendByteByADDR(unsigned char c,unsigned char addr); //передача байта в шину на устройство по адресу
 unsigned char I2C_ReadByte(void); //читаем байт
 unsigned char I2C_ReadLastByte(void); //читаем последний байт
-
+extern volatile unsigned char i2c_error_counter;
 
 #endif /* TWI_H_ */

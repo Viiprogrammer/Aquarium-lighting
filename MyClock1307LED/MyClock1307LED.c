@@ -1,5 +1,8 @@
 #include "main.h"
 
+#define ADC_VREF_TYPE ((0<<REFS1) | (1<<REFS0) | (0<<ADLAR))
+#define ADC_READ_NUM 5
+
 #define SHIFT_REG_DDR DDRB
 #define SHIFT_REG_PORT PORTB
 #define DATA 3
@@ -86,7 +89,8 @@ unsigned char count = 0;                           //Счетчик вызово
 volatile char twoHZ = 255;
 
 volatile char twoHZ_status = 0;
- 
+unsigned int adcMaxPWM = 0;
+volatile unsigned char i2c_error_counter = 0;
 //Прерывание моргалки
 ISR(TIMER2_COMP_vect)
 {
@@ -94,6 +98,9 @@ ISR(TIMER2_COMP_vect)
 	 if(!twoHZ){
 	    twoHZ_status = !twoHZ_status;
 		twoHZ = 255;
+		if(i2c_error_counter){
+			i2c_error_counter--;
+		}
 	}
 }
 
@@ -130,6 +137,21 @@ ISR (TIMER0_OVF_vect)
 	if (green_b == count) { PORT_G &=~ (1<<G);}
 	if (blue_b  == count) {  PORT_B &=~ (1<<B);}
 	if (white_b  == count) { 	PORT_W &= ~(1<<W);}
+}
+
+unsigned int read_adc(unsigned char adc_input)
+{
+	uint32_t adc_ = 0;
+	ADMUX= adc_input | ADC_VREF_TYPE;
+	_delay_us(10);
+	for (char i = 0; i < ADC_READ_NUM; i++)
+	{
+		ADCSRA|=(1<<ADSC);
+		while ((ADCSRA & (1<<ADIF))==0);
+		ADCSRA|=(1<<ADIF);
+		adc_ += ADCW;
+	}
+	return adc_/ADC_READ_NUM;
 }
 
 //Преобразование диапазона
@@ -487,6 +509,9 @@ int main(void)
 	BUT_Init();
 	BUTTON_SPROB_LED_DDR |= (1 << BUTTON_SPROB_LED_PIN);
 	
+   //ADC Init
+   ADCSRA = (1<<ADEN) | (0<<ADSC) | (0<<ADFR) | (0<<ADIF) | (0<<ADIE) | (1<<ADPS2) | (0<<ADPS1) | (1<<ADPS0);
+	
 	SPI_init();
 	timer1_led_init();
 	
@@ -496,17 +521,6 @@ int main(void)
 	PORT_B |= (1<<B);
 	PORT_W |= (1<<W);
 	
-    sei(); 
-	
-	//1Hz generator
-	DDRC &= ~(1 << PC3);
-	I2C_StartCondition();
-	I2C_SendByte(0b11010000);
-	I2C_SendByte(7);//Переходим на 0x07
-	I2C_SendByte(0b00010000); //включим SQWE
-	I2C_StopCondition();
-	
-
     OCR2 = 255;
 
     TCCR2 |= (1 << WGM21);
@@ -516,7 +530,16 @@ int main(void)
     //Set interrupt on compare match
 
     TCCR2 |= ((1 << CS21) | (1 << CS20) | (1 << CS20));
-    // set prescaler to 64 and starts PWM
+    // set prescaler to 64 and starts PWM	
+    sei(); 
+	
+	//1Hz generator
+	DDRC &= ~(1 << PC3);
+	I2C_StartCondition();
+	I2C_SendByte(0b11010000);
+	I2C_SendByte(7);//Переходим на 0x07
+	I2C_SendByte(0b00010000); //включим SQWE
+	I2C_StopCondition();
 	
 	
 	//Восстанавливаем значения из EEPOM
@@ -528,7 +551,9 @@ int main(void)
     led_menu_sunset_interval_mins = eeprom_read_word(&ee_led_menu_sunset_interval_mins);
 	
 	while(1)
-	{   	  //Принудительное включение 
+	{ 
+				adcMaxPWM = read_adc(0)/4;
+		  	    //Принудительное включение 
 				if(now_mode_led_menu == MODE_NONE && now_mode == MODE_NONE){
 				if((PINB & (1 << PB7))){	
 								//Супер дупер крутой рассвет и закат
@@ -540,7 +565,7 @@ int main(void)
 									excess_sec_dawm = all_time_in_sec - all_time_in_sec_dawn;
 									//Если закат начался
 			                        if(((int)excess_sec_dawm / 60) < led_menu_dawn_interval_mins){
-										PWM_set(RGBW, map(excess_sec_dawm, 1, led_menu_dawn_interval_mins * 60, 10, 255));
+										PWM_set(RGBW, map(excess_sec_dawm, 1, led_menu_dawn_interval_mins * 60, 10, adcMaxPWM));
 										now_mode_light = LIGHT_DAWM;
 									}else{
 										all_time_in_sec_sunset = ((long)led_menu_sunset_hours * 60 * 60) + ((long)led_menu_sunset_mins * 60);
@@ -549,14 +574,14 @@ int main(void)
 											excess_sec_sunset = all_time_in_sec - all_time_in_sec_sunset;
 											
 											if(((int)excess_sec_sunset / 60) < led_menu_sunset_interval_mins){
-												PWM_set(RGBW, map(excess_sec_sunset, 1, led_menu_sunset_interval_mins * 60, 255, 10));
+												PWM_set(RGBW, map(excess_sec_sunset, 1, led_menu_sunset_interval_mins * 60, adcMaxPWM, 10));
 												now_mode_light = LIGHT_SUNSET;
 										    }else{ 
 												PWM_set(RGBW, 0x00); 
 												now_mode_light = LIGHT_OFF;
 											}
 										}else{ 
-											PWM_set(RGBW, 0xFF); 
+											PWM_set(RGBW, adcMaxPWM); 
 											now_mode_light = LIGHT_FULL;
 										}
 									 }
@@ -573,11 +598,12 @@ int main(void)
 								TIMSK |= (1 << TOIE0);
 					}else{
 						//Подаем + на драйвера если тумблер включен
-						TIMSK &=~ (1 << TOIE0);
-						PORT_R |= (1<<R);
-						PORT_G |= (1<<G);
-						PORT_B |= (1<<B);
-						PORT_W |= (1<<W);
+					//	TIMSK &=~ (1 << TOIE0);
+						///PORT_R |= (1<<R);
+						//PORT_G |= (1<<G);
+						//PORT_B |= (1<<B);
+						//PORT_W |= (1<<W);
+						PWM_set(RGBW, adcMaxPWM); 
 					}
 					
 					//Читаем время
@@ -670,7 +696,7 @@ int main(void)
 					I2C_StartCondition();
 					I2C_SendByte(0b11010000);
 					I2C_SendByte(0);
-					I2C_SendByte(RTC_ConvertFromBinDec(1));
+					I2C_SendByte(0);
 					I2C_StopCondition();
 					ClearALLCharIndicator();
 					now_mode = MODE_NONE;

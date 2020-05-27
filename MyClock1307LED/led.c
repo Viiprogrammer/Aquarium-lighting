@@ -27,8 +27,8 @@ unsigned char segments [20] = {
 	0b01100011, //SUNSET
 	0b01011100//DAMN
 };
-
 */
+
 unsigned char segments [] = {
 	0b11110011, //0
 	0b10000001, //1

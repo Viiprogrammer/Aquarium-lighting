@@ -60,31 +60,75 @@
 #define LIGHT_OFF 4
 
 //Переменные Времени и Даты
-unsigned char sec = 0, min = 0, hour = 0, day = 0, date = 0, month = 0, year = 0;
+unsigned char sec = 0,
+			  min = 0,
+			  hour = 0,
+			  day = 0,
+			  date = 0,
+			  month = 0,
+			  year = 0;
 
 //Временные переменные 
-unsigned char sec_, min_, hour_, day_, date_, month_, year_, hour_, min_;
-unsigned char temp_mins_dawm = 0, temp_hours_dawm = 0, temp_mins_sunset = 0, temp_hours_sunset = 0;;
-unsigned long excess_sec_dawm = 0, excess_sec_sunset = 0;
+unsigned char sec_,
+              min_,
+			  hour_,
+			  day_,
+			  date_,
+			  month_,
+			  year_,
+			  hour_,
+			  min_;
+
+unsigned char temp_mins_dawm = 0,
+              temp_hours_dawm = 0, 
+			  temp_mins_sunset = 0,
+			  temp_hours_sunset = 0;
+			  
+unsigned long excess_sec_dawm = 0,
+              excess_sec_sunset = 0;
 
 //Переменные рассвета и заката
-uint16_t led_menu_dawn_hours = 0, led_menu_dawn_mins = 0, led_menu_dawn_interval_mins= 0, led_menu_sunset_hours = 0, led_menu_sunset_mins = 0, led_menu_sunset_interval_mins = 0;
+uint16_t led_menu_dawn_hours = 0,
+		 led_menu_dawn_mins = 0,
+		 led_menu_dawn_interval_mins= 0,
+		 led_menu_sunset_hours = 0,
+		 led_menu_sunset_mins = 0,
+		 led_menu_sunset_interval_mins = 0;
 
 //Кнопки
 uint8_t button, button_code;
 
 //Меню
 uint8_t now_mode = 0, increment_mode = 0;
-uint16_t now_mode_led_menu = 0, increment_mode_led_menu = 0, now_mode_light = 0, prev_now_mode_light = 0;
+uint16_t now_mode_led_menu = 0,
+         increment_mode_led_menu = 0,
+		 now_mode_light = 0,
+		 prev_now_mode_light = 0;
 
 //EEPORM
-uint16_t ee_led_menu_dawn_hours EEMEM = 0, ee_led_menu_dawn_mins EEMEM = 0, ee_led_menu_dawn_interval_mins EEMEM = 0, ee_led_menu_sunset_hours EEMEM = 0, ee_led_menu_sunset_mins EEMEM = 0, ee_led_menu_sunset_interval_mins EEMEM = 0;
+uint16_t ee_led_menu_dawn_hours EEMEM = 0, 
+         ee_led_menu_dawn_mins EEMEM = 0,
+		 ee_led_menu_dawn_interval_mins EEMEM = 0,
+		 ee_led_menu_sunset_hours EEMEM = 0,
+		 ee_led_menu_sunset_mins EEMEM = 0,
+		 ee_led_menu_sunset_interval_mins EEMEM = 0;
 
-unsigned long all_time_in_sec = 0, all_time_in_sec_sunset = 0, all_time_in_sec_dawn = 0;
+unsigned long all_time_in_sec = 0,
+			  all_time_in_sec_sunset = 0,
+			  all_time_in_sec_dawn = 0;
+			  
 //ШИМ каналы RGBW
-unsigned char red, green = 0, blue = 0, white = 0;       //Переменные скважности ШИМ
-unsigned char red_b  = 0, green_b = 0, blue_b = 0, white_b = 0;     //Буферизация значений скважности ШИМ
-unsigned char count = 0;                           //Счетчик вызовов обработчика прерываний
+unsigned char red, 
+			  green = 0,
+			  blue = 0,
+			  white = 0;       //Переменные скважности ШИМ
+			  
+unsigned char red_b  = 0,
+              green_b = 0,
+			  blue_b = 0,
+			  white_b = 0;     //Буферизация значений скважности ШИМ
+			  
+unsigned char pwm_trigger_value = 0;  //Счетчик вызовов обработчика прерываний
 
 volatile char twoHZ = 255;
 
@@ -107,8 +151,8 @@ ISR(TIMER2_COMP_vect)
 //Прерывание ШИМ
 ISR (TIMER0_OVF_vect)
 {
-	count++;
-	if (count == 0){//Переполнение
+	pwm_trigger_value++;
+	if (pwm_trigger_value == 0){//Переполнение
 		
 		//Сохранием значения в буфер
 		red_b   = red; 
@@ -133,10 +177,10 @@ ISR (TIMER0_OVF_vect)
 	}
 	
 	//Если достигли ширины импульса, низкий уровень
-	if (red_b   == count) { PORT_R &=~ (1<<R);}
-	if (green_b == count) { PORT_G &=~ (1<<G);}
-	if (blue_b  == count) {  PORT_B &=~ (1<<B);}
-	if (white_b  == count) { 	PORT_W &= ~(1<<W);}
+	if (red_b   == pwm_trigger_value) { PORT_R &=~ (1<<R);}
+	if (green_b == pwm_trigger_value) { PORT_G &=~ (1<<G);}
+	if (blue_b  == pwm_trigger_value) {  PORT_B &=~ (1<<B);}
+	if (white_b  == pwm_trigger_value) { 	PORT_W &= ~(1<<W);}
 }
 
 unsigned int read_adc(unsigned char adc_input)
@@ -261,154 +305,6 @@ void ModifyRTC(void)
 				}
 			}
 		break;
-		
-		/*
-		case MODE_EDIT_DAY: // дата
-		 	I2C_SendByte(4);//Переходим на 0x04 - байт числа даты
-			if (month==2) //февраль
-			{
-				if(year%4==0) { //Если високосный год
-					 if(increment_mode == MODE_INC){
-						 if(date<29){ 
-							 I2C_SendByte(RTC_ConvertFromBinDec(date+1));
-							 date++;
-						 }else{ 
-							 I2C_SendByte(RTC_ConvertFromBinDec(1));
-							 date = 1;
-						 }
-				     }else if(increment_mode == MODE_DISINC){
-						 if(date>1){ 
-							 I2C_SendByte(RTC_ConvertFromBinDec(date-1));
-							 date--;
-						 }else{ 
-							 I2C_SendByte(RTC_ConvertFromBinDec(29));
-							 date = 29;
-						 }
-			         }
-				}else{
-					if(increment_mode == MODE_INC){
-						if(date<28){
-							I2C_SendByte(RTC_ConvertFromBinDec(date+1));
-							date++;
-						}else{ 
-							I2C_SendByte(RTC_ConvertFromBinDec(1));
-							date = 1;
-						}
-					}else if(increment_mode == MODE_DISINC){
-						 if(date>1){ 
-							 I2C_SendByte(RTC_ConvertFromBinDec(date-1));
-							 date--;
-						 }else{ 
-							 I2C_SendByte(RTC_ConvertFromBinDec(28));
-							 date = 28;
-						 }
-					}				
-				}
-			}else if ((month==4)|(month==6)|(month==9)|(month==11)){
-				if(increment_mode == MODE_INC){
-					if(date<30){ 
-						I2C_SendByte(RTC_ConvertFromBinDec(date+1));
-						date++;
-					}else{ 
-						I2C_SendByte(RTC_ConvertFromBinDec(1));
-						date = 1;
-					}
-				}else if(increment_mode == MODE_DISINC){
-					if(date>1){ 
-						I2C_SendByte(RTC_ConvertFromBinDec(date-1));
-						date--;
-					}else{ 
-						I2C_SendByte(RTC_ConvertFromBinDec(30));
-						date = 30;
-					}
-				}			
-			}else{
-				if(increment_mode == MODE_INC){
-					if(date<31){ 
-						I2C_SendByte(RTC_ConvertFromBinDec(date+1));
-						date++;
-					}else{ 
-						I2C_SendByte(RTC_ConvertFromBinDec(1));
-						date = 1;
-					}
-				}else if(increment_mode == MODE_DISINC){
-					if(date>1){ 
-						I2C_SendByte(RTC_ConvertFromBinDec(date-1));
-						date--;
-					}else{ 
-						I2C_SendByte(RTC_ConvertFromBinDec(31));
-						date = 31;
-					}
-				}
-			}
-		break;
-		
-		case MODE_EDIT_MOUTH: // месяц
-		 	I2C_SendByte(5);//Переходим на 0x05 - байт месяца
-			
-			if(increment_mode == MODE_INC){
-			 if(month<12){ 
-				 I2C_SendByte(RTC_ConvertFromBinDec(month+1));
-				 month++;
-			 }else{ 
-				 I2C_SendByte(RTC_ConvertFromBinDec(1));
-				 month = 1;
-			 }
-			}else if(increment_mode == MODE_DISINC){
-			 if(month > 1){ 
-				 I2C_SendByte(RTC_ConvertFromBinDec(month-1));
-				 month--;
-			 }else{ 
-				 I2C_SendByte(RTC_ConvertFromBinDec(12));
-				 month = 12;
-			 }
-			}		
-		break;
-		
-		
-		case MODE_EDIT_YEAR: // год
-		 	I2C_SendByte(6);//Переходим на 0x06 - байт года
-			if(increment_mode == MODE_INC){
-			 if(year<99){ 
-				 I2C_SendByte(RTC_ConvertFromBinDec(year+1));
-				 year++;
-			 }else{ 
-				 I2C_SendByte(RTC_ConvertFromBinDec(1));
-				 year = 1;
-			 }
-			}else if(increment_mode == MODE_DISINC){
-			 if(year>1){
-				  I2C_SendByte(RTC_ConvertFromBinDec(year-1));
-				  year--;
-			 }else{ 
-				  I2C_SendByte(RTC_ConvertFromBinDec(99));
-				  year = 99;
-			 }
-			}
-		break;
-		
-		
-		case MODE_EDIT_WEEK_DAY: // день недели
-		 	I2C_SendByte(3);//Переходим на 0x03 - байт дня недели
-			if(increment_mode == MODE_INC){
-			    if(day<7){ 
-					I2C_SendByte(RTC_ConvertFromBinDec(day+1));
-					day++;
-			    }else{ 
-					I2C_SendByte(RTC_ConvertFromBinDec(1));
-					day = 1;
-				}
-			}else if(increment_mode == MODE_DISINC){
-				if(day>1){ 
-					I2C_SendByte(RTC_ConvertFromBinDec(day-1));
-					day--;
-				}else{ 
-					I2C_SendByte(RTC_ConvertFromBinDec(7));
-					day = 7;
-				}
-			}
-	    break;
-*/
 	}
 	I2C_StopCondition();
 }
@@ -541,6 +437,43 @@ int main(void)
 	I2C_SendByte(0b00010000); //включим SQWE
 	I2C_StopCondition();
 	
+	//Читаем время
+	I2C_SendByteByADDR(0,0b11010000);	//Установка адреса в 0
+	I2C_StartCondition(); //Отправим условие START
+	I2C_SendByte(0b11010001); //Бит на чтение
+	sec_ = I2C_ReadByte();
+	min_ = I2C_ReadByte();
+	hour_ = I2C_ReadByte();
+	day_ = I2C_ReadByte();
+	date_ = I2C_ReadByte();
+	month_ = I2C_ReadByte();
+	year_ = I2C_ReadLastByte();
+	I2C_StopCondition(); //Отправим условие STOP
+					
+	sec = RTC_ConvertFromDec(sec_); //Преобразуем в десятичный формат
+	min = RTC_ConvertFromDec(min_); //Преобразуем в десятичный формат
+	hour = RTC_ConvertFromDec(hour_); //Преобразуем в десятичный формат
+	day = RTC_ConvertFromDec(day_); //Преобразуем в десятичный формат
+	year = RTC_ConvertFromDec(year_); //Преобразуем в десятичный формат
+	month = RTC_ConvertFromDec(month_); //Преобразуем в десятичный формат
+	date = RTC_ConvertFromDec(date_); //Преобразуем в десятичный формат
+	
+	
+	//Защита от кривых данных в DSxxxx
+	if(min > 59 || hour > 23){
+	 	I2C_StartCondition();
+	 	I2C_SendByte(0b11010000);
+	 	I2C_SendByte(0);//Переходим на 0x00
+		I2C_SendByte(RTC_ConvertFromBinDec(0)); //секунды
+	 	I2C_SendByte(RTC_ConvertFromBinDec(0)); //минуты
+	 	I2C_SendByte(RTC_ConvertFromBinDec(0)); //часы
+	 	I2C_SendByte(RTC_ConvertFromBinDec(1)); //день недели
+	 	I2C_SendByte(RTC_ConvertFromBinDec(23)); //дата
+	 	I2C_SendByte(RTC_ConvertFromBinDec(7)); //месяц
+		I2C_SendByte(RTC_ConvertFromBinDec(20)); //год
+		I2C_StopCondition();
+	}
+	
 	
 	//Восстанавливаем значения из EEPOM
 	led_menu_dawn_hours = eeprom_read_word(&ee_led_menu_dawn_hours);
@@ -597,17 +530,10 @@ int main(void)
 								prev_now_mode_light = now_mode_light;
 								TIMSK |= (1 << TOIE0);
 					}else{
-						//Подаем + на драйвера если тумблер включен
-					//	TIMSK &=~ (1 << TOIE0);
-						///PORT_R |= (1<<R);
-						//PORT_G |= (1<<G);
-						//PORT_B |= (1<<B);
-						//PORT_W |= (1<<W);
 						PWM_set(RGBW, adcMaxPWM); 
 					}
 					
 					//Читаем время
-						
 					I2C_SendByteByADDR(0,0b11010000);	//Установка адреса в 0
 					I2C_StartCondition(); //Отправим условие START
 					I2C_SendByte(0b11010001); //Бит на чтение
@@ -619,6 +545,7 @@ int main(void)
 					month_ = I2C_ReadByte();
 					year_ = I2C_ReadLastByte();
 					I2C_StopCondition(); //Отправим условие STOP
+					
 					sec = RTC_ConvertFromDec(sec_); //Преобразуем в десятичный формат
 					min = RTC_ConvertFromDec(min_); //Преобразуем в десятичный формат
 					hour = RTC_ConvertFromDec(hour_); //Преобразуем в десятичный формат
@@ -701,32 +628,7 @@ int main(void)
 					ClearALLCharIndicator();
 					now_mode = MODE_NONE;
 					increment_mode = MODE_NONE_INC;
-					/*
-		            //Число
-					now_mode = MODE_EDIT_DAY;
-					ClearALLCharIndicator();
-					*/
-				   }/*else if(now_mode == MODE_EDIT_DAY){
-					//Месяц
-					now_mode = MODE_EDIT_MOUTH;
-				   }else if(now_mode == MODE_EDIT_MOUTH){
-					//Год
-					now_mode = MODE_EDIT_YEAR;
-				   }else if(now_mode == MODE_EDIT_YEAR){
-					ClearALLCharIndicator();
-					ClearALLDotsIndicator();
-					//День
-					now_mode = MODE_EDIT_WEEK_DAY;
-				   }else if(now_mode == MODE_EDIT_WEEK_DAY){
-					I2C_StartCondition();
-					I2C_SendByte(0b11010000);
-					I2C_SendByte(0);
-					I2C_SendByte(RTC_ConvertFromBinDec(1));
-					I2C_StopCondition();
-					ClearALLCharIndicator();
-					now_mode = MODE_NONE;
-					increment_mode = MODE_NONE_INC;
-				   }*/
+				   }
 				  }
 				break;
 			
@@ -785,32 +687,7 @@ int main(void)
 				setCharIndicator(19, 0);
 				setCharIndicator(19, 5);
 			}
-			/*
-			if(now_mode_light == LIGHT_FULL){
-				setCharIndicator(14, 1);
-				setCharIndicator(15, 2);
-				setCharIndicator(16, 3);	
-				setCharIndicator(16, 4);
-			}else if(now_mode_light == LIGHT_OFF){
-				setCharIndicator(17, 1);
-				setCharIndicator(14, 2);
-				setCharIndicator(14, 3);
-		   }else if(now_mode_light == LIGHT_DAWM){
-				setCharIndicator(18, 0);
-				setCharIndicator(18, 1);
-				setCharIndicator(18, 2);
-				setCharIndicator(18, 3);
-				setCharIndicator(18, 4);
-				setCharIndicator(18, 5);
-           }else if(now_mode_light == LIGHT_SUNSET){
-			   setCharIndicator(19, 0);
-			   setCharIndicator(19, 1);
-			   setCharIndicator(19, 2);
-			   setCharIndicator(19, 3);
-			   setCharIndicator(19, 4);
-			   setCharIndicator(19, 5);
-           }
-		   */
+
         }
 		
 		if(now_mode_led_menu){
@@ -924,30 +801,7 @@ int main(void)
 				   }
 				break;
 			    
-			/*
-				case MODE_EDIT_DAY: // дата
-				   ShowDate(date, month, year);
-				break;
-				
-				case MODE_EDIT_MOUTH: // месяц
-				   ShowDate(date, month, year);
-				break;
-				
-				
-				case MODE_EDIT_YEAR: // год
-				   ShowDate(date, month, year);
-				break;
-				
-				
-				case MODE_EDIT_WEEK_DAY: // день недели
-					setCharIndicator(10, 0);
-					setCharIndicator(10, 1);
-			   		setCharIndicator(0, 2);
-			   		setCharIndicator(day, 3);
-					setCharIndicator(10, 4);
-					setCharIndicator(10, 5);
-				break;
-				*/
+
 			
 			}
 		
